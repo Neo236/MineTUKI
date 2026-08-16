@@ -15,15 +15,16 @@ Both point at the exact same `pack.toml` URL — the raw file on this GitHub rep
 
 ## For friends: installing the modpack
 
-1. Install [NeoForge 21.1.248](https://neoforged.net/) for Minecraft 1.21.1 first (normal client install via the NeoForge installer).
-2. Download [`packwiz-installer-bootstrap.jar`](https://github.com/packwiz/packwiz-installer-bootstrap/releases/latest).
-3. Run it pointed at this pack:
-   ```
-   java -jar packwiz-installer-bootstrap.jar https://raw.githubusercontent.com/Neo236/MineTUKI/main/pack.toml
-   ```
-4. It downloads mods straight into your instance's `mods` folder. Re-run it any time the modlist updates.
+No extra launcher, no typing commands - just the regular Minecraft Launcher plus a double-click installer.
 
-(Alternatively: Prism Launcher can import a packwiz pack directly from that same URL.)
+1. Install [NeoForge 21.1.248](https://neoforged.net/) for Minecraft 1.21.1 (this adds a profile to your normal Minecraft Launcher, same as any other version).
+2. Download the **[client installer](https://github.com/Neo236/MineTUKI/releases/tag/client-installer-v1)** and drop its 4 files straight into your `.minecraft` folder (same place as `options.txt` - `%appdata%\.minecraft` on Windows, `~/Library/Application Support/minecraft` on Mac, `~/.minecraft` on Linux).
+3. Double-click `instalar-mods-windows.bat` (Windows) or `instalar-mods-mac-linux.command` (Mac/Linux). A window shows mod download progress, then closes.
+4. Launch Minecraft normally with the NeoForge 1.21.1 profile.
+
+Whenever the modlist changes, just double-click the installer again - it diffs against the current `pack.toml` and adds/removes what's needed. Full instructions are in the `LEEME.txt` inside the zip.
+
+Under the hood this is still `packwiz-installer-bootstrap.jar` pointed at this repo's `pack.toml` (defaults to `client`+`both` side) - the .bat/.command files just wrap that one command so nobody has to type it.
 
 ## For the server (this machine)
 
