@@ -4,6 +4,12 @@ services:
     container_name: minetuki
     restart: unless-stopped
     stop_grace_period: 60s
+    # Hard cap at the cgroup/Docker level - MEMORY below only bounds the JVM
+    # heap (-Xmx), not off-heap/native usage (Distant Horizons, Create,
+    # Sable's physics engine, etc.), and this host runs ~13 other containers
+    # that shouldn't get starved if Minecraft's off-heap usage balloons.
+    mem_limit: "${MC_MEM_LIMIT:-10g}"
+    memswap_limit: "${MC_MEM_LIMIT:-10g}"
     ports:
       - "25565:25565"
       # RCON (optional remote console) - only exposed if you set ENABLE_RCON below
@@ -24,6 +30,13 @@ services:
       DIFFICULTY: "${MC_DIFFICULTY:-normal}"
       MAX_PLAYERS: "${MC_MAX_PLAYERS:-10}"
       ALLOW_FLIGHT: "TRUE"
+
+      # Whitelist is on (white-list=true set directly in server.properties -
+      # deliberately NOT managed via the WHITELIST/ENFORCE_WHITELIST env vars
+      # here: itzg's image treats an empty env value as "clear this
+      # property", which fights an empty-but-enabled whitelist). Add players
+      # from the server console with `whitelist add <username>`, or edit
+      # whitelist.json directly in the deployments data folder.
 
       # Set to a real password in .env to enable remote console access.
       ENABLE_RCON: "${MC_ENABLE_RCON:-FALSE}"
