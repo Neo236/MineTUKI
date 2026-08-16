@@ -243,6 +243,11 @@ hash = "fa2640282935a560f924f518cd8168683d2d885bc0ca111c068fb480be5edf8b"
 metafile = true
 
 [[files]]
+file = "mods/framework.pw.toml"
+hash = "dd0153bc05a3ffc8592dfaf35b4e8014127e6e1b352d7c18462d49a1ed7a5035"
+metafile = true
+
+[[files]]
 file = "mods/geckolib.pw.toml"
 hash = "5a26489b734991c0511abfe43bf9143c935b8483d854a78fecd2e84993fb09cc"
 metafile = true
@@ -443,6 +448,11 @@ hash = "1ef7ce6d5fe6e584914680f5463508996f0dd1c2bdbc051b8b3b050c85e134ff"
 metafile = true
 
 [[files]]
+file = "mods/platform.pw.toml"
+hash = "00887452f4c902a5f98fc42875d522e59948b60c20d887855a183c0f7235c641"
+metafile = true
+
+[[files]]
 file = "mods/prometheus-api.pw.toml"
 hash = "edef74673c04f649fce7fdb438ae12cf5f9aa6416df471f362043f7a09204113"
 metafile = true
@@ -460,6 +470,11 @@ metafile = true
 [[files]]
 file = "mods/real-camera.pw.toml"
 hash = "8ad6693963b52431e5d98bd930a8ba1cea8672e98c0303834d6fd7d3f3822665"
+metafile = true
+
+[[files]]
+file = "mods/refurbished-furniture.pw.toml"
+hash = "208de52370a896983814bd3f69ed0e2b46ca52d99603656562f3890f96d151da"
 metafile = true
 
 [[files]]
@@ -618,6 +633,11 @@ hash = "3d907a6ec6e27ba52d9f8f062216b56aef39e586a4e673cfbb70dbe12671ec61"
 metafile = true
 
 [[files]]
+file = "mods/void-lib.pw.toml"
+hash = "72683ad5fef758a7f05003b0e7c9671f4f7afc2a068951c8482b6bbc5ce6f559"
+metafile = true
+
+[[files]]
 file = "mods/waystones.pw.toml"
 hash = "18755836fe5817992e8f52bdb1d42857e85a41a7a19287b04d63a072006931b5"
 metafile = true
@@ -625,6 +645,11 @@ metafile = true
 [[files]]
 file = "mods/yacl.pw.toml"
 hash = "539f362e9e192cf3b2813e0dfdfc51a5e6814129c6e82a9733842529beea6242"
+metafile = true
+
+[[files]]
+file = "mods/yungs-api.pw.toml"
+hash = "d9c0c9209bac0b693af2a7c1e47ffb28d366bad19c91df31dc6d345fa75250a1"
 metafile = true
 
 [[files]]

@@ -1,0 +1,13 @@
+name = "Void Lib"
+filename = "void_lib-1.1.6.jar"
+side = "server"
+
+[download]
+url = "https://cdn.modrinth.com/data/Z7Z0JsCA/versions/a17otTL7/void_lib-1.1.6.jar"
+hash-format = "sha512"
+hash = "e7496311c49fcf47a86f7111b9e2aa437d72427f3aacfae7e006dd7154d216337de4f9e86616f969b86af15995e4d79ee30fda170e18e45e12d699ac86649144"
+
+[update]
+[update.modrinth]
+mod-id = "Z7Z0JsCA"
+version = "a17otTL7"
