@@ -1,0 +1,13 @@
+name = "More Mob Variants Modernized"
+filename = "moremobvariants-1.0.0-neoforge-1.21.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/cV0OA46M/versions/d9Mz6Ci3/moremobvariants-1.0.0-neoforge-1.21.1.jar"
+hash-format = "sha512"
+hash = "caa92897debbe7518b29251c972c4eb734509e8a9c68d503c256bf0976e9041877d4de49277a5c3bd61a5a4584bec3c606f34e0a9df4e5ed08ac946128075257"
+
+[update]
+[update.modrinth]
+mod-id = "cV0OA46M"
+version = "d9Mz6Ci3"

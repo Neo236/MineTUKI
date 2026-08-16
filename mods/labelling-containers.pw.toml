@@ -1,0 +1,13 @@
+name = "Labelling Containers"
+filename = "labellingcontainers-1.9.3.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/b2T42hfY/versions/mpucuO6a/labellingcontainers-1.9.3.jar"
+hash-format = "sha512"
+hash = "5ca69249c11cf83ac7db74ce7c74c2e9bb0b207a6914cc2c8ef19e4d3d0f9b7567e9b4f5a7bc79f61da9a81bd1f54f6db750be40fd6a88bd9889452c8230a7f0"
+
+[update]
+[update.modrinth]
+mod-id = "b2T42hfY"
+version = "mpucuO6a"

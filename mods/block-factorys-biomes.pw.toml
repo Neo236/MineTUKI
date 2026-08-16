@@ -1,0 +1,13 @@
+name = "Block Factory's Biomes"
+filename = "bf_biomes-1.1.0-neoforge-1.21.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/gzP2qFmu/versions/sftckuFv/bf_biomes-1.1.0-neoforge-1.21.1.jar"
+hash-format = "sha512"
+hash = "76615639693f8638913c4fae6c6774b3a022883e02c95df182705dc7ecf67b55875fbce2b07ce6ef4aeec0db7e7937a3e6665190470d5d653e9459e93bddc124"
+
+[update]
+[update.modrinth]
+mod-id = "gzP2qFmu"
+version = "sftckuFv"

@@ -1,0 +1,13 @@
+name = "It Takes a Pillage Continuation"
+filename = "takesapillage-neoforge-1.0.12+mc1.21.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/QOJOg1gE/versions/tUy3BgDd/takesapillage-neoforge-1.0.12%2Bmc1.21.1.jar"
+hash-format = "sha512"
+hash = "7cb2b4c90f78227c73ead283ecbeb43e0dd8fbb0b8e30eb99c9783da59753fc03ca8aedd754389ee48f290030feba71fd80d1b8598cf0ff103160a3cbc33c300"
+
+[update]
+[update.modrinth]
+mod-id = "QOJOg1gE"
+version = "tUy3BgDd"

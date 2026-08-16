@@ -1,0 +1,13 @@
+name = "Global XP"
+filename = "globalxp-neoforge-1.21.1-1.12.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/bSkHUVQQ/versions/gDenrTYo/globalxp-neoforge-1.21.1-1.12.jar"
+hash-format = "sha512"
+hash = "448ea55b80988ebc032e72060c30efba333442122406f760de15f4e07856db0aa76afa96195dcdac651b73368a93eb2d8b7767447c31581d162703ff1e1ed970"
+
+[update]
+[update.modrinth]
+mod-id = "bSkHUVQQ"
+version = "gDenrTYo"

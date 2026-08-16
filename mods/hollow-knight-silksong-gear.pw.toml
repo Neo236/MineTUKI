@@ -1,0 +1,13 @@
+name = "Hollow Knight: Silksong Gear"
+filename = "hollow_knight_silksong_armor-1.1.0-neoforge-1.21.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "3bd6c4efcc31c99d87ac7f1c3a9d57a918c1679a"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7949270
+project-id = 1345347

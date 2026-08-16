@@ -1,0 +1,13 @@
+name = "Fast Config API"
+filename = "fastconfigapi-2.1.0.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/jhHNjn7K/versions/pO1r5kf3/fastconfigapi-2.1.0.jar"
+hash-format = "sha512"
+hash = "a806c5b07415bb5a482ec35d150ead8a2ff910a18e39990395a2244964b0bae4a2917aa4941fdfa40a8c329a61f6dba67daf8076f628baf8ac7339ed3ea47147"
+
+[update]
+[update.modrinth]
+mod-id = "jhHNjn7K"
+version = "pO1r5kf3"

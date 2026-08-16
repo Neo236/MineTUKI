@@ -1,0 +1,13 @@
+name = "Soul Fire'd"
+filename = "soul-fire-d-neoforge-1.21-6.1.0.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/d6MhxwRo/versions/j16Kori6/soul-fire-d-neoforge-1.21-6.1.0.jar"
+hash-format = "sha512"
+hash = "19d07afc330a3a7b67bd17e5ca1ab6046679e14e7d7331bf4be74da6c25d541480c938d81b0b1af1e2c54d29306581d0031ef62225d6c55735723f8f3a8ce5b9"
+
+[update]
+[update.modrinth]
+mod-id = "d6MhxwRo"
+version = "j16Kori6"

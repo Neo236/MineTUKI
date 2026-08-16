@@ -1,0 +1,13 @@
+name = "MrCrayfish's Furniture Mod Tools: Refurbished"
+filename = "furniture_mod_tools_refurbished-1.0.0-neoforge-1.21.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/wjNYBh7l/versions/pLoFIP1e/furniture_mod_tools_refurbished-1.0.0-neoforge-1.21.1.jar"
+hash-format = "sha512"
+hash = "4fe4b02c632c7f158b04f2323ad7b8c377bc6ee0009e4dc19016cbd040de9aa1d91b1140b2796dc03a61e084415e991581274da6ba07deaf38710dcb27a60f10"
+
+[update]
+[update.modrinth]
+mod-id = "wjNYBh7l"
+version = "pLoFIP1e"

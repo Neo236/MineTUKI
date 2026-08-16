@@ -1,0 +1,13 @@
+name = "Grabby Mobs"
+filename = "grabbymobs-1.21.1-1.6.jar"
+side = "server"
+
+[download]
+url = "https://cdn.modrinth.com/data/O6Sh7btX/versions/a40un6os/grabbymobs-1.21.1-1.6.jar"
+hash-format = "sha512"
+hash = "f0e9d62dd3febafe60b8d5ea25032b47c97136221f8d36f42a387edce0070f73c11d4cf4a9029121aa51fc03de0af3899d493b730d8679338132939e42a18038"
+
+[update]
+[update.modrinth]
+mod-id = "O6Sh7btX"
+version = "a40un6os"

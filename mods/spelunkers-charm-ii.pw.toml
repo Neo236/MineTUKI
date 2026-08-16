@@ -1,0 +1,13 @@
+name = "Lucky's Spelunker's Charm II"
+filename = "spelunkers_charm-5.0.6.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "506dfb501bfab2ae799029f33d5d9c574f16ca49"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 8029825
+project-id = 886997

@@ -1,0 +1,13 @@
+name = "Real Camera"
+filename = "realcamera-1.21.1-neoforge-0.7.8-beta.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/fYYSAh4R/versions/j9j0EChP/realcamera-1.21.1-neoforge-0.7.8-beta.jar"
+hash-format = "sha512"
+hash = "48d9bba88f40dd9d573badd3e5ab3d580ad5d83aebadac59eb3d6b610cda9d782b2b45b96f779ca11f3ca894e439ded654362fd25674e5a241c521c705b04a76"
+
+[update]
+[update.modrinth]
+mod-id = "fYYSAh4R"
+version = "j9j0EChP"
