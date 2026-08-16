@@ -41,6 +41,14 @@ Runtime data (world save, downloaded mod jars, configs, logs) lives entirely **o
 
 Copy `.env.example` to `.env` (gitignored) to override memory/MOTD/difficulty/RCON without touching the committed compose file.
 
+### Managing access
+
+- **Online-mode** (`true`) and **whitelist** (`true`) are both on — only players with legit Microsoft/Mojang accounts *and* a whitelist entry can join.
+- Add a player: `docker exec -u 1000 minetuki mc-send-to-console whitelist add <username>`
+- Remove a player: `docker exec -u 1000 minetuki mc-send-to-console whitelist remove <username>`
+- List current whitelist: `docker exec -u 1000 minetuki mc-send-to-console whitelist list`
+- Or edit `whitelist.json` directly in the deployments data folder and run `whitelist reload` via the same command.
+
 ## Updating mods
 
 ```

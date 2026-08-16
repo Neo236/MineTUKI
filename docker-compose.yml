@@ -35,8 +35,8 @@ services:
       # deliberately NOT managed via the WHITELIST/ENFORCE_WHITELIST env vars
       # here: itzg's image treats an empty env value as "clear this
       # property", which fights an empty-but-enabled whitelist). Add players
-      # from the server console with `whitelist add <username>`, or edit
-      # whitelist.json directly in the deployments data folder.
+      # with: docker exec -u 1000 minetuki mc-send-to-console whitelist add <username>
+      CREATE_CONSOLE_IN_PIPE: "TRUE"
 
       # Set to a real password in .env to enable remote console access.
       ENABLE_RCON: "${MC_ENABLE_RCON:-FALSE}"
