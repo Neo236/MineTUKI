@@ -398,11 +398,6 @@ hash = "cc903ca450e9667ad5a951110f6e84f22c9e52635bf39321ca4294bc8313797e"
 metafile = true
 
 [[files]]
-file = "mods/more-mob-variants-modernized.pw.toml"
-hash = "f3d446848ac3510248ec04c01eece3d83b3426b894aaf7c1b3e4c735c608fbdc"
-metafile = true
-
-[[files]]
 file = "mods/mouse-tweaks.pw.toml"
 hash = "6bc414cc0f2d4c078fe83f384d786343f701f371d657c5279b5b0df1595804bd"
 metafile = true
