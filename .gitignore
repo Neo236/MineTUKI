@@ -1,0 +1,9 @@
+# packwiz cache
+.packwizcache/
+
+# Runtime server (jars, world, logs) - lives outside/beside the packwiz pack, never committed
+/server/
+
+# OS/editor cruft
+.DS_Store
+*.swp
