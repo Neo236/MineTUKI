@@ -378,16 +378,6 @@ hash = "28d8aeaaa4e12098474b3028cf7dce0ef867de2f1a98fc6de2c224731e176fd3"
 metafile = true
 
 [[files]]
-file = "mods/mavapi.pw.toml"
-hash = "7f830fe13354e86c1eac6363e16a012b7ab489614c861cbf5e4944e2b54bbd58"
-metafile = true
-
-[[files]]
-file = "mods/mavm.pw.toml"
-hash = "b49ba7389c85ac7715ea485ff333e7f418bab8ac9cc4f96c13ecb8944e86e8c0"
-metafile = true
-
-[[files]]
 file = "mods/mns-moogs-nether-structures.pw.toml"
 hash = "013bc1d1b6beb990e412e1c88a83c832e4f75c94c3c2e6dd6788a87835ba425d"
 metafile = true
