@@ -1,18 +1,6 @@
 hash-format = "sha256"
 
 [[files]]
-file = ".env.example"
-hash = "6f84c672b8c88d11c8eef32512eff2694bb69af6e6dc5308ad0297f905df8c4d"
-
-[[files]]
-file = "README.md"
-hash = "10c6c3319e292f5f9b3fdff473f985d2e584d1171f1731d2d5c9e34d6933246f"
-
-[[files]]
-file = "docker-compose.yml"
-hash = "9d0a6b5f4b2a83e174357b763fbbb94b3eb6edae3dc4e5d3f9a71d379afc8700"
-
-[[files]]
 file = "mods/3dskinlayers.pw.toml"
 hash = "c1f98a1e9d7201f0b6ddc3f705f43a53f7539978f48425de5c1177a310fe7b86"
 metafile = true
