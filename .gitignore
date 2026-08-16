@@ -1,9 +1,12 @@
 # packwiz cache
 .packwizcache/
 
-# Runtime server (jars, world, logs) - lives outside/beside the packwiz pack, never committed
-/server/
+# Secrets / local overrides for docker-compose
+.env
 
 # OS/editor cruft
 .DS_Store
 *.swp
+
+# Note: server runtime (world, mods, logs, config) lives entirely outside
+# this repo, in ~/deployments/minecraft/mainMinecraftServer/ - see README.

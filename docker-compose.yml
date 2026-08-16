@@ -1,0 +1,36 @@
+services:
+  mc:
+    image: itzg/minecraft-server
+    container_name: minetuki
+    restart: unless-stopped
+    stop_grace_period: 60s
+    ports:
+      - "25565:25565"
+      # RCON (optional remote console) - only exposed if you set ENABLE_RCON below
+      # - "25575:25575"
+    environment:
+      EULA: "TRUE"
+      TYPE: "NEOFORGE"
+      VERSION: "1.21.1"
+      NEOFORGE_VERSION: "21.1.248"
+
+      # Pulls pack.toml straight from this repo's main branch and installs
+      # only the mods marked side="server" or side="both" - the same
+      # mechanism friends use client-side, just filtered the other way.
+      PACKWIZ_URL: "https://raw.githubusercontent.com/Neo236/MineTUKI/main/pack.toml"
+
+      MEMORY: "${MC_MEMORY:-8G}"
+      MOTD: "${MC_MOTD:-MineTUKI}"
+      DIFFICULTY: "${MC_DIFFICULTY:-normal}"
+      MAX_PLAYERS: "${MC_MAX_PLAYERS:-10}"
+      ALLOW_FLIGHT: "TRUE"
+
+      # Set to a real password in .env to enable remote console access.
+      ENABLE_RCON: "${MC_ENABLE_RCON:-FALSE}"
+      RCON_PASSWORD: "${MC_RCON_PASSWORD:-}"
+
+      # World-heavy modpack (Distant Horizons, Terralith, etc.) - give the
+      # server more time to generate/load before health-checking it.
+      TZ: "${MC_TZ:-America/Argentina/Buenos_Aires}"
+    volumes:
+      - /home/neo236/deployments/minecraft/mainMinecraftServer:/data

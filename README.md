@@ -27,7 +27,18 @@ Both point at the exact same `pack.toml` URL — the raw file on this GitHub rep
 
 ## For the server (this machine)
 
-See `server/` (gitignored, lives locally) — it runs the same installer with `-s server` against this repo, then launches NeoForge headless. Setup details below once the pack is populated.
+Runs in Docker via [`itzg/minecraft-server`](https://github.com/itzg/docker-minecraft-server), which has built-in packwiz support: set `PACKWIZ_URL` to this repo's `pack.toml` and it installs only `side = "server"` / `side = "both"` mods automatically — same source, same mechanism as the client install above, just filtered the other way. No separate server branch, fork, or release needed.
+
+```
+docker compose up -d        # first start (pulls image, installs NeoForge + mods, generates world)
+docker compose logs -f mc   # watch it boot
+docker compose restart mc   # re-syncs mods from the latest pushed pack.toml, then relaunches
+docker compose down         # stop (world/config/mods persist on disk, untouched)
+```
+
+Runtime data (world save, downloaded mod jars, configs, logs) lives entirely **outside this repo**, bind-mounted from `~/deployments/minecraft/mainMinecraftServer/` — that folder is this server's `.minecraft` equivalent. Nothing under it is committed to git.
+
+Copy `.env.example` to `.env` (gitignored) to override memory/MOTD/difficulty/RCON without touching the committed compose file.
 
 ## Updating mods
 
@@ -38,4 +49,4 @@ packwiz update --all              # bump everything to latest compatible version
 packwiz refresh                   # rehash after manual edits
 ```
 
-Commit `pack.toml`, `index.toml`, and the `mods/*.toml` files. Then push.
+Commit `pack.toml`, `index.toml`, and the `mods/*.toml` files, then push. Run `docker compose restart mc` on this machine to pick up the change server-side; friends re-run the installer client-side whenever they want to update.
