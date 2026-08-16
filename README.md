@@ -15,16 +15,9 @@ Both point at the exact same `pack.toml` URL — the raw file on this GitHub rep
 
 ## For friends: installing the modpack
 
-No extra launcher, no typing commands, and it never touches anyone's existing `.minecraft` folder - everything lives self-contained in its own directory.
+Download the **[client installer](https://github.com/Neo236/MineTUKI/releases/tag/client-installer-v1)**, unzip it anywhere, double-click the script for your OS (`instalar-mods-windows.bat` / `instalar-mods-mac-linux.command`). It downloads the client mods into a `modsTUKI` folder next to itself - re-running it later updates that same folder (adds new mods, removes dropped ones). What you do with those mods from there (copy them into your NeoForge instance's `mods` folder, etc.) is up to you.
 
-1. Download the **[client installer](https://github.com/Neo236/MineTUKI/releases/tag/client-installer-v1)** and unzip it into a new folder anywhere (Desktop, wherever) - e.g. `MineTUKI`.
-2. Double-click `instalar-mods-windows.bat` (Windows) or `instalar-mods-mac-linux.command` (Mac/Linux). A window shows mod download progress; mods land inside that same `MineTUKI/mods/` folder.
-3. Install [NeoForge 21.1.248](https://neoforged.net/) for Minecraft 1.21.1 (adds a profile to the normal Minecraft Launcher). Edit that profile → *More Options* → set **Game Directory** to the `MineTUKI` folder from step 1.
-4. Play - the launcher reads mods/config/world from that folder, the real `.minecraft` is untouched.
-
-Whenever the modlist changes, just double-click the installer again (step 2) - it diffs against the current `pack.toml`, adding and **removing** what's needed (verified: a mod dropped from the pack gets its local jar deleted on the next run, not just left behind). Full instructions are in the `LEEME.txt` inside the zip.
-
-Under the hood this is still `packwiz-installer-bootstrap.jar` pointed at this repo's `pack.toml` (defaults to `client`+`both` side) - the .bat/.command files just wrap that one command, run from wherever they're unzipped, so nobody has to type it or touch a shared folder.
+Under the hood it's just `packwiz-installer-bootstrap.jar --pack-folder modsTUKI` pointed at this repo's `pack.toml` (defaults to `client`+`both` side, verified to never pull `server`-only mods).
 
 ## For the server (this machine)
 
