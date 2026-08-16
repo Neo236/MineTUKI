@@ -1,10 +1,6 @@
 hash-format = "sha256"
 
 [[files]]
-file = ".claude/scheduled_tasks.lock"
-hash = "ff5a008876f1386cc43573a1a51a378e0aaf341a6d2614e53b2f2f5ec32da8e9"
-
-[[files]]
 file = ".env.example"
 hash = "6f84c672b8c88d11c8eef32512eff2694bb69af6e6dc5308ad0297f905df8c4d"
 
@@ -569,11 +565,6 @@ metafile = true
 [[files]]
 file = "mods/tectonic.pw.toml"
 hash = "fef2f8085bbdf6d398b02c87225ad9ccf9cc5d71edde13cd18e12a154764c84e"
-metafile = true
-
-[[files]]
-file = "mods/terrablender-neoforge.pw.toml"
-hash = "d77e4dc337b6090358c1ef01b0f99a8357e5279443e0e23e511de1be865c01c9"
 metafile = true
 
 [[files]]

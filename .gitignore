@@ -1,6 +1,9 @@
 # packwiz cache
 .packwizcache/
 
+# Claude Code local session state (not project content)
+.claude/
+
 # Secrets / local overrides for docker-compose
 .env
 
