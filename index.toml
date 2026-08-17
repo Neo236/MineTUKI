@@ -367,7 +367,7 @@ metafile = true
 
 [[files]]
 file = "mods/lithostitched.pw.toml"
-hash = "b44ca90546d8fbf059a68aa34ed1106825fb99b8e1570d1edc16bec38af8a0e8"
+hash = "0e1046e1bb16b42706ba58700f294787dc8fe643518bc5fb26eeaea8e96fd320"
 metafile = true
 
 [[files]]
@@ -647,7 +647,7 @@ metafile = true
 
 [[files]]
 file = "mods/void-lib.pw.toml"
-hash = "72683ad5fef758a7f05003b0e7c9671f4f7afc2a068951c8482b6bbc5ce6f559"
+hash = "8c962589501b86b06570e6507a58103dafd49c40554fd0924c9df54d60ff324b"
 metafile = true
 
 [[files]]
