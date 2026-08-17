@@ -1,54 +1,54 @@
 # MineTUKI
 
-Modpack for a private Minecraft **1.21.1** server running **NeoForge 21.1.248**, managed with [packwiz](https://packwiz.infra.link/).
+Modpack para un servidor privado de Minecraft **1.21.1** corriendo **NeoForge 21.1.248**, gestionado con [packwiz](https://packwiz.infra.link/).
 
-This repo is the single source of truth for the modlist. It is *not* the server itself — no world save, no server jar, no logs live here. It's just the list of mods + their configs, versioned so changes are reviewable and reproducible.
+Este repo es la fuente única de verdad del listado de mods. *No* es el servidor en sí — acá no vive el mundo, ni el jar del servidor, ni los logs. Es solo la lista de mods + sus configs, versionada para que los cambios sean revisables y reproducibles.
 
-## How the client/server split works
+## Cómo funciona la separación cliente/servidor
 
-Every mod tracked here has a `side` in its `.toml` file: `client`, `server`, or `both`. One pack, one repo — no separate branches or releases needed for this. The installer picks what to download based on which side you ask for:
+Cada mod tiene un `side` en su archivo `.toml`: `client`, `server`, o `both`. Un solo pack, un solo repo — no hace falta rama ni release separado para esto. El instalador elige qué descargar según el lado que le pidas:
 
-- **Server** (this machine) runs the installer with `-s server`, pulling only `server` + `both` mods.
-- **Clients** (you and friends) run the installer with `-s client` (the default), pulling only `client` + `both` mods.
+- **Servidor** (esta máquina) corre el instalador con `-s server`, bajando solo mods `server` + `both`.
+- **Clientes** (vos y tus amigos) corren el instalador con `-s client` (el default), bajando solo mods `client` + `both`.
 
-Both point at the exact same `pack.toml` URL — the raw file on this GitHub repo's `main` branch.
+Ambos apuntan a la misma URL de `pack.toml` — el archivo crudo de este repo en la rama `main`.
 
-## For friends: installing the modpack
+## Para amigos: instalar el modpack
 
-Download the **[client installer](https://github.com/Neo236/MineTUKI/releases/tag/client-installer-v1)**, unzip it anywhere, double-click the script for your OS (`instalar-mods-windows.bat` / `instalar-mods-mac-linux.command`). It downloads the client mods into a `modsTUKI` folder next to itself - re-running it later updates that same folder (adds new mods, removes dropped ones). What you do with those mods from there (copy them into your NeoForge instance's `mods` folder, etc.) is up to you.
+Descargá el **[instalador de cliente](https://github.com/Neo236/MineTUKI/releases/tag/client-installer-v1)**, extraelo en cualquier lado, y doble clic al script de tu sistema (`instalar-mods-windows.bat` / `instalar-mods-mac-linux.command`). Descarga los mods de cliente a una carpeta `modsTUKI` al lado del instalador — si volvés a correrlo más adelante, actualiza esa misma carpeta (agrega lo nuevo, saca lo que ya no está). Qué hacés con esos mods después (copiarlos a tu perfil de NeoForge, etc.) es cosa tuya.
 
-Under the hood it's just `packwiz-installer-bootstrap.jar --pack-folder modsTUKI` pointed at this repo's `pack.toml` (defaults to `client`+`both` side, verified to never pull `server`-only mods).
+Por dentro es simplemente `packwiz-installer-bootstrap.jar --pack-folder modsTUKI` apuntando al `pack.toml` de este repo (default `client`+`both`, verificado que nunca baja mods `server`-only).
 
-## For the server (this machine)
+## Para el servidor (esta máquina)
 
-Runs in Docker via [`itzg/minecraft-server`](https://github.com/itzg/docker-minecraft-server), which has built-in packwiz support: set `PACKWIZ_URL` to this repo's `pack.toml` and it installs only `side = "server"` / `side = "both"` mods automatically — same source, same mechanism as the client install above, just filtered the other way. No separate server branch, fork, or release needed.
-
-```
-docker compose up -d        # first start (pulls image, installs NeoForge + mods, generates world)
-docker compose logs -f mc   # watch it boot
-docker compose restart mc   # re-syncs mods from the latest pushed pack.toml, then relaunches
-docker compose down         # stop (world/config/mods persist on disk, untouched)
-```
-
-Runtime data (world save, downloaded mod jars, configs, logs) lives entirely **outside this repo**, bind-mounted from `~/deployments/minecraft/mainMinecraftServer/` — that folder is this server's `.minecraft` equivalent. Nothing under it is committed to git.
-
-Copy `.env.example` to `.env` (gitignored) to override memory/MOTD/difficulty/RCON without touching the committed compose file.
-
-### Managing access
-
-- **Online-mode** (`true`) and **whitelist** (`true`) are both on — only players with legit Microsoft/Mojang accounts *and* a whitelist entry can join.
-- Add a player: `docker exec -u 1000 minetuki mc-send-to-console whitelist add <username>`
-- Remove a player: `docker exec -u 1000 minetuki mc-send-to-console whitelist remove <username>`
-- List current whitelist: `docker exec -u 1000 minetuki mc-send-to-console whitelist list`
-- Or edit `whitelist.json` directly in the deployments data folder and run `whitelist reload` via the same command.
-
-## Updating mods
+Corre en Docker vía [`itzg/minecraft-server`](https://github.com/itzg/docker-minecraft-server), que tiene soporte nativo para packwiz: seteás `PACKWIZ_URL` al `pack.toml` de este repo y instala automáticamente solo los mods `side = "server"` / `side = "both"` — misma fuente, mismo mecanismo que el instalador de cliente, solo que filtrado al revés. No hace falta rama, fork ni release separado para el servidor.
 
 ```
-packwiz modrinth add <slug>       # add a Modrinth mod
-packwiz curseforge add <slug>     # add a CurseForge mod
-packwiz update --all              # bump everything to latest compatible version
-packwiz refresh                   # rehash after manual edits
+docker compose up -d        # primer arranque (baja la imagen, instala NeoForge + mods, genera el mundo)
+docker compose logs -f mc   # ver el arranque en vivo
+docker compose restart mc   # resincroniza mods desde el pack.toml pusheado más reciente, y relanza
+docker compose down         # detener (mundo/config/mods quedan en disco, intactos)
 ```
 
-Commit `pack.toml`, `index.toml`, and the `mods/*.toml` files, then push. Run `docker compose restart mc` on this machine to pick up the change server-side; friends re-run the installer client-side whenever they want to update.
+Los datos en tiempo de ejecución (mundo, jars de mods descargados, configs, logs) viven completamente **fuera de este repo**, montados desde `~/deployments/minecraft/mainMinecraftServer/` — esa carpeta es el equivalente al `.minecraft` de este servidor. Nada de ahí se commitea a git.
+
+Copiá `.env.example` a `.env` (ignorado por git) para sobreescribir memoria/MOTD/dificultad/RCON sin tocar el compose commiteado.
+
+### Gestionar el acceso
+
+- **Online-mode** (`true`) y **whitelist** (`true`) están activos — solo entran jugadores con cuenta legítima de Microsoft/Mojang *y* que estén en la whitelist.
+- Agregar jugador: `docker exec -u 1000 minetuki mc-send-to-console whitelist add <username>`
+- Sacar jugador: `docker exec -u 1000 minetuki mc-send-to-console whitelist remove <username>`
+- Ver whitelist actual: `docker exec -u 1000 minetuki mc-send-to-console whitelist list`
+- O editar `whitelist.json` directamente en la carpeta de datos y correr `whitelist reload` con el mismo comando.
+
+## Actualizar mods
+
+```
+packwiz modrinth add <slug>       # agregar un mod de Modrinth
+packwiz curseforge add <slug>     # agregar un mod de CurseForge
+packwiz update --all              # actualizar todo a la última versión compatible
+packwiz refresh                   # rehashear después de editar a mano
+```
+
+Commiteá `pack.toml`, `index.toml`, y los `mods/*.toml`, después pusheá. Corré `docker compose restart mc` en esta máquina para aplicar el cambio del lado servidor; los amigos vuelven a correr el instalador del lado cliente cuando quieran actualizar.
