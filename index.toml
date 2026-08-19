@@ -606,6 +606,11 @@ hash = "d46ef885a2589d300e51c7bf67dcdaa3aea5a783cf7cb12f38116a5b2181db5b"
 metafile = true
 
 [[files]]
+file = "mods/simple-planes.pw.toml"
+hash = "6beb1b570e3341b057ab44a5470a097cf21838419add35f7940045cc9da6adab"
+metafile = true
+
+[[files]]
 file = "mods/small-ships.pw.toml"
 hash = "caffad379a6357e75041ac067cc303a07f898d5c1033d3707eb4afdd163b2e18"
 metafile = true
