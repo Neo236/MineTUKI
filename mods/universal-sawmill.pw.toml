@@ -1,0 +1,13 @@
+name = "Sawmill"
+filename = "sawmill-1.21-1.8.0-neoforge.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/WRaRZdTd/versions/RIxcwgDb/sawmill-1.21-1.8.0-neoforge.jar"
+hash-format = "sha512"
+hash = "b4e503f1a914628156183c6331626f5f896f042ff41b4c7f4c6d723cb3c7b844a9062c147002d0fedae579c77935dfecc2e364ebdb9688d1df344fa555491c4c"
+
+[update]
+[update.modrinth]
+mod-id = "WRaRZdTd"
+version = "RIxcwgDb"
