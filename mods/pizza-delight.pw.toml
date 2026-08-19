@@ -1,0 +1,13 @@
+name = "Pizza Delight"
+filename = "pizzadelight-1.1.4-1.21.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/Cb5J3sNW/versions/ZI33HMQ3/pizzadelight-1.1.4-1.21.1.jar"
+hash-format = "sha512"
+hash = "97beb2468eb28df08a77da19c60ebf4e4baa4bcbb57c6e35a0c86cb63cbff181456f665571d46f9ae0572292fe39d1175be6b378d21bc64cd3b8a7bda4d24bc3"
+
+[update]
+[update.modrinth]
+mod-id = "Cb5J3sNW"
+version = "ZI33HMQ3"

@@ -1,0 +1,13 @@
+name = "Aures - Farmers Structures"
+filename = "FarmersStructures-1.0.2-1.21.1_neoforge.jar"
+side = "server"
+
+[download]
+url = "https://cdn.modrinth.com/data/iYGRt6QB/versions/MEsGDnri/FarmersStructures-1.0.2-1.21.1_neoforge.jar"
+hash-format = "sha512"
+hash = "cacea687bf16e8a3ec6a1b46fa5323490a3aef9e970bbe882b3f13bd219fe6b044f04ba092c5c7d89e8670ec88120c5b1fab860c52795f1c27dd67e5173de4c4"
+
+[update]
+[update.modrinth]
+mod-id = "iYGRt6QB"
+version = "MEsGDnri"
