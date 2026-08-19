@@ -46,6 +46,11 @@ hash = "187eafde5974beee1263538b462b7b8fe2fc8948c5d413980d9796d55928580b"
 metafile = true
 
 [[files]]
+file = "mods/astikorcarts-redux.pw.toml"
+hash = "5d9bdb9a8bcd02fe6f867d52c52a8f20100422de6db324b02543a1d2aff362fa"
+metafile = true
+
+[[files]]
 file = "mods/aures-farmers-structures.pw.toml"
 hash = "6fbc3e91a26e021c3abf59ec8992123a7e9b6f8c8f72556021dbc6249c26c95e"
 metafile = true
