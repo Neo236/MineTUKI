@@ -437,7 +437,7 @@ metafile = true
 
 [[files]]
 file = "mods/moogs-structure-lib.pw.toml"
-hash = "06ba0fccd9b8597873aa4b0b2d70f5ea767fbd6352d6e07f7638ae5bfb5d7588"
+hash = "ba94dfeb21c6ae878a568062cd03154163e9b8bb31018bd16441129c75b16e8b"
 metafile = true
 
 [[files]]
@@ -747,7 +747,7 @@ metafile = true
 
 [[files]]
 file = "mods/yungs-api.pw.toml"
-hash = "36e0e147f192c7991ee230bf492728042602236d5811619bbb16f8d5d1f7771f"
+hash = "d9c0c9209bac0b693af2a7c1e47ffb28d366bad19c91df31dc6d345fa75250a1"
 metafile = true
 
 [[files]]
