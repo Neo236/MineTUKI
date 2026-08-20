@@ -86,16 +86,6 @@ hash = "b866140903f1f92f5b604aebe20762491a4096d4883b8bdedd1f388f10461091"
 metafile = true
 
 [[files]]
-file = "mods/bluedude-dragons.pw.toml"
-hash = "d80a40cab0c2ed99d6a94c8b72f3c8e68d4452f92968d72b11813b56c1e76920"
-metafile = true
-
-[[files]]
-file = "mods/bluelib.pw.toml"
-hash = "0048f3368768eb4d1ba846ba70efe1c67a4bdf920cd1718972fc07443ec81e1b"
-metafile = true
-
-[[files]]
 file = "mods/borninchaos.pw.toml"
 hash = "a2c8cf1a4fc5faed55ca1f8d04f7abaa1c8282b9bcd70e1b3e607181923f48d9"
 metafile = true
