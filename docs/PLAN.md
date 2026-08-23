@@ -126,32 +126,24 @@ Como itzg hace `exit 1` cuando packwiz falla, y el compose usa `restart: unless-
 `docker compose restart mc` habría dejado el servidor caído. Esto convierte el gate de CI de
 la Fase 0 en un requisito de disponibilidad, no en una prolijidad.
 
-Esto dejó de ser una prediccion: en el arranque del 22 de agosto el servidor entro en ese
-loop **seis veces seguidas** antes de levantar. Pero el disparador no fue el pack, sino algo
-que no estaba en el analisis:
+El mecanismo del loop dejo de ser una prediccion: el 22 de agosto el servidor reintento
+**seis veces** antes de levantar, con este error:
 
 ```
 [init] [ERROR] Failed to get packwiz installer
 java.net.UnknownHostException: Failed to resolve 'maven.packwiz.infra.link'
 ```
 
-Antes de mirar el `PACKWIZ_URL`, itzg descarga el propio instalador de packwiz desde un Maven
-de terceros, **en cada arranque**, sin forma de saltearlo ni de fijar la version: el codigo
-llama a `maven-download` sin condicion cuando hay `PACKWIZ_URL`, y aunque pasa
-`--skip-existing`, igual necesita resolver la metadata para saber que version bajar.
+Vale la pena saber que, antes de mirar el `PACKWIZ_URL`, itzg descarga el propio instalador
+de packwiz desde un Maven de terceros en cada arranque, sin forma de saltearlo.
 
-El servidor resuelve DNS contra `100.100.100.100`, que es MagicDNS de Tailscale. Es decir:
-**el arranque del servidor de Minecraft depende de que Tailscale este levantado.** Se auto
-recupera gracias a la politica de reinicio, pero cada episodio son varios minutos caido.
+Pero ese episodio **no fue un problema de configuracion y no requiere arreglo**: los fallos
+ocurrieron entre 69 y 114 segundos despues del arranque en frio del host, y el intento
+exitoso llego a los 121 segundos. Fue una carrera de arranque, con el contenedor levantando
+antes que la red. La politica de reinicio hizo exactamente lo que tenia que hacer.
 
-Mitigacion propuesta, aditiva y reversible: darle al contenedor un resolutor de respaldo,
-manteniendo MagicDNS primero.
-
-```yaml
-    dns:
-      - 100.100.100.100   # MagicDNS de Tailscale, sigue primero
-      - 1.1.1.1           # respaldo publico
-```
+Queda como evidencia de que el loop es real, y por lo tanto de que el gate de CI importa:
+un pack roto si seria un fallo permanente, sin nada que se resuelva solo.
 
 ## 5. Fases
 
