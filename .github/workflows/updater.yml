@@ -31,7 +31,12 @@ jobs:
 
       - name: El jar no puede llevar restos del MDK de ejemplo
         run: |
-          jar=$(ls build/libs/*.jar | head -1)
+          # El build produce tambien el jar del companion; hay que mirar el del mod.
+          jar=$(ls build/libs/*.jar | grep -v -- '-companion\.jar$' | head -1)
+          if [ -z "$jar" ]; then
+            echo "::error::No se genero el jar del mod."
+            exit 1
+          fi
           echo "Revisando $jar"
           if unzip -l "$jar" | grep -q 'examplemod'; then
             echo "::error::El jar todavia incluye assets de examplemod."
@@ -49,3 +54,14 @@ jobs:
           name: updater-jar
           path: updater/build/libs/*.jar
           if-no-files-found: error
+
+      - name: El companion tiene que poder ejecutarse solo
+        run: |
+          companion=build/libs/*-companion.jar
+          # Sin argumentos falla por falta de --pack-url, pero eso ya prueba que el
+          # Main-Class esta bien declarado y que no le falta ninguna dependencia.
+          if ! unzip -p $companion META-INF/MANIFEST.MF | grep -q 'Main-Class'; then
+            echo "::error::El jar del companion no declara Main-Class."
+            exit 1
+          fi
+          echo "OK: companion ejecutable."

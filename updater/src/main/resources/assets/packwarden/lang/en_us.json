@@ -1,0 +1,43 @@
+{
+  "packwarden.screen.title": "%s found an update",
+  "packwarden.screen.version": "Published version: %s",
+  "packwarden.screen.summary": "%1$s mods added, %2$s removed, %3$s updated",
+  "packwarden.screen.changes_unknown": "Could not determine what changed.",
+  "packwarden.screen.added": "Added: %s",
+  "packwarden.screen.removed": "Removed: %s",
+  "packwarden.screen.updated": "Updated: %s",
+
+  "packwarden.button.now": "Update now",
+  "packwarden.button.on_exit": "Update on exit",
+  "packwarden.button.later": "Later",
+  "packwarden.check.dont_ask": "Don't remind me about this version",
+
+  "packwarden.checking.title": "%s",
+  "packwarden.checking.message": "Checking for updates...",
+
+  "packwarden.status.up_to_date": "Your modpack is up to date.",
+  "packwarden.status.offline": "Could not reach the server. Check your connection.",
+  "packwarden.status.disabled": "No modpack URL is configured.",
+  "packwarden.status.not_managed": "The mods in this folder were not installed by the updater, so there is nothing to compare against. Update once to get it in sync.",
+  "packwarden.status.available": "An update is available.",
+
+  "packwarden.error.title": "Update error",
+  "packwarden.error.launch": "Could not start the update.\n\n%s",
+
+  "packwarden.command.checking": "Checking modpack status...",
+  "packwarden.command.no_permission": "You don't have permission to do that.",
+
+  "packwarden.server.update_found": "%s: a modpack update is available.",
+  "packwarden.server.restarting_now": "Restarting now to update. Back in a minute.",
+  "packwarden.server.countdown": "The server will update in %s.",
+  "packwarden.server.kick": "The server is updating. Rejoin in a minute and update your modpack.",
+  "packwarden.server.vote_open": "Postpone the update?",
+  "packwarden.server.vote_postpone": "[Postpone %s]",
+  "packwarden.server.vote_now": "[Update now]",
+  "packwarden.server.vote_counted": "Vote counted.",
+  "packwarden.server.vote_postponed": "The update was postponed by %s.",
+  "packwarden.server.vote_rejected": "The update schedule stands.",
+  "packwarden.server.vote_limit": "No more postponements are allowed.",
+
+  "packwarden.client.outdated": "Your modpack does not match the server's. Update it with the button on the main menu."
+}

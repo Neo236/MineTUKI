@@ -188,3 +188,73 @@ idea {
         downloadJavadoc = true
     }
 }
+
+// ---------------------------------------------------------------------------
+// Companion: el ejecutable que hace el trabajo con Minecraft ya cerrado.
+//
+// Vive en su propio source set, sin nada de Minecraft en el classpath, porque
+// tiene que poder correr solo. Se empaqueta dentro del mod como recurso, junto
+// con el bootstrap de packwiz, para no depender de descargas en tiempo de uso.
+// ---------------------------------------------------------------------------
+
+sourceSets {
+    companion {
+        java.srcDirs = ['src/companion/java']
+        compileClasspath = files()
+        runtimeClasspath = files()
+    }
+}
+
+// Fijado a una version concreta y verificado por hash: es codigo de terceros que
+// se va a ejecutar en las maquinas de los jugadores.
+def packwizBootstrapUrl =
+        'https://github.com/packwiz/packwiz-installer-bootstrap/releases/download/v0.0.3/packwiz-installer-bootstrap.jar'
+def packwizBootstrapSha256 = 'a8fbb24dc604278e97f4688e82d3d91a318b98efc08d5dbfcbcbcab6443d116c'
+def packwizBootstrapFile = layout.buildDirectory.file('packwiz/packwiz-installer-bootstrap.jar')
+
+tasks.register('downloadPackwizBootstrap') {
+    description = 'Descarga el bootstrap de packwiz y verifica su hash.'
+    outputs.file(packwizBootstrapFile)
+    def url = packwizBootstrapUrl
+    def expected = packwizBootstrapSha256
+    def output = packwizBootstrapFile
+    doLast {
+        def target = output.get().asFile
+        target.parentFile.mkdirs()
+        if (!target.exists()) {
+            new URL(url).withInputStream { input ->
+                target.withOutputStream { out -> out << input }
+            }
+        }
+        def actual = java.security.MessageDigest.getInstance('SHA-256')
+                .digest(target.bytes)
+                .encodeHex()
+                .toString()
+        if (actual != expected) {
+            target.delete()
+            throw new GradleException(
+                    "El hash del bootstrap de packwiz no coincide.\n" +
+                    "  esperado: ${expected}\n" +
+                    "  obtenido: ${actual}")
+        }
+    }
+}
+
+tasks.register('companionJar', Jar) {
+    archiveClassifier = 'companion'
+    from sourceSets.companion.output
+    manifest {
+        attributes('Main-Class': 'io.github.neo236.packwarden.companion.CompanionMain')
+    }
+}
+
+tasks.named('processResources') {
+    dependsOn 'companionJar', 'downloadPackwizBootstrap'
+    from(tasks.named('companionJar').flatMap { it.archiveFile }) {
+        into 'packwarden'
+        rename { 'companion.jar' }
+    }
+    from(packwizBootstrapFile) {
+        into 'packwarden'
+    }
+}
