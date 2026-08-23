@@ -175,7 +175,15 @@ un pack roto si seria un fallo permanente, sin nada que se resuelva solo.
 - [ ] Resolver `MineTUKI_test`: borrarlo o agregarle `mods/*.jar` al `.gitignore` (hoy tiene
       141 jars sin trackear ni ignorar).
 
-### Fase 2 — El mod
+### Fase 2 — El mod ✅ escrita, parcialmente verificada
+
+Probado contra el servidor real: el mod carga en dedicado sin arrastrar clases de cliente,
+la deteccion acierta en los dos sentidos, el alias `/tuki` funciona y el branding sale de la
+configuracion. Dos bugs salieron de ejecutarlo, no de leerlo, y estan corregidos: el comando
+no le respondia a la consola, y un `check` de solo lectura llegaba a apagar el servidor.
+
+**Falta ejecutar la interfaz del cliente y probar una conexion real** con el handshake
+activo. Es lo unico que no se puede verificar por SSH.
 
 **Detección.** Hoy busca `pack.toml` con una ruta relativa al directorio de trabajo, que en el
 cliente casi nunca existe, así que devuelve "hay update" **siempre**. Se reemplaza por leer
