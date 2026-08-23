@@ -6,6 +6,7 @@ import io.github.neo236.packwarden.core.UpdateChecker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.AlertScreen;
 import net.minecraft.client.gui.screens.Screen;
 
@@ -15,11 +16,27 @@ import net.minecraft.resources.ResourceLocation;
 /** El boton del menu principal: estado de un vistazo, y consulta manual al hacer clic. */
 public class WardenButton extends Button {
 
+    /** Lado de la textura del icono, en pixeles. Ver assets/packwarden/textures/gui. */
+    private static final int ICON_SIZE = 64;
+
     private static final ResourceLocation ICON =
             ResourceLocation.fromNamespaceAndPath(PackWarden.MOD_ID, "textures/gui/fox.png");
 
     public WardenButton(int x, int y, int size) {
         super(x, y, size, size, Component.empty(), b -> handleClick(), Button.DEFAULT_NARRATION);
+
+        // Un boton de 20x20 con un dibujo y sin texto no le dice nada a nadie: ni a
+        // quien lo ve por primera vez, ni a un lector de pantalla. El tooltip y la
+        // narracion le ponen nombre.
+        Component label = Component.literal(WardenConfig.COMMON.brandName.get());
+        this.setMessage(label);
+        this.setTooltip(Tooltip.create(label));
+    }
+
+    @Override
+    public void renderString(GuiGraphics graphics, net.minecraft.client.gui.Font font, int color) {
+        // El nombre existe para el tooltip y la narracion, no para dibujarse encima
+        // del icono.
     }
 
     private static void handleClick() {
@@ -73,8 +90,14 @@ public class WardenButton extends Button {
 
         super.renderWidget(graphics, mouseX, mouseY, partialTick);
 
-        int inset = Math.max(1, (this.width - 16) / 2);
-        graphics.blit(ICON, this.getX() + inset, this.getY() + inset, 0, 0, 16, 16, 16, 16);
+        // La textura es de 64x64 y se dibuja escalada a 16x16. Guardarla mas grande
+        // que su tamaño en pantalla la mantiene nitida en monitores con escalado,
+        // donde una de 16x16 se ve pastosa.
+        int drawn = 16;
+        int inset = Math.max(1, (this.width - drawn) / 2);
+        graphics.blit(
+                ICON, this.getX() + inset, this.getY() + inset, drawn, drawn, 0, 0, ICON_SIZE, ICON_SIZE,
+                ICON_SIZE, ICON_SIZE);
 
         if (ClientUpdateState.updateAvailable()) {
             graphics.drawString(

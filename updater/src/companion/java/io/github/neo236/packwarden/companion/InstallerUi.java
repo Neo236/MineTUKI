@@ -5,15 +5,21 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Image;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -44,7 +50,55 @@ public final class InstallerUi {
     private JLabel statusLabel;
     private JProgressBar progress;
     private JButton installButton;
+    private JComboBox<Language> languageBox;
     private Path gameFolder;
+    private Language language = Language.fromSystem();
+
+    /**
+     * Idiomas ofrecidos.
+     *
+     * <p>Cada uno define dos cosas a la vez: en que idioma se ve el instalador y en
+     * que idioma arranca el juego la primera vez. Son la misma eleccion para el
+     * jugador, asi que preguntarla dos veces no tendria sentido.
+     */
+    enum Language {
+        ES_ES("es", "es_es", "Español (España)"),
+        ES_MX("es", "es_mx", "Español (Latinoamérica)"),
+        ES_AR("es", "es_ar", "Español (Argentina)"),
+        EN_US("en", "en_us", "English (US)"),
+        PT_BR("pt", "pt_br", "Português (Brasil)");
+
+        final String uiTag;
+        final String minecraftCode;
+        final String label;
+
+        Language(String uiTag, String minecraftCode, String label) {
+            this.uiTag = uiTag;
+            this.minecraftCode = minecraftCode;
+            this.label = label;
+        }
+
+        @Override
+        public String toString() {
+            return label;
+        }
+
+        /**
+         * El que mejor encaja con el sistema.
+         *
+         * <p>Se cae a español de España, que es la variante mas neutra de las que
+         * ofrece Minecraft y la que mas gente entiende.
+         */
+        static Language fromSystem() {
+            String tag = Locale.getDefault().getLanguage();
+            for (Language language : values()) {
+                if (language.uiTag.equals(tag)) {
+                    return language;
+                }
+            }
+            return ES_ES;
+        }
+    }
 
     /** Todo lo que distingue a un modpack de otro. Nada de esto esta en el codigo. */
     public record Config(
@@ -63,8 +117,10 @@ public final class InstallerUi {
     }
 
     public void show() {
+        Messages.setLanguage(language.uiTag);
         frame = new JFrame(Messages.get("window.title", config.packName()));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        applyIcons(frame);
 
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
@@ -73,7 +129,9 @@ public final class InstallerUi {
         content.add(title(config.packName()));
         content.add(Box.createVerticalStrut(4));
         content.add(plain(Messages.get("intro")));
-        content.add(Box.createVerticalStrut(14));
+        content.add(Box.createVerticalStrut(10));
+        content.add(languageRow());
+        content.add(Box.createVerticalStrut(10));
 
         boolean hasLauncher = Platform.hasOfficialLauncher();
 
@@ -139,6 +197,55 @@ public final class InstallerUi {
         frame.setMinimumSize(new Dimension(560, frame.getHeight()));
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    /**
+     * Selector de idioma.
+     *
+     * <p>Al cambiarlo se reconstruye la ventana entera. Es lo mas simple y ocurre
+     * a lo sumo una vez: no vale la pena mantener referencias a cada etiqueta solo
+     * para poder reescribirlas.
+     */
+    private JPanel languageRow() {
+        JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        row.setAlignmentX(Component.LEFT_ALIGNMENT);
+        row.add(plain(Messages.get("field.language") + "  "));
+
+        languageBox = new JComboBox<>(Language.values());
+        languageBox.setSelectedItem(language);
+        languageBox.addActionListener(event -> {
+            Language chosen = (Language) languageBox.getSelectedItem();
+            if (chosen != null && chosen != language) {
+                language = chosen;
+                frame.dispose();
+                show();
+            }
+        });
+        row.add(languageBox);
+        return row;
+    }
+
+    /**
+     * Icono de la ventana y de la barra de tareas.
+     *
+     * <p>Se cargan varios tamaños y el sistema elige el que necesita en cada lugar.
+     * Si no estan, la ventana usa el icono generico de Java: es feo, pero no vale
+     * la pena que falte un archivo y no abra.
+     */
+    private static void applyIcons(JFrame frame) {
+        List<Image> icons = new ArrayList<>();
+        for (int size : new int[] {16, 32, 48, 64, 128, 256}) {
+            try (InputStream in = InstallerUi.class.getResourceAsStream("/packwarden/icon-" + size + ".png")) {
+                if (in != null) {
+                    icons.add(ImageIO.read(in));
+                }
+            } catch (Exception ignored) {
+                // Un icono ilegible no puede impedir que se abra el instalador.
+            }
+        }
+        if (!icons.isEmpty()) {
+            frame.setIconImages(icons);
+        }
     }
 
     private void refreshEnabled() {
@@ -216,6 +323,7 @@ public final class InstallerUi {
                 profileKey(profileName),
                 config.brandName(),
                 config.commandAlias(),
+                language.minecraftCode,
                 config.bootstrapJar());
 
         installButton.setEnabled(false);

@@ -33,6 +33,8 @@ public final class Installer {
             String profileKey,
             String brandName,
             String commandAlias,
+            /** Codigo de idioma de Minecraft para la primera vez, por ejemplo "es_es". */
+            String gameLanguage,
             Path bootstrapJar) {}
 
     public interface Progress {
@@ -55,7 +57,7 @@ public final class Installer {
         seedModConfig(options);
 
         progress.step(Messages.get("step.resourcepacks"));
-        seedOptions(options.gameDirectory());
+        seedOptions(options.gameDirectory(), options.gameLanguage());
 
         if (options.destination() == Destination.DEDICATED_PROFILE) {
             progress.step(Messages.get("step.profile"));
@@ -194,7 +196,7 @@ public final class Installer {
      * el archivo no existe, porque en una carpeta ya usada seria pisarle la
      * configuracion al jugador.
      */
-    static void seedOptions(Path gameDirectory) throws IOException {
+    static void seedOptions(Path gameDirectory, String gameLanguage) throws IOException {
         Path options = gameDirectory.resolve("options.txt");
         if (Files.exists(options)) {
             return;
@@ -219,7 +221,13 @@ public final class Installer {
         }
         list.append(']');
 
+        // El idioma tambien se siembra: es la primera vez que se abre esta carpeta,
+        // asi que el juego arranca directamente en el idioma que eligio el jugador
+        // en vez de en ingles.
+        String language = gameLanguage == null || gameLanguage.isBlank() ? "en_us" : gameLanguage;
+
         String content = "version:3955\n"
+                + "lang:" + language + "\n"
                 + "fullscreen:false\n"
                 + "resourcePacks:" + list + "\n"
                 + "incompatibleResourcePacks:[]\n";

@@ -134,6 +134,9 @@ jobs:
           tag="${{ github.event.inputs.tag || github.ref_name }}"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
 
+      - name: Instalar WiX
+        run: choco install wixtoolset --no-progress -y
+
       - name: Armar el ejecutable
         shell: bash
         run: |
@@ -169,8 +172,48 @@ jobs:
 
           cd salida && 7z a -tzip ../MineTUKI-instalador-windows.zip MineTUKI
 
+      - name: Armar el instalador de un solo archivo
+        shell: bash
+        continue-on-error: true
+        run: |
+          # Un unico .exe que no hay que descomprimir. Se instala por usuario para
+          # que no pida permisos de administrador.
+          jpackage \
+            --type exe \
+            --name "MineTUKI" \
+            --app-version "${{ steps.meta.outputs.version }}" \
+            --input entrada \
+            --main-jar packwarden-companion.jar \
+            --main-class io.github.neo236.packwarden.companion.CompanionMain \
+            --dest instalador \
+            --win-per-user-install \
+            --win-shortcut \
+            --win-menu \
+            --win-menu-group "MineTUKI" \
+            --vendor "Neo236" \
+            --description "Instalador del modpack MineTUKI" \
+            --java-options "-Dfile.encoding=UTF-8" \
+            --arguments "--install" \
+            --arguments "--pack-name" --arguments "MineTUKI" \
+            --arguments "--title" --arguments "NeoTUKI Mod Updater" \
+            --arguments "--command-alias" --arguments "tuki" \
+            --arguments "--pack-url" --arguments "https://minetuki-neo236s-projects.vercel.app/pack.toml" \
+            --arguments "--fallback-url" --arguments "https://raw.githubusercontent.com/Neo236/MineTUKI/main/pack.toml" \
+            --arguments "--neoforge-version" --arguments "neoforge-21.1.248" \
+            --arguments "--folder-name" --arguments "minetuki" \
+            --arguments "--bootstrap" --arguments "packwiz-installer-bootstrap.jar"
+
+          mv instalador/*.exe MineTUKI-instalador.exe
+
       - name: Subirlo al release
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload "${{ steps.meta.outputs.tag }}" MineTUKI-instalador-windows.zip --clobber
+        run: |
+          archivos="MineTUKI-instalador-windows.zip"
+          if [ -f MineTUKI-instalador.exe ]; then
+            archivos="$archivos MineTUKI-instalador.exe"
+          else
+            echo "::warning::No se pudo generar el .exe de un solo archivo; queda el zip."
+          fi
+          gh release upload "${{ steps.meta.outputs.tag }}" $archivos --clobber

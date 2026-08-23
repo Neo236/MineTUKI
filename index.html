@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MineTUKI — Instalar el modpack</title>
+<meta name="description" content="Instalador del modpack MineTUKI para Minecraft 1.21.1.">
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f6f5f2;
+    --card: #ffffff;
+    --ink: #1c1b19;
+    --soft: #6b6862;
+    --line: #e2ded6;
+    --accent: #b4632a;
+    --accent-ink: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16150f;
+      --card: #201e17;
+      --ink: #f0ece3;
+      --soft: #a29c8e;
+      --line: #322f25;
+      --accent: #d4813f;
+      --accent-ink: #1c1b19;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+    padding: 40px 20px 80px;
+  }
+  main { max-width: 620px; margin: 0 auto; }
+  h1 { font-size: 2.2rem; margin: 0 0 6px; letter-spacing: -0.02em; }
+  .sub { color: var(--soft); margin: 0 0 32px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 16px;
+  }
+  .card h2 { font-size: 1.05rem; margin: 0 0 4px; }
+  .card p { margin: 0 0 16px; color: var(--soft); font-size: 0.92rem; }
+  a.dl {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--accent-ink);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 11px 22px;
+    border-radius: 9px;
+  }
+  a.dl:hover { filter: brightness(1.08); }
+  a.alt { color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.92rem; }
+  a.alt:hover { text-decoration: underline; }
+  ol { padding-left: 20px; margin: 0; }
+  ol li { margin-bottom: 10px; }
+  .note {
+    border-left: 3px solid var(--accent);
+    padding: 2px 0 2px 14px;
+    color: var(--soft);
+    font-size: 0.92rem;
+    margin: 24px 0 0;
+  }
+  footer { margin-top: 40px; color: var(--soft); font-size: 0.85rem; }
+  footer a { color: var(--soft); }
+</style>
+</head>
+<body>
+<main>
+  <h1>MineTUKI</h1>
+  <p class="sub">Modpack de Minecraft 1.21.1 · NeoForge</p>
+
+  <div class="card">
+    <h2>Windows</h2>
+    <p>Un solo archivo. No necesitas tener Java instalado.</p>
+    <a class="dl" href="https://github.com/Neo236/MineTUKI/releases/latest/download/MineTUKI-instalador.exe">Descargar instalador</a>
+    <p style="margin:14px 0 0">
+      <a class="alt" href="https://github.com/Neo236/MineTUKI/releases/latest/download/MineTUKI-instalador-windows.zip">
+        ¿Prefieres no instalar nada? Versión portable (.zip)
+      </a>
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Mac y Linux</h2>
+    <p>Descomprime y haz doble clic en <code>instalar-mac-linux.command</code>.</p>
+    <a class="alt" href="https://github.com/Neo236/MineTUKI/releases/latest/download/MineTUKI-instalador.zip">Descargar (.zip)</a>
+  </div>
+
+  <div class="card">
+    <h2>Cómo se usa</h2>
+    <ol>
+      <li><strong>Cierra el launcher de Minecraft.</strong> Si está abierto puede borrar el perfil que se va a crear.</li>
+      <li>Abre el instalador y elige el idioma.</li>
+      <li>Deja marcada la primera opción y pulsa <strong>Instalar</strong>.</li>
+      <li>Abre el launcher y elige el perfil <strong>MineTUKI</strong>.</li>
+    </ol>
+    <p class="note">
+      Crea una carpeta de mods propia: no toca los mods que ya tengas en otros perfiles.
+      Se ejecuta una sola vez — después el juego avisa solo cuando el modpack cambia.
+    </p>
+  </div>
+
+  <footer>
+    <a href="https://github.com/Neo236/MineTUKI">Código y lista de mods en GitHub</a>
+  </footer>
+</main>
+</body>
+</html>
