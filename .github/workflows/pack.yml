@@ -1,0 +1,45 @@
+name: Validar pack
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  packwiz-refresh:
+    name: El indice coincide con el contenido
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Instalar packwiz
+        run: go install github.com/packwiz/packwiz@latest
+
+      - name: packwiz refresh
+        run: packwiz refresh
+
+      - name: El pack tiene que quedar sin cambios
+        run: |
+          if ! git diff --exit-code; then
+            echo "::error::pack.toml o index.toml estaban desincronizados."
+            echo "::error::Corre 'packwiz refresh' y commitea el resultado."
+            echo "::error::Publicar asi rompe la instalacion de todos los clientes y"
+            echo "::error::deja el servidor en loop de reinicio (itzg hace exit 1)."
+            exit 1
+          fi
+
+      - name: Verificar el hash del indice a mano
+        run: |
+          # Ojo: '^hash' tambien matchea 'hash-format'. El espacio antes del = importa.
+          esperado=$(grep -E '^hash[[:space:]]*=' pack.toml | cut -d'"' -f2)
+          real=$(sha256sum index.toml | cut -d' ' -f1)
+          echo "pack.toml declara: $esperado"
+          echo "index.toml es:     $real"
+          if [ "$esperado" != "$real" ]; then
+            echo "::error::El hash del indice en pack.toml no coincide con index.toml."
+            exit 1
+          fi

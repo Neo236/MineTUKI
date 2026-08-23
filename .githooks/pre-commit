@@ -1,0 +1,29 @@
+#!/bin/sh
+# Mantiene index.toml y pack.toml sincronizados antes de cada commit.
+#
+# Publicar un pack.toml cuyo hash no coincide con index.toml rompe la
+# instalacion de todos los clientes y, como itzg hace exit 1 cuando packwiz
+# falla, deja el servidor en loop de reinicio.
+#
+# Se activa con:  git config core.hooksPath .githooks
+
+if ! command -v packwiz >/dev/null 2>&1; then
+    echo "aviso: packwiz no esta instalado, se saltea la verificacion del indice."
+    echo "       el gate de CI la va a hacer igual antes de que llegue a main."
+    exit 0
+fi
+
+# Solo tiene sentido si el commit toca contenido del pack.
+if git diff --cached --name-only | grep -qE '^(mods|resourcepacks|shaderpacks|config)/|^pack\.toml$|^index\.toml$'; then
+    packwiz refresh >/dev/null 2>&1 || {
+        echo "error: 'packwiz refresh' fallo. Revisa el pack antes de commitear."
+        exit 1
+    }
+
+    if ! git diff --quiet -- pack.toml index.toml; then
+        git add pack.toml index.toml
+        echo "packwiz: index.toml/pack.toml resincronizados y agregados al commit."
+    fi
+fi
+
+exit 0
