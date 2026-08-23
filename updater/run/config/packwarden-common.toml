@@ -1,0 +1,6 @@
+[general]
+	pack_url = "https://raw.githubusercontent.com/Neo236/MineTUKI/f6dbb0f/pack.toml"
+	fallback_pack_url = ""
+	brand_name = "NeoTUKI Mod Updater"
+	command_alias = "tuki"
+	http_timeout_seconds = 10

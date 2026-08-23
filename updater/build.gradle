@@ -28,7 +28,9 @@ sourceSets.main.resources {
 }
 
 repositories {
-    // Add here additional repositories if required by some of the dependencies below.
+    // Para las dependencias del companion, que se compila fuera del entorno de
+    // Minecraft y por lo tanto no hereda sus repositorios.
+    mavenCentral()
 }
 
 base {
@@ -197,11 +199,22 @@ idea {
 // con el bootstrap de packwiz, para no depender de descargas en tiempo de uso.
 // ---------------------------------------------------------------------------
 
+configurations {
+    // El companion necesita un parser JSON de verdad: al registrar el perfil en el
+    // launcher tiene que reescribir launcher_profiles.json sin perder ni un campo
+    // de los perfiles que el jugador ya tenga.
+    companionDeps
+}
+
+dependencies {
+    companionDeps 'com.google.code.gson:gson:2.11.0'
+}
+
 sourceSets {
     companion {
         java.srcDirs = ['src/companion/java']
-        compileClasspath = files()
-        runtimeClasspath = files()
+        compileClasspath = configurations.companionDeps
+        runtimeClasspath = configurations.companionDeps
     }
 }
 
@@ -243,6 +256,12 @@ tasks.register('downloadPackwizBootstrap') {
 tasks.register('companionJar', Jar) {
     archiveClassifier = 'companion'
     from sourceSets.companion.output
+    // Tiene que ser autocontenido: se ejecuta suelto, fuera del juego.
+    from {
+        configurations.companionDeps.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'module-info.class'
     manifest {
         attributes('Main-Class': 'io.github.neo236.packwarden.companion.CompanionMain')
     }
