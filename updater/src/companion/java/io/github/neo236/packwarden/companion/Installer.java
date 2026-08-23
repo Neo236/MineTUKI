@@ -48,17 +48,17 @@ public final class Installer {
             ensureNeoForge(options, progress);
         }
 
-        progress.step("Descargando los mods...");
+        progress.step(Messages.get("step.downloading"));
         installPack(options);
 
-        progress.step("Configurando el actualizador...");
+        progress.step(Messages.get("step.configuring"));
         seedModConfig(options);
 
-        progress.step("Activando los paquetes de texturas...");
+        progress.step(Messages.get("step.resourcepacks"));
         seedOptions(options.gameDirectory());
 
         if (options.destination() == Destination.DEDICATED_PROFILE) {
-            progress.step("Registrando el perfil en el launcher...");
+            progress.step(Messages.get("step.profile"));
             int heapGb = Platform.recommendedHeapGb();
             LauncherProfiles.install(
                     options.minecraftFolder(),
@@ -67,7 +67,7 @@ public final class Installer {
                     options.gameDirectory(),
                     options.neoForgeVersion(),
                     javaArgs(heapGb));
-            progress.step("Perfil listo, con " + heapGb + " GB de memoria asignados.");
+            progress.step(Messages.get("step.profileDone", heapGb));
         }
     }
 
@@ -86,11 +86,11 @@ public final class Installer {
     private static void ensureNeoForge(Options options, Progress progress) throws Exception {
         if (LauncherProfiles.findInstalledVersion(options.minecraftFolder(), options.neoForgeVersion())
                 .isPresent()) {
-            progress.step("NeoForge " + options.neoForgeVersion() + " ya estaba instalado.");
+            progress.step(Messages.get("step.neoforgePresent", options.neoForgeVersion()));
             return;
         }
 
-        progress.step("Instalando NeoForge " + options.neoForgeVersion() + "...");
+        progress.step(Messages.get("step.neoforgeInstalling", options.neoForgeVersion()));
         String version = options.neoForgeVersion().replace("neoforge-", "");
         String url = "https://maven.neoforged.net/releases/net/neoforged/neoforge/"
                 + version + "/neoforge-" + version + "-installer.jar";
@@ -111,7 +111,7 @@ public final class Installer {
         Files.deleteIfExists(installer);
 
         if (exit != 0) {
-            throw new IOException("El instalador de NeoForge fallo (codigo " + exit + ").");
+            throw new IOException(Messages.get("error.neoforge", exit));
         }
     }
 

@@ -64,6 +64,15 @@ jobs:
             --title "PackWarden ${{ steps.meta.outputs.version }}" \
             --generate-notes --latest
 
+      - name: Guardar el companion para el ejecutable de Windows
+        uses: actions/upload-artifact@v4
+        with:
+          name: companion
+          path: |
+            updater/build/libs/*-companion.jar
+            updater/build/packwiz/packwiz-installer-bootstrap.jar
+          if-no-files-found: error
+
       - name: Apuntar el pack a la version nueva
         run: |
           jar="packwarden-${{ steps.meta.outputs.version }}.jar"
@@ -97,3 +106,71 @@ jobs:
           git add pack.toml index.toml mods/packwarden.pw.toml
           git commit -m "chore: apuntar el pack a PackWarden ${{ steps.meta.outputs.version }}"
           git push origin main
+
+  windows-exe:
+    name: Ejecutable de Windows
+    needs: release
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: companion
+          path: artefactos
+
+      - name: Resolver etiqueta
+        id: meta
+        shell: bash
+        run: |
+          tag="${{ github.event.inputs.tag || github.ref_name }}"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Armar el ejecutable
+        shell: bash
+        run: |
+          mkdir -p entrada
+          cp artefactos/libs/*-companion.jar entrada/packwarden-companion.jar
+          cp artefactos/packwiz/packwiz-installer-bootstrap.jar entrada/
+
+          # jpackage empaqueta un Java propio, asi que el ejecutable corre en
+          # cualquier maquina sin que haya nada instalado. app-image y no un
+          # instalador: el instalador de un instalador seria absurdo.
+          jpackage \
+            --type app-image \
+            --name "MineTUKI" \
+            --input entrada \
+            --main-jar packwarden-companion.jar \
+            --main-class io.github.neo236.packwarden.companion.CompanionMain \
+            --dest salida \
+            --java-options "-Dfile.encoding=UTF-8" \
+            --arguments "--install" \
+            --arguments "--pack-name" --arguments "MineTUKI" \
+            --arguments "--title" --arguments "NeoTUKI Mod Updater" \
+            --arguments "--command-alias" --arguments "tuki" \
+            --arguments "--pack-url" --arguments "https://minetuki-neo236s-projects.vercel.app/pack.toml" \
+            --arguments "--fallback-url" --arguments "https://raw.githubusercontent.com/Neo236/MineTUKI/main/pack.toml" \
+            --arguments "--neoforge-version" --arguments "neoforge-21.1.248" \
+            --arguments "--folder-name" --arguments "minetuki" \
+            --arguments "--bootstrap" --arguments "packwiz-installer-bootstrap.jar"
+
+          # El bootstrap tiene que quedar al lado del ejecutable: la ruta que
+          # recibe es relativa al directorio de trabajo del proceso.
+          cp entrada/packwiz-installer-bootstrap.jar "salida/MineTUKI/"
+          cp updater/src/installer/LEEME.txt "salida/MineTUKI/"
+
+          cd salida && 7z a -tzip ../MineTUKI-instalador-windows.zip MineTUKI
+
+      - name: Subirlo al release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ steps.meta.outputs.tag }}" MineTUKI-instalador-windows.zip --clobber

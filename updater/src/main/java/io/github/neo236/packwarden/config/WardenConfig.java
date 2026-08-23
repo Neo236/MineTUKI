@@ -76,13 +76,32 @@ public final class WardenConfig {
         }
     }
 
+    /** Punto de referencia para ubicar el boton del menu principal. */
+    public enum ButtonAnchor {
+        REALMS,
+        MULTIPLAYER,
+        BOTTOM_LEFT
+    }
+
     public static final class Client {
 
         public final ModConfigSpec.BooleanValue checkOnStartup;
         public final ModConfigSpec.BooleanValue promptOnStartup;
+        public final ModConfigSpec.EnumValue<ButtonAnchor> buttonAnchor;
 
         Client(ModConfigSpec.Builder b) {
             b.comment("Ajustes que solo afectan a tu juego.").push("client");
+
+            buttonAnchor = b
+                    .comment(
+                            "Donde ubicar el boton en el menu principal.",
+                            "El costado del menu es zona disputada: varios mods ponen ahi su",
+                            "boton. Si el elegido esta ocupado se busca el lugar libre mas",
+                            "cercano, y si no queda ninguno se cae a la esquina inferior.",
+                            "REALMS = a la izquierda de Minecraft Realms",
+                            "MULTIPLAYER = a la izquierda de Multijugador",
+                            "BOTTOM_LEFT = esquina inferior izquierda, sobre el texto de version")
+                    .defineEnum("button_anchor", ButtonAnchor.REALMS);
 
             checkOnStartup = b
                     .comment("Consultar si hay actualizaciones al abrir el juego.")

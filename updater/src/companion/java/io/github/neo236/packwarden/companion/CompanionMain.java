@@ -39,6 +39,7 @@ public final class CompanionMain {
     private static final String ARG_PACK_NAME = "--pack-name";
     private static final String ARG_ALIAS = "--command-alias";
     private static final String ARG_FALLBACK_URL = "--fallback-url";
+    private static final String ARG_LANGUAGE = "--language";
 
     /** Margen de seguridad: si el juego no cierra en este plazo, seguimos igual. */
     private static final Duration WAIT_LIMIT = Duration.ofMinutes(2);
@@ -47,6 +48,7 @@ public final class CompanionMain {
 
     public static void main(String[] args) {
         Map<String, String> options = parse(args);
+        Messages.setLanguage(options.getOrDefault(ARG_LANGUAGE, ""));
         String title = options.getOrDefault(ARG_TITLE, "PackWarden");
 
         try {
@@ -77,14 +79,13 @@ public final class CompanionMain {
             int exitCode = runInstaller(options);
 
             if (exitCode == 0) {
-                info(title, "Listo. Ya puedes abrir el juego.");
+                info(title, Messages.get("update.done"));
             } else {
-                error(title, "La actualizacion no se completo (codigo " + exitCode + ").\n"
-                        + "El modpack quedo como estaba.");
+                error(title, Messages.get("update.failed", exitCode));
             }
             System.exit(exitCode);
         } catch (Exception e) {
-            error(title, "No se pudo actualizar:\n" + e.getMessage());
+            error(title, Messages.get("update.error", String.valueOf(e.getMessage())));
             System.exit(1);
         }
     }

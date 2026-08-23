@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.AlertScreen;
 import net.minecraft.client.gui.screens.Screen;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -53,8 +54,23 @@ public class WardenButton extends Button {
         };
     }
 
+    /** La ubicacion se resuelve una vez, en el primer render. Ver {@link ButtonPlacer}. */
+    private boolean placed;
+
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        if (!placed) {
+            placed = true;
+            Screen screen = Minecraft.getInstance().screen;
+            if (screen != null) {
+                int[] spot = ButtonPlacer.findFreeSpot(screen, this, this.width);
+                if (spot != null) {
+                    this.setX(spot[0]);
+                    this.setY(spot[1]);
+                }
+            }
+        }
+
         super.renderWidget(graphics, mouseX, mouseY, partialTick);
 
         int inset = Math.max(1, (this.width - 16) / 2);

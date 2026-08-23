@@ -63,7 +63,7 @@ public final class InstallerUi {
     }
 
     public void show() {
-        frame = new JFrame("Instalador de " + config.packName());
+        frame = new JFrame(Messages.get("window.title", config.packName()));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel content = new JPanel();
@@ -72,31 +72,29 @@ public final class InstallerUi {
 
         content.add(title(config.packName()));
         content.add(Box.createVerticalStrut(4));
-        content.add(plain("Elige donde instalar los mods."));
+        content.add(plain(Messages.get("intro")));
         content.add(Box.createVerticalStrut(14));
 
         boolean hasLauncher = Platform.hasOfficialLauncher();
 
-        profileOption = new JRadioButton("Crear un perfil en el launcher oficial (recomendado)", hasLauncher);
+        profileOption = new JRadioButton(Messages.get("option.profile"), hasLauncher);
         profileOption.setEnabled(hasLauncher);
         profileOption.addActionListener(event -> refreshEnabled());
         content.add(profileOption);
-        content.add(hint(hasLauncher
-                ? "Usa una carpeta propia. No toca los mods que ya tengas instalados."
-                : "No se encontro el launcher oficial en esta computadora."));
+        content.add(hint(Messages.get(hasLauncher ? "option.profile.hint" : "option.profile.missing")));
 
         JPanel nameRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         nameRow.setAlignmentX(Component.LEFT_ALIGNMENT);
         nameRow.setBorder(BorderFactory.createEmptyBorder(0, 22, 6, 0));
-        nameRow.add(plain("Nombre del perfil:  "));
+        nameRow.add(plain(Messages.get("field.profileName") + "  "));
         profileNameField = new JTextField(config.packName(), 18);
         nameRow.add(profileNameField);
         content.add(nameRow);
 
-        folderOption = new JRadioButton("Solo descargar los mods a una carpeta", !hasLauncher);
+        folderOption = new JRadioButton(Messages.get("option.folder"), !hasLauncher);
         folderOption.addActionListener(event -> refreshEnabled());
         content.add(folderOption);
-        content.add(hint("Para Prism, MultiMC u otra instalacion."));
+        content.add(hint(Messages.get("option.folder.hint")));
 
         ButtonGroup group = new ButtonGroup();
         group.add(profileOption);
@@ -105,7 +103,7 @@ public final class InstallerUi {
         JPanel folderRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         folderRow.setAlignmentX(Component.LEFT_ALIGNMENT);
         folderRow.setBorder(BorderFactory.createEmptyBorder(4, 0, 0, 0));
-        JButton browse = new JButton("Cambiar carpeta...");
+        JButton browse = new JButton(Messages.get("button.changeFolder"));
         browse.addActionListener(event -> chooseFolder());
         folderRow.add(browse);
         folderRow.add(Box.createHorizontalStrut(8));
@@ -128,7 +126,7 @@ public final class InstallerUi {
 
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         buttons.setAlignmentX(Component.LEFT_ALIGNMENT);
-        installButton = new JButton("Instalar");
+        installButton = new JButton(Messages.get("button.install"));
         installButton.addActionListener(event -> install());
         buttons.add(installButton);
         content.add(Box.createVerticalStrut(10));
@@ -155,11 +153,13 @@ public final class InstallerUi {
 
         int totalGb = Platform.totalMemoryGb();
         int heapGb = Platform.recommendedHeapGb();
-        panel.add(plain("Memoria detectada: " + (totalGb > 0 ? totalGb + " GB" : "desconocida")
-                + "  -  se asignaran " + heapGb + " GB al juego."));
+        panel.add(plain(Messages.get(
+                "memory.detected",
+                totalGb > 0 ? totalGb + " GB" : Messages.get("memory.unknown"),
+                heapGb)));
 
         if (Platform.isMemoryTight()) {
-            JLabel warning = plain("Aviso: este modpack es pesado y con menos de 10 GB puede ir lento.");
+            JLabel warning = plain(Messages.get("memory.tight"));
             warning.setForeground(new Color(0xB8, 0x6A, 0x00));
             panel.add(warning);
         }
@@ -169,7 +169,7 @@ public final class InstallerUi {
     private void chooseFolder() {
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setDialogTitle("Elige la carpeta del juego");
+        chooser.setDialogTitle(Messages.get("chooser.title"));
         chooser.setSelectedFile(gameFolder.toFile());
         if (chooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
             gameFolder = chooser.getSelectedFile().toPath();
@@ -184,21 +184,17 @@ public final class InstallerUi {
 
         if (withProfile) {
             if (!LauncherProfiles.exists(minecraftFolder)) {
-                error("No se encontro el launcher oficial.\n\n"
-                        + "Abrelo una vez y vuelve a intentar, o elige la otra opcion.");
+                error(Messages.get("error.noLauncher"));
                 return;
             }
             if (profileNameField.getText().isBlank()) {
-                error("El perfil necesita un nombre.");
+                error(Messages.get("error.noName"));
                 return;
             }
             if (LauncherProfiles.looksLikeLauncherRunning()) {
                 int answer = JOptionPane.showConfirmDialog(
                         frame,
-                        "Parece que el launcher esta abierto.\n\n"
-                                + "Al cerrarse vuelve a escribir su configuracion y puede borrar\n"
-                                + "el perfil que se va a crear. Conviene cerrarlo antes.\n\n"
-                                + "Continuar de todos modos?",
+                        Messages.get("warn.launcherOpen"),
                         config.packName(),
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.WARNING_MESSAGE);
@@ -249,8 +245,8 @@ public final class InstallerUi {
                     finished(withProfile, profileName);
                 } catch (Exception e) {
                     Throwable cause = e.getCause() != null ? e.getCause() : e;
-                    statusLabel.setText("No se pudo completar.");
-                    error("La instalacion no se completo.\n\n" + cause.getMessage());
+                    statusLabel.setText(Messages.get("status.failed"));
+                    error(Messages.get("error.failed", String.valueOf(cause.getMessage())));
                 }
             }
         }.execute();
@@ -264,10 +260,8 @@ public final class InstallerUi {
 
     private void finished(boolean withProfile, String profileName) {
         String message = withProfile
-                ? "Listo.\n\nAbre el launcher y elige el perfil \"" + profileName + "\".\n\n"
-                        + "De ahora en mas el juego avisa solo cuando haya cambios."
-                : "Listo.\n\nLos mods quedaron en:\n" + gameFolder
-                        + "\n\nApunta tu instancia a esa carpeta.";
+                ? Messages.get("done.profile", profileName)
+                : Messages.get("done.folder", gameFolder.toString());
 
         JOptionPane.showMessageDialog(frame, message, config.packName(), JOptionPane.INFORMATION_MESSAGE);
 
@@ -308,7 +302,7 @@ public final class InstallerUi {
         if (!Files.isRegularFile(config.bootstrapJar())) {
             JOptionPane.showMessageDialog(
                     null,
-                    "Falta el instalador de packwiz:\n" + config.bootstrapJar(),
+                    Messages.get("error.noBootstrap", config.bootstrapJar().toString()),
                     config.packName(),
                     JOptionPane.ERROR_MESSAGE);
             return;
