@@ -58,11 +58,20 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${{ steps.meta.outputs.tag }}" \
-            "updater/build/libs/packwarden-${{ steps.meta.outputs.version }}.jar" \
-            updater/build/distributions/MineTUKI-instalador.zip \
-            --title "PackWarden ${{ steps.meta.outputs.version }}" \
-            --generate-notes --latest
+          jar="updater/build/libs/packwarden-${{ steps.meta.outputs.version }}.jar"
+          zip="updater/build/distributions/MineTUKI-instalador.zip"
+
+          # Idempotente a proposito: si el release ya existe se reemplazan sus
+          # archivos en vez de fallar, para poder reintentar una publicacion sin
+          # tener que inventar un numero de version nuevo.
+          if gh release view "${{ steps.meta.outputs.tag }}" >/dev/null 2>&1; then
+            echo "El release ya existe; se actualizan sus archivos."
+            gh release upload "${{ steps.meta.outputs.tag }}" "$jar" "$zip" --clobber
+          else
+            gh release create "${{ steps.meta.outputs.tag }}" "$jar" "$zip" \
+              --title "PackWarden ${{ steps.meta.outputs.version }}" \
+              --generate-notes --latest
+          fi
 
       - name: Guardar el companion para el ejecutable de Windows
         uses: actions/upload-artifact@v4
@@ -127,12 +136,15 @@ jobs:
           name: companion
           path: artefactos
 
-      - name: Resolver etiqueta
+      - name: Resolver etiqueta y version
         id: meta
         shell: bash
         run: |
           tag="${{ github.event.inputs.tag || github.ref_name }}"
+          # La version tambien: jpackage la exige para el instalador de Windows, y
+          # sin ella el paso falla con "Version may not be empty string".
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=${tag#packwarden-v}" >> "$GITHUB_OUTPUT"
 
       - name: Instalar WiX
         run: choco install wixtoolset --no-progress -y
