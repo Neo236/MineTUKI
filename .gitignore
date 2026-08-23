@@ -7,6 +7,10 @@
 # Secrets / local overrides for docker-compose
 .env
 
+# Build outputs del mod (updater/)
+updater/build/
+updater/.gradle/
+
 # OS/editor cruft
 .DS_Store
 *.swp

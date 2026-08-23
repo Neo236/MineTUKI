@@ -1,0 +1,51 @@
+name: Compilar updater
+
+on:
+  push:
+    branches: [main]
+    paths: ['updater/**', '.github/workflows/updater.yml']
+  pull_request:
+    paths: ['updater/**', '.github/workflows/updater.yml']
+
+jobs:
+  build:
+    name: gradlew build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: updater
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build
+        run: ./gradlew build
+
+      - name: El jar no puede llevar restos del MDK de ejemplo
+        run: |
+          jar=$(ls build/libs/*.jar | head -1)
+          echo "Revisando $jar"
+          if unzip -l "$jar" | grep -q 'examplemod'; then
+            echo "::error::El jar todavia incluye assets de examplemod."
+            exit 1
+          fi
+          if unzip -p "$jar" META-INF/neoforge.mods.toml | grep -qi 'Example mod description'; then
+            echo "::error::neoforge.mods.toml todavia tiene la descripcion de ejemplo."
+            exit 1
+          fi
+          echo "OK: sin restos del template."
+
+      - name: Publicar el jar como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: updater-jar
+          path: updater/build/libs/*.jar
+          if-no-files-found: error

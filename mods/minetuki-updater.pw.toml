@@ -1,0 +1,8 @@
+name = "MineTUKI Updater"
+filename = "minetuki_updater-1.0.1.jar"
+side = "client"
+
+[download]
+url = "https://github.com/Neo236/MineTUKI/releases/download/updater-v1.0.1/minetuki_updater-1.0.1.jar"
+hash-format = "sha256"
+hash = "e24dc7dfb9d87b43a75b6f8502e96f30506b6a430ac24037b9dcd302fe7b3896"

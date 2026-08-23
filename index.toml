@@ -416,8 +416,9 @@ hash = "28d8aeaaa4e12098474b3028cf7dce0ef867de2f1a98fc6de2c224731e176fd3"
 metafile = true
 
 [[files]]
-file = "mods/minetuki_updater-1.0.0.jar"
-hash = "faeeb005a4c1e8bc52678e2c3a254077886632ce631048d17180fe3d5badf679"
+file = "mods/minetuki-updater.pw.toml"
+hash = "153d9ae6afeaa97e712845156f3c233244390883f5be2f12d3e8095607c2d116"
+metafile = true
 
 [[files]]
 file = "mods/mns-moogs-nether-structures.pw.toml"
