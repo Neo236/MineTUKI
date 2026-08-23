@@ -41,6 +41,11 @@ public class PackWarden {
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.register(
                 new io.github.neo236.packwarden.server.PackWardenServer());
 
+        modBus.addListener(
+                net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent.class,
+                event -> io.github.neo236.packwarden.net.WardenNetwork.register(
+                        event.registrar(String.valueOf(PROTOCOL_VERSION))));
+
         LOG.info("PackWarden iniciando (protocolo v{})", PROTOCOL_VERSION);
     }
 }

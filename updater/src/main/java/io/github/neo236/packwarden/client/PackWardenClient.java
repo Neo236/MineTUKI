@@ -27,6 +27,10 @@ public class PackWardenClient {
 
     public PackWardenClient(IEventBus modBus, ModContainer container) {
         container.registerConfig(ModConfig.Type.CLIENT, WardenConfig.CLIENT_SPEC);
+
+        // El registro del canal vive en codigo comun; el manejador se instala aca
+        // para que ninguna clase de cliente se cargue en un servidor dedicado.
+        io.github.neo236.packwarden.net.WardenNetwork.setClientHandler(ClientPackState::handle);
         NeoForge.EVENT_BUS.register(this);
     }
 

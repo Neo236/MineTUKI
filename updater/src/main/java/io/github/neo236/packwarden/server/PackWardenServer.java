@@ -1,7 +1,10 @@
 package io.github.neo236.packwarden.server;
 
 import net.neoforged.bus.api.SubscribeEvent;
+import io.github.neo236.packwarden.net.WardenNetwork;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
@@ -30,6 +33,19 @@ public class PackWardenServer {
     @SubscribeEvent
     public void onServerStopping(ServerStoppingEvent event) {
         ServerUpdateManager.stop();
+    }
+
+    /**
+     * Le cuenta al cliente que version del pack corre este servidor.
+     *
+     * <p>A quien no tenga el mod no se le manda nada: el canal es opcional
+     * justamente para que un cliente sin el pueda entrar igual.
+     */
+    @SubscribeEvent
+    public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            WardenNetwork.sendStateTo(player);
+        }
     }
 
     @SubscribeEvent
