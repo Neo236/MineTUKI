@@ -24,7 +24,10 @@ jobs:
 
       - name: El pack tiene que quedar sin cambios
         run: |
-          if ! git diff --exit-code; then
+          # Acotado a los dos archivos que packwiz puede tocar. Sin acotar,
+          # cualquier renormalizacion de finales de linea en archivos que no
+          # son del pack hace fallar el gate por algo que no es el problema.
+          if ! git diff --exit-code -- pack.toml index.toml; then
             echo "::error::pack.toml o index.toml estaban desincronizados."
             echo "::error::Corre 'packwiz refresh' y commitea el resultado."
             echo "::error::Publicar asi rompe la instalacion de todos los clientes y"
