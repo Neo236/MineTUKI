@@ -33,6 +33,9 @@ public final class CompanionMain {
     private static final String ARG_BOOTSTRAP = "--bootstrap";
     private static final String ARG_SIDE = "--side";
     private static final String ARG_TITLE = "--title";
+    private static final String ARG_INSTALL = "--install";
+    private static final String ARG_NEOFORGE = "--neoforge-version";
+    private static final String ARG_FOLDER_NAME = "--folder-name";
 
     /** Margen de seguridad: si el juego no cierra en este plazo, seguimos igual. */
     private static final Duration WAIT_LIMIT = Duration.ofMinutes(2);
@@ -47,6 +50,19 @@ public final class CompanionMain {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ignored) {
             // El look and feel es cosmetico; si falla, se sigue igual.
+        }
+
+        // Un solo binario con dos modos: instalacion de primera vez, y actualizacion
+        // con el juego ya cerrado. Comparten la deteccion de Java, las rutas y la
+        // llamada a packwiz, asi que separarlos en dos programas seria duplicar todo.
+        if (contains(args, ARG_INSTALL)) {
+            InstallerUi.launch(
+                    title,
+                    options.getOrDefault(ARG_PACK_URL, ""),
+                    options.getOrDefault(ARG_NEOFORGE, ""),
+                    options.getOrDefault(ARG_FOLDER_NAME, "modpack"),
+                    options.getOrDefault(ARG_BOOTSTRAP, "packwiz-installer-bootstrap.jar"));
+            return;
         }
 
         try {
@@ -142,12 +158,32 @@ public final class CompanionMain {
         return Files.isExecutable(binary) ? binary.toString() : "java";
     }
 
+    private static boolean contains(String[] args, String flag) {
+        for (String arg : args) {
+            if (arg.equals(flag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Parseo de argumentos.
+     *
+     * <p>Una bandera sin valor, como {@code --install}, no puede tragarse el nombre
+     * de la siguiente: se considera valor solo lo que no empieza con dos guiones.
+     */
     private static Map<String, String> parse(String[] args) {
         Map<String, String> options = new HashMap<>();
-        for (int i = 0; i < args.length - 1; i++) {
-            if (args[i].startsWith("--")) {
+        for (int i = 0; i < args.length; i++) {
+            if (!args[i].startsWith("--")) {
+                continue;
+            }
+            if (i + 1 < args.length && !args[i + 1].startsWith("--")) {
                 options.put(args[i], args[i + 1]);
                 i++;
+            } else {
+                options.put(args[i], "");
             }
         }
         return options;
