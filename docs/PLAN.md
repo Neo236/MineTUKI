@@ -113,6 +113,11 @@ Todo lo que sigue se midió o se leyó del código, no se asumió.
 | Vercel sirve el pack completo correctamente | Instalación real de 100 mods desde la URL de Vercel |
 | Vercel ya trae los headers correctos sin configurar nada | `Cache-Control: public, max-age=0, must-revalidate` + ETag |
 | Cualquier archivo nuevo del repo entra al índice y se le descarga a todos los clientes | Medido: al crear `docs/PLAN.md`, `packwiz refresh` lo agregó al índice |
+| packwiz **no** guarda `pack.toml` ni `index.toml` en la carpeta de juego, solo `packwiz.json` | Inspección del servidor real: el manifiesto está, los otros dos no existen |
+| El manifiesto registra **las 153 entradas**, incluidas las de otro lado, con `cachedLocation` nulo | Manifiesto real del servidor |
+| El filtrado por `side` funciona en producción | Log del servidor: `(83/153) Skipped MineTUKI Updater (wrong side)` |
+| itzg resincroniza en cada arranque y deja el índice al día | Reinicio real: `indexFileHash` pasó de `6e0ceafc` a `0d25b6cd` |
+| El loop de reinicio por fallo de packwiz **ocurre de verdad** | Log del servidor: 6 arranques fallidos seguidos antes de uno exitoso |
 
 ### Consecuencia operativa importante
 
@@ -120,6 +125,33 @@ Como itzg hace `exit 1` cuando packwiz falla, y el compose usa `restart: unless-
 **un pack roto produce un loop de reinicio del servidor**. Con el hash desincronizado, un
 `docker compose restart mc` habría dejado el servidor caído. Esto convierte el gate de CI de
 la Fase 0 en un requisito de disponibilidad, no en una prolijidad.
+
+Esto dejó de ser una prediccion: en el arranque del 22 de agosto el servidor entro en ese
+loop **seis veces seguidas** antes de levantar. Pero el disparador no fue el pack, sino algo
+que no estaba en el analisis:
+
+```
+[init] [ERROR] Failed to get packwiz installer
+java.net.UnknownHostException: Failed to resolve 'maven.packwiz.infra.link'
+```
+
+Antes de mirar el `PACKWIZ_URL`, itzg descarga el propio instalador de packwiz desde un Maven
+de terceros, **en cada arranque**, sin forma de saltearlo ni de fijar la version: el codigo
+llama a `maven-download` sin condicion cuando hay `PACKWIZ_URL`, y aunque pasa
+`--skip-existing`, igual necesita resolver la metadata para saber que version bajar.
+
+El servidor resuelve DNS contra `100.100.100.100`, que es MagicDNS de Tailscale. Es decir:
+**el arranque del servidor de Minecraft depende de que Tailscale este levantado.** Se auto
+recupera gracias a la politica de reinicio, pero cada episodio son varios minutos caido.
+
+Mitigacion propuesta, aditiva y reversible: darle al contenedor un resolutor de respaldo,
+manteniendo MagicDNS primero.
+
+```yaml
+    dns:
+      - 100.100.100.100   # MagicDNS de Tailscale, sigue primero
+      - 1.1.1.1           # respaldo publico
+```
 
 ## 5. Fases
 
