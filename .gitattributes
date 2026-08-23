@@ -1,1 +1,11 @@
+# Los .toml del pack se guardan tal cual: packwiz hashea bytes, y una
+# conversion de finales de linea cambiaria el hash y rompería el indice.
 * -text
+
+# Excepciones: scripts que ejecuta Linux. Con CRLF el shebang queda como
+# "/bin/sh\r" y fallan con "required file not found" (exit 127).
+updater/gradlew text eol=lf
+.githooks/* text eol=lf
+
+# Batch de Windows: al reves, necesita CRLF.
+updater/gradlew.bat text eol=crlf
