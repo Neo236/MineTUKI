@@ -35,6 +35,12 @@ public class PackWarden {
     public PackWarden(IEventBus modBus, ModContainer container) {
         container.registerConfig(ModConfig.Type.COMMON, WardenConfig.COMMON_SPEC);
         container.registerConfig(ModConfig.Type.SERVER, WardenConfig.SERVER_SPEC);
+
+        // Se registra desde aca y no con un @Mod propio: dos clases anotadas con el
+        // mismo modid y sin distinguir por dist serian una definicion duplicada.
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.register(
+                new io.github.neo236.packwarden.server.PackWardenServer());
+
         LOG.info("PackWarden iniciando (protocolo v{})", PROTOCOL_VERSION);
     }
 }
