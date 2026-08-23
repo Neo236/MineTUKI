@@ -1,8 +1,8 @@
 name = "PackWarden"
-filename = "packwarden-2.0.0.jar"
+filename = "packwarden-2.0.1.jar"
 side = "both"
 
 [download]
-url = "https://github.com/Neo236/MineTUKI/releases/download/packwarden-v2.0.0/packwarden-2.0.0.jar"
+url = "https://github.com/Neo236/MineTUKI/releases/download/packwarden-v2.0.1/packwarden-2.0.1.jar"
 hash-format = "sha256"
-hash = "bdda406f6de4420ebc79400d04dabb56a043ada53b07cf2150490f4993c96eb5"
+hash = "a9e49ec3cd6e03fef8d537161a20e2a3755264142ef45de1f149cdd20b0bd3fe"

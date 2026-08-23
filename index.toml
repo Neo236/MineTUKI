@@ -492,7 +492,7 @@ metafile = true
 
 [[files]]
 file = "mods/packwarden.pw.toml"
-hash = "09077b637f40b9ad9c330d41635a9dec1778f1769465417a13664733f1e0aa3f"
+hash = "4d911e03cebefe3904e043b1f866fec579422bd7156e68f4920341c5c812694d"
 metafile = true
 
 [[files]]
