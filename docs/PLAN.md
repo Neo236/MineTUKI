@@ -130,21 +130,23 @@ la Fase 0 en un requisito de disponibilidad, no en una prolijidad.
 - [x] Crear el proyecto de Vercel linkeado al repo, deploy en producción.
 - [x] Agregar `docs/` y `updater/` a `.packwizignore` para que no se le descarguen a los
       clientes como si fueran contenido del pack.
-- [ ] Hook `pre-commit` + gate de CI: si `pack.toml` e `index.toml` no coinciden, falla.
+- [x] Hook `pre-commit` + gate de CI: si `pack.toml` e `index.toml` no coinciden, falla.
 - [ ] Empezar a bumpear `version` en `pack.toml` con semver por cada cambio del modlist.
 
 ### Fase 1 — Higiene
 
-- [ ] Mover el código del mod a `updater/` en este repo.
-- [ ] Sacar el jar del updater del índice como **archivo crudo**. Las entradas crudas de
+- [x] Mover el código del mod a `updater/` en este repo.
+- [x] Sacar el jar del updater del índice como **archivo crudo**. Las entradas crudas de
       `index.toml` no soportan `side`, y por eso hoy el servidor se descarga un mod de GUI.
       Pasa a publicarse como asset de release y se referencia con su propio `.pw.toml`, con
       `side = "client"` mientras el mod no tenga parte servidor. Pasa a `both` en la Fase 2.
-      El **binario no cambia** en esta fase: se corrige el empaquetado, no el comportamiento.
-      Sacarlo del pack dejaría sin botón a quienes ya lo tienen instalado, así que sigue
-      publicado tal cual hasta que la Fase 2 lo reemplace.
+      El **comportamiento no cambia** en esta fase, solo el empaquetado y la metadata
+      (versión 1.0.0 → 1.0.1). Sacarlo del pack dejaría sin botón a quienes ya lo tienen
+      instalado, así que sigue publicado hasta que la Fase 2 lo reemplace.
+      Verificado de los dos lados contra un pack de prueba local: con `-s server` el
+      instalador responde `Skipped MineTUKI Updater (wrong side)`, y con `-s client` lo baja.
 - [ ] Limpiar los 275 MB de Gradle (`gradle.zip`, `gradle-8.9/`).
-- [ ] Reemplazar la metadata de ejemplo del MDK: `neoforge.mods.toml` todavía dice
+- [x] Reemplazar la metadata de ejemplo del MDK: `neoforge.mods.toml` todavía dice
       "Example mod description" y viaja un `assets/examplemod/` dentro del jar.
 - [ ] Resolver `MineTUKI_test`: borrarlo o agregarle `mods/*.jar` al `.gitignore` (hoy tiene
       141 jars sin trackear ni ignorar).
