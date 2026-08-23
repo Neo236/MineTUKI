@@ -417,7 +417,7 @@ metafile = true
 
 [[files]]
 file = "mods/minetuki-updater.pw.toml"
-hash = "153d9ae6afeaa97e712845156f3c233244390883f5be2f12d3e8095607c2d116"
+hash = "53090e23dbea02d2a705eb2ff39ef43a39815df00f0bf204a4c7b9c2edf2bf5d"
 metafile = true
 
 [[files]]
