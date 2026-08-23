@@ -15,9 +15,19 @@ Ambos apuntan a la misma URL de `pack.toml` — el archivo crudo de este repo en
 
 ## Para amigos: instalar el modpack
 
-Descargá el **[instalador de cliente](https://github.com/Neo236/MineTUKI/releases/tag/client-installer-v1)**, extraelo en cualquier lado, y doble clic al script de tu sistema (`instalar-mods-windows.bat` / `instalar-mods-mac-linux.command`). Descarga los mods de cliente a una carpeta `modsTUKI` al lado del instalador — si volvés a correrlo más adelante, actualiza esa misma carpeta (agrega lo nuevo, saca lo que ya no está). Qué hacés con esos mods después (copiarlos a tu perfil de NeoForge, etc.) es cosa tuya.
+Descargá el **[instalador](https://github.com/Neo236/MineTUKI/releases/latest)** (`MineTUKI-instalador.zip`), extraelo y hacé doble clic al script de tu sistema (`instalar-windows.bat` / `instalar-mac-linux.command`).
 
-Por dentro es simplemente `packwiz-installer-bootstrap.jar --pack-folder modsTUKI` apuntando al `pack.toml` de este repo (default `client`+`both`, verificado que nunca baja mods `server`-only).
+Crea un perfil aparte en el launcher oficial, con su **propia carpeta de mods** dentro de `.minecraft`. No toca los mods que ya tengas: tus otros perfiles y modpacks quedan intactos. También te deja elegir una carpeta a mano si usás Prism, MultiMC u otra instalación.
+
+**No hace falta instalar Java**: usa el que ya viene con el launcher de Minecraft.
+
+Cerrá el launcher antes de instalar — al cerrarse reescribe su configuración y podría borrar el perfil recién creado.
+
+Esto se corre **una sola vez**. De ahí en más el mod [PackWarden](updater/) avisa solo dentro del juego cuando el modpack cambia, muestra qué mods entran y salen, y te deja actualizar en el momento, al salir del juego, o más tarde.
+
+### Actualizar el modpack
+
+No hace falta bajar nada de nuevo. Al abrir el juego, si hay cambios aparece una pantalla con el detalle. El botón del zorro en el menú principal sirve para consultar cuando quieras.
 
 ## Para el servidor (esta máquina)
 
@@ -51,4 +61,25 @@ packwiz update --all              # actualizar todo a la última versión compat
 packwiz refresh                   # rehashear después de editar a mano
 ```
 
-Commiteá `pack.toml`, `index.toml`, y los `mods/*.toml`, después pusheá. Corré `docker compose restart mc` en esta máquina para aplicar el cambio del lado servidor; los amigos vuelven a correr el instalador del lado cliente cuando quieran actualizar.
+Commiteá `pack.toml`, `index.toml`, y los `mods/*.toml`, después pusheá. Corré `docker compose restart mc` en esta máquina para aplicar el cambio del lado servidor; los clientes se enteran solos la próxima vez que abran el juego.
+
+**Activá el hook una vez por clon**, para que el índice no se publique nunca desincronizado:
+
+```
+git config core.hooksPath .githooks
+```
+
+Publicar un `pack.toml` cuyo hash no coincide con `index.toml` rompe la instalación de todos los clientes y, como itzg hace `exit 1` cuando packwiz falla, deja el servidor en bucle de reinicio. El hook lo resincroniza al commitear y el CI lo verifica antes de que llegue a `main`.
+
+## De dónde sale el pack
+
+| | URL | por qué |
+|---|---|---|
+| Clientes | `minetuki-neo236s-projects.vercel.app/pack.toml` | se actualiza en el momento del push |
+| Servidor | `raw.githubusercontent.com/.../main/pack.toml` | una dependencia menos en el arranque |
+
+GitHub raw tarda hasta ~5 minutos en propagar, y **por nodo de CDN**: durante esa ventana dos jugadores pueden recibir versiones distintas. Al servidor no le afecta porque solo sincroniza al reiniciar. El mod lleva la URL de GitHub como respaldo configurable.
+
+## El código del mod
+
+Vive en [`updater/`](updater/), excluido del pack vía `.packwizignore`. Ver [docs/PLAN.md](docs/PLAN.md) para las decisiones de diseño y los hechos verificados.

@@ -416,11 +416,6 @@ hash = "28d8aeaaa4e12098474b3028cf7dce0ef867de2f1a98fc6de2c224731e176fd3"
 metafile = true
 
 [[files]]
-file = "mods/minetuki-updater.pw.toml"
-hash = "53090e23dbea02d2a705eb2ff39ef43a39815df00f0bf204a4c7b9c2edf2bf5d"
-metafile = true
-
-[[files]]
 file = "mods/mns-moogs-nether-structures.pw.toml"
 hash = "013bc1d1b6beb990e412e1c88a83c832e4f75c94c3c2e6dd6788a87835ba425d"
 metafile = true
@@ -493,6 +488,11 @@ metafile = true
 [[files]]
 file = "mods/overweight-farming.pw.toml"
 hash = "836ffb879311a16e620c05796513395a3b9009c7d27d84c5938f03add120bec6"
+metafile = true
+
+[[files]]
+file = "mods/packwarden.pw.toml"
+hash = "09077b637f40b9ad9c330d41635a9dec1778f1769465417a13664733f1e0aa3f"
 metafile = true
 
 [[files]]

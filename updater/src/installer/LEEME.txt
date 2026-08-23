@@ -1,0 +1,39 @@
+MineTUKI - Instalador de mods
+=============================
+
+Que hace
+--------
+Deja el juego listo para jugar. Crea un perfil aparte llamado
+"NeoTUKI Mod Updater" en el launcher oficial, con su propia carpeta de
+mods, y descarga todo lo que hace falta.
+
+No toca los mods que ya tengas: usa una carpeta propia, asi que tus otros
+perfiles y modpacks quedan intactos.
+
+Como se usa
+-----------
+- Windows: doble clic en instalar-windows.bat
+- Mac / Linux: doble clic en instalar-mac-linux.command
+  (en Mac, si no abre al doble clic: click derecho > Abrir)
+
+Cerra el launcher de Minecraft antes de instalar. Si esta abierto,
+al cerrarse reescribe su configuracion y puede borrar el perfil nuevo.
+
+Cuando termine, abri el launcher y elegi el perfil "NeoTUKI Mod Updater".
+
+Java
+----
+No hace falta instalar nada: el instalador usa el Java que ya trae el
+launcher de Minecraft. Si no encuentra ninguno te lo va a decir, con el
+link para bajarlo.
+
+Despues de instalar
+-------------------
+Esto se corre una sola vez. De ahi en mas el juego te avisa solo cuando
+haya cambios en el modpack, con un boton en el menu principal, y podes
+elegir actualizar en el momento, al salir del juego, o mas tarde.
+
+Si preferis otra cosa
+---------------------
+El instalador tambien te deja elegir una carpeta a mano, para quien use
+Prism, MultiMC u otra instalacion.

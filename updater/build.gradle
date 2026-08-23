@@ -277,3 +277,25 @@ tasks.named('processResources') {
         into 'packwarden'
     }
 }
+
+// Paquete que se le manda a los jugadores: el companion, el bootstrap de
+// packwiz y un lanzador por sistema operativo que sabe encontrar Java.
+tasks.register('installerZip', Zip) {
+    dependsOn 'companionJar', 'downloadPackwizBootstrap'
+    archiveFileName = 'MineTUKI-instalador.zip'
+    destinationDirectory = layout.buildDirectory.dir('distributions')
+
+    into('MineTUKI-instalador') {
+        from(tasks.named('companionJar').flatMap { it.archiveFile }) {
+            rename { 'packwarden-companion.jar' }
+        }
+        from(packwizBootstrapFile)
+        from('src/installer') {
+            // Los scripts de shell tienen que quedar ejecutables al descomprimir.
+            // En Gradle 9 la propiedad 'mode' ya no existe.
+            filesMatching('*.command') { details ->
+                details.permissions { permissions -> permissions.unix('rwxr-xr-x') }
+            }
+        }
+    }
+}
