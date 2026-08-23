@@ -157,6 +157,10 @@ un pack roto si seria un fallo permanente, sin nada que se resuelva solo.
 - [x] Hook `pre-commit` + gate de CI: si `pack.toml` e `index.toml` no coinciden, falla.
 - [ ] Empezar a bumpear `version` en `pack.toml` con semver por cada cambio del modlist.
 
+> Publicar una version nueva del mod es ahora empujar una etiqueta `packwarden-vX.Y.Z`:
+> el workflow compila, publica el release con el jar y el instalador, reapunta el metadato
+> del pack con el hash del artefacto recien compilado, corre `packwiz refresh` y commitea.
+
 ### Fase 1 — Higiene
 
 - [x] Mover el código del mod a `updater/` en este repo.
@@ -227,7 +231,17 @@ podemos mejorar es el mensaje de kick.
 **Higiene de concurrencia.** `updateRequired` pasa a `volatile` y el re-chequeo del botón sale
 del hilo de render.
 
-### Fase 3 — Instalador 2.0
+### Fase 3 — Instalador 2.0 ✅ hecha
+
+Publicado en `packwarden-v2.0.0` junto con el mod. Verificado en esta maquina: el `.bat`
+encuentra el Java del launcher sin que haga falta instalar nada, la ventana detecta el
+launcher oficial y muestra la memoria real, y el registro del perfil se probo **contra una
+copia del `launcher_profiles.json` real**: agrega el perfil, no pierde ninguno de los seis
+existentes, deja uno ajeno byte a byte identico, conserva las claves de raiz, deja respaldo
+y es idempotente.
+
+La migracion tambien se probo de punta a punta: una carpeta con el jar viejo instalado queda,
+despues de actualizar, con un unico archivo — el nuevo.
 
 Dos destinos, con el primero como default:
 
@@ -259,7 +273,7 @@ raw en vez del de Vercel. Al viejo se le edita la descripción para mandar al nu
 `-1.21.2 Fresh Moves v3.1 (With Animated Eyes).zip`: empieza con guión y tiene espacios y
 paréntesis. `options.txt` se genera con escapado correcto, no concatenando strings.
 
-### Fase 4 — CI/CD
+### Fase 4 — CI/CD ✅ hecha
 
 ```
 tocás updater/

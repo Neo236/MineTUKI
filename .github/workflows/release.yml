@@ -1,0 +1,99 @@
+name: Publicar updater
+
+# Se dispara al empujar una etiqueta packwarden-vX.Y.Z. No corre en push a
+# main: el commit que este mismo workflow deja no debe volver a dispararlo.
+on:
+  push:
+    tags: ['packwarden-v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Etiqueta a publicar, por ejemplo packwarden-v2.1.0'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Compilar, publicar y actualizar el pack
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Instalar packwiz
+        run: go install github.com/packwiz/packwiz@latest
+
+      - name: Resolver etiqueta y version
+        id: meta
+        run: |
+          tag="${{ github.event.inputs.tag || github.ref_name }}"
+          version="${tag#packwarden-v}"
+          declared=$(grep -E '^mod_version=' updater/gradle.properties | cut -d= -f2)
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if [ "$version" != "$declared" ]; then
+            echo "::error::La etiqueta dice $version pero gradle.properties dice $declared."
+            exit 1
+          fi
+
+      - name: Compilar
+        working-directory: updater
+        run: ./gradlew build installerZip
+
+      - name: Publicar el release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.meta.outputs.tag }}" \
+            "updater/build/libs/packwarden-${{ steps.meta.outputs.version }}.jar" \
+            updater/build/distributions/MineTUKI-instalador.zip \
+            --title "PackWarden ${{ steps.meta.outputs.version }}" \
+            --generate-notes --latest
+
+      - name: Apuntar el pack a la version nueva
+        run: |
+          jar="packwarden-${{ steps.meta.outputs.version }}.jar"
+          url="https://github.com/${{ github.repository }}/releases/download/${{ steps.meta.outputs.tag }}/${jar}"
+          hash=$(sha256sum "updater/build/libs/${jar}" | cut -d' ' -f1)
+
+          # Se reescribe el metadato a mano en vez de usar 'packwiz url add':
+          # el release recien publicado puede tardar en estar disponible, y
+          # el hash ya lo tenemos del artefacto que acabamos de compilar.
+          cat > mods/packwarden.pw.toml <<EOF
+          name = "PackWarden"
+          filename = "${jar}"
+          side = "both"
+
+          [download]
+          url = "${url}"
+          hash-format = "sha256"
+          hash = "${hash}"
+          EOF
+
+          packwiz refresh
+
+      - name: Commitear el pack actualizado
+        run: |
+          if git diff --quiet -- pack.toml index.toml mods/packwarden.pw.toml; then
+            echo "El pack ya apuntaba a esta version."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add pack.toml index.toml mods/packwarden.pw.toml
+          git commit -m "chore: apuntar el pack a PackWarden ${{ steps.meta.outputs.version }}"
+          git push origin main
