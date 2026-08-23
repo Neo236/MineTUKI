@@ -4,3 +4,5 @@ docker-compose.yml
 README.md
 .gitignore
 .packwizignore
+docs/
+updater/
