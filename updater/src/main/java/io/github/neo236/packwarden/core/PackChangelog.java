@@ -39,9 +39,13 @@ public record PackChangelog(List<String> added, List<String> removed, List<Strin
             }
         }
 
-        for (String metaPath : installed.keySet()) {
-            if (!published.containsKey(metaPath)) {
-                removed.add(displayName(metaPath));
+        for (Map.Entry<String, PackManifest.Entry> local : installed.entrySet()) {
+            // Solo cuenta como "se quita" lo que de verdad estaba instalado de este
+            // lado. El manifiesto tambien anota mods del otro lado, y los conserva
+            // aunque ya no esten en el pack: contarlos hacia aparecer bajas
+            // fantasma de mods que el jugador nunca tuvo.
+            if (local.getValue().installed() && !published.containsKey(local.getKey())) {
+                removed.add(displayName(local.getKey()));
             }
         }
 
@@ -59,7 +63,12 @@ public record PackChangelog(List<String> added, List<String> removed, List<Strin
         return added.size() + removed.size() + updated.size();
     }
 
-    /** "mods/create-aeronautics.pw.toml" -> "Create Aeronautics". */
+    /**
+     * "mods/create-aeronautics.pw.toml" -> "Create Aeronautics".
+     *
+     * <p>Tambien maneja archivos sueltos, que llegan con nombre de jar y version
+     * pegada: "mods/minetuki_updater-1.0.0.jar" -> "Minetuki Updater".
+     */
     static String displayName(String metaPath) {
         String name = metaPath;
 
@@ -67,10 +76,22 @@ public record PackChangelog(List<String> added, List<String> removed, List<Strin
         if (slash >= 0) {
             name = name.substring(slash + 1);
         }
-        if (name.endsWith(".pw.toml")) {
-            name = name.substring(0, name.length() - ".pw.toml".length());
+        for (String extension : new String[] {".pw.toml", ".jar", ".zip"}) {
+            if (name.endsWith(extension)) {
+                name = name.substring(0, name.length() - extension.length());
+                break;
+            }
         }
-        name = name.replace('-', ' ').replace('_', ' ').trim();
+
+        // Se descartan los tramos finales que son numeros de version. Nunca el
+        // primero: hay mods que empiezan con digito, como "3dskinlayers".
+        String[] parts = name.split("[-_]");
+        int last = parts.length;
+        while (last > 1 && parts[last - 1].matches("[vV]?\\d[\\w.+]*")) {
+            last--;
+        }
+
+        name = String.join(" ", java.util.Arrays.copyOfRange(parts, 0, last)).trim();
 
         if (name.isEmpty()) {
             return metaPath;

@@ -1,7 +1,7 @@
 {
   "packwarden.screen.title": "%s found an update",
   "packwarden.screen.version": "Published version: %s",
-  "packwarden.screen.summary": "%1$s mods added, %2$s removed, %3$s updated",
+  "packwarden.screen.summary": "Changes: +%1$s / -%2$s / ~%3$s",
   "packwarden.screen.changes_unknown": "Could not determine what changed.",
   "packwarden.screen.added": "Added: %s",
   "packwarden.screen.removed": "Removed: %s",

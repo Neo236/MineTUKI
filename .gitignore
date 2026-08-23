@@ -17,3 +17,4 @@ updater/.gradle/
 
 # Note: server runtime (world, mods, logs, config) lives entirely outside
 # this repo, in ~/deployments/minecraft/mainMinecraftServer/ - see README.
+updater/run/

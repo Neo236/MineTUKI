@@ -42,8 +42,18 @@ import java.util.Optional;
 public record PackManifest(
         String packFileHash, String indexFileHash, String side, Map<String, Entry> installedFiles) {
 
-    /** Un archivo del pack tal como quedo instalado. */
-    public record Entry(String metaHash, String installedPath) {}
+    /**
+     * Un archivo del pack tal como quedo registrado.
+     *
+     * <p>No todas las entradas corresponden a algo instalado. packwiz tambien anota
+     * las del otro lado, con la forma {@code {"optionValue":true,"onlyOtherSide":true}}:
+     * sin hash y sin archivo. Y las conserva aunque el mod ya no este en el indice,
+     * porque nunca hubo nada que borrar.
+     *
+     * <p>Confundirlas con archivos instalados hace que aparezcan como "se quitan"
+     * mods que en realidad nunca estuvieron de este lado.
+     */
+    public record Entry(String metaHash, String installedPath, boolean installed) {}
 
     public static final String FILE_NAME = "packwiz.json";
 
@@ -72,6 +82,7 @@ public record PackManifest(
                     String metaPath = entry.getKey();
                     String installedPath = metaPath;
                     String metaHash = null;
+                    boolean otherSide = false;
 
                     if (entry.getValue().isJsonObject()) {
                         JsonObject value = entry.getValue().getAsJsonObject();
@@ -79,9 +90,12 @@ public record PackManifest(
                             installedPath = value.get("cachedLocation").getAsString();
                         }
                         metaHash = hashValue(value, "hash");
+                        otherSide = value.has("onlyOtherSide")
+                                && value.get("onlyOtherSide").isJsonPrimitive()
+                                && value.get("onlyOtherSide").getAsBoolean();
                     }
 
-                    files.put(metaPath, new Entry(metaHash, installedPath));
+                    files.put(metaPath, new Entry(metaHash, installedPath, !otherSide && metaHash != null));
                 }
             }
 
