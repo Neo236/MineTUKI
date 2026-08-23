@@ -3,37 +3,40 @@ MineTUKI - Instalador de mods
 
 Que hace
 --------
-Deja el juego listo para jugar. Crea un perfil aparte llamado
-"NeoTUKI Mod Updater" en el launcher oficial, con su propia carpeta de
-mods, y descarga todo lo que hace falta.
+Deja el juego listo para jugar. Crea un perfil aparte en el launcher
+oficial, con su propia carpeta de mods, y descarga todo lo necesario.
 
-No toca los mods que ya tengas: usa una carpeta propia, asi que tus otros
-perfiles y modpacks quedan intactos.
+No toca los mods que ya tengas: usa una carpeta propia, asi que tus
+otros perfiles y modpacks quedan intactos.
 
 Como se usa
 -----------
 - Windows: doble clic en instalar-windows.bat
 - Mac / Linux: doble clic en instalar-mac-linux.command
-  (en Mac, si no abre al doble clic: click derecho > Abrir)
+  (en Mac, si no abre con doble clic: clic derecho > Abrir)
 
-Cerra el launcher de Minecraft antes de instalar. Si esta abierto,
+Cierra el launcher de Minecraft antes de instalar. Si esta abierto,
 al cerrarse reescribe su configuracion y puede borrar el perfil nuevo.
 
-Cuando termine, abri el launcher y elegi el perfil "NeoTUKI Mod Updater".
+Cuando termine, abre el launcher y elige el perfil que creaste.
+
+Se puede cambiar el nombre del perfil y la carpeta de instalacion
+desde la misma ventana, antes de instalar.
 
 Java
 ----
 No hace falta instalar nada: el instalador usa el Java que ya trae el
-launcher de Minecraft. Si no encuentra ninguno te lo va a decir, con el
-link para bajarlo.
+launcher de Minecraft. Si no encuentra ninguno lo va a avisar, con el
+enlace para descargarlo.
 
 Despues de instalar
 -------------------
-Esto se corre una sola vez. De ahi en mas el juego te avisa solo cuando
-haya cambios en el modpack, con un boton en el menu principal, y podes
+Esto se ejecuta una sola vez. De ahi en mas el juego avisa solo cuando
+hay cambios en el modpack, con un boton en el menu principal, y se puede
 elegir actualizar en el momento, al salir del juego, o mas tarde.
 
-Si preferis otra cosa
----------------------
-El instalador tambien te deja elegir una carpeta a mano, para quien use
-Prism, MultiMC u otra instalacion.
+Si prefieres otra cosa
+----------------------
+El instalador tambien permite descargar los mods a una carpeta suelta,
+sin crear ningun perfil, para quien use Prism, MultiMC u otra
+instalacion.

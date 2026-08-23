@@ -41,6 +41,7 @@ public class PackWardenClient {
         }
 
         int[] position = placeNextToMultiplayer(event, screen);
+        position = avoidOverlap(event, position);
         event.addListener(new WardenButton(position[0], position[1], BUTTON_SIZE));
 
         if (WardenConfig.CLIENT.checkOnStartup.get()) {
@@ -67,5 +68,42 @@ public class PackWardenClient {
         return new int[] {
             screen.width / 2 - 100 - BUTTON_SIZE - BUTTON_GAP, screen.height / 4 + 48 + 24
         };
+    }
+
+    /**
+     * Corre el boton hasta encontrar un lugar libre.
+     *
+     * <p>El costado del menu principal es zona disputada: varios mods ponen ahi su
+     * boton de configuracion. Sin este ajuste el nuestro quedaba encima de otro,
+     * invisible y robandole los clics.
+     */
+    private static int[] avoidOverlap(ScreenEvent.Init.Post event, int[] position) {
+        int x = position[0];
+        int y = position[1];
+
+        for (int attempt = 0; attempt < 8; attempt++) {
+            if (isFree(event, x, y)) {
+                return new int[] {x, y};
+            }
+            x -= BUTTON_SIZE + BUTTON_GAP;
+        }
+        // Si toda la fila esta ocupada, se sube una fila en la posicion original.
+        return new int[] {position[0], y - BUTTON_SIZE - BUTTON_GAP};
+    }
+
+    private static boolean isFree(ScreenEvent.Init.Post event, int x, int y) {
+        for (var listener : event.getListenersList()) {
+            if (!(listener instanceof AbstractWidget widget) || !widget.visible) {
+                continue;
+            }
+            boolean overlaps = x < widget.getX() + widget.getWidth()
+                    && x + BUTTON_SIZE > widget.getX()
+                    && y < widget.getY() + widget.getHeight()
+                    && y + BUTTON_SIZE > widget.getY();
+            if (overlaps) {
+                return false;
+            }
+        }
+        return true;
     }
 }

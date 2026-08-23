@@ -27,9 +27,12 @@ public final class Installer {
             Path minecraftFolder,
             Path gameDirectory,
             String packUrl,
+            String fallbackPackUrl,
             String neoForgeVersion,
             String profileName,
             String profileKey,
+            String brandName,
+            String commandAlias,
             Path bootstrapJar) {}
 
     public interface Progress {
@@ -48,7 +51,10 @@ public final class Installer {
         progress.step("Descargando los mods...");
         installPack(options);
 
-        progress.step("Dejando los paquetes de texturas activados...");
+        progress.step("Configurando el actualizador...");
+        seedModConfig(options);
+
+        progress.step("Activando los paquetes de texturas...");
         seedOptions(options.gameDirectory());
 
         if (options.destination() == Destination.DEDICATED_PROFILE) {
@@ -118,6 +124,10 @@ public final class Installer {
         command.add(options.gameDirectory().toAbsolutePath().toString());
         command.add("--side");
         command.add("client");
+        // Sin ventana propia de packwiz: el instalador ya muestra su progreso, y
+        // la de packwiz ademas pregunta por "mods opcionales", algo que este pack
+        // no usa y que solo confunde.
+        command.add("--no-gui");
         command.add(options.packUrl());
 
         Process process = new ProcessBuilder(command)
@@ -131,8 +141,50 @@ public final class Installer {
         if (exit != 0) {
             throw new IOException(
                     "La descarga de mods fallo (codigo " + exit + ").\n"
-                            + "Mira packwarden-install.log dentro de la carpeta del juego.");
+                            + "Revisa packwarden-install.log dentro de la carpeta del juego.");
         }
+    }
+
+    /**
+     * Le deja al mod su configuracion, con la URL del pack ya puesta.
+     *
+     * <p>Sin esto el mod arranca con la configuracion por defecto, que no tiene
+     * ninguna URL, y lo unico que sabe decir es "no hay ningun modpack
+     * configurado": queda instalado pero inutil, y el jugador no tiene forma de
+     * adivinar que le falta.
+     *
+     * <p>Se escriben todas las claves. Si falta alguna, NeoForge reescribe el
+     * archivo para completarlo y avisa que estaba "incorrecto".
+     */
+    static void seedModConfig(Options options) throws IOException {
+        Path configFolder = options.gameDirectory().resolve("config");
+        Files.createDirectories(configFolder);
+
+        Path common = configFolder.resolve("packwarden-common.toml");
+        if (!Files.exists(common)) {
+            Files.writeString(
+                    common,
+                    "[general]\n"
+                            + "\tpack_url = " + tomlString(options.packUrl()) + "\n"
+                            + "\tfallback_pack_url = " + tomlString(options.fallbackPackUrl()) + "\n"
+                            + "\tbrand_name = " + tomlString(options.brandName()) + "\n"
+                            + "\tcommand_alias = " + tomlString(options.commandAlias()) + "\n"
+                            + "\thttp_timeout_seconds = 10\n",
+                    StandardCharsets.UTF_8);
+        }
+
+        Path client = configFolder.resolve("packwarden-client.toml");
+        if (!Files.exists(client)) {
+            Files.writeString(
+                    client,
+                    "[client]\n\tcheck_on_startup = true\n\tprompt_on_startup = true\n",
+                    StandardCharsets.UTF_8);
+        }
+    }
+
+    private static String tomlString(String value) {
+        String safe = value == null ? "" : value;
+        return "\"" + safe.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
     }
 
     /**

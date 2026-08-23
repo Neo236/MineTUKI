@@ -1,6 +1,5 @@
 package io.github.neo236.packwarden.companion;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -9,6 +8,7 @@ import java.awt.Font;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -21,66 +21,109 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 /**
  * Ventana del instalador de primera vez.
  *
- * <p>Una sola pantalla, dos opciones y un boton. La version anterior era un .bat que
- * dejaba los mods en una carpeta suelta y un LEEME que terminaba con "de ahi en mas
- * es cosa tuya llevarlos a tu carpeta de mods": justamente el paso donde se caia la
- * gente.
+ * <p>Una sola pantalla. La carpeta se puede cambiar en cualquiera de los dos
+ * modos: crear el perfil del launcher no obliga a instalar en el lugar por
+ * defecto, solo hace falta que el perfil apunte a donde sea que se instale.
  */
 public final class InstallerUi {
 
-    private final String brand;
-    private final String packUrl;
-    private final String neoForgeVersion;
-    private final String folderName;
-    private final Path bootstrapJar;
+    private final Config config;
 
     private JFrame frame;
     private JRadioButton profileOption;
-    private JRadioButton customOption;
-    private JLabel customPathLabel;
+    private JRadioButton folderOption;
+    private JTextField profileNameField;
+    private JLabel folderLabel;
     private JLabel statusLabel;
     private JProgressBar progress;
     private JButton installButton;
-    private Path customFolder;
+    private Path gameFolder;
 
-    public InstallerUi(String brand, String packUrl, String neoForgeVersion, String folderName, Path bootstrapJar) {
-        this.brand = brand;
-        this.packUrl = packUrl;
-        this.neoForgeVersion = neoForgeVersion;
-        this.folderName = folderName;
-        this.bootstrapJar = bootstrapJar;
+    /** Todo lo que distingue a un modpack de otro. Nada de esto esta en el codigo. */
+    public record Config(
+            String packName,
+            String brandName,
+            String commandAlias,
+            String packUrl,
+            String fallbackPackUrl,
+            String neoForgeVersion,
+            String folderName,
+            Path bootstrapJar) {}
+
+    public InstallerUi(Config config) {
+        this.config = config;
+        this.gameFolder = Platform.minecraftFolder().resolve(config.folderName());
     }
 
     public void show() {
-        frame = new JFrame(brand);
+        frame = new JFrame("Instalador de " + config.packName());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
         content.setBorder(BorderFactory.createEmptyBorder(16, 20, 16, 20));
 
-        content.add(title(brand));
+        content.add(title(config.packName()));
         content.add(Box.createVerticalStrut(4));
-        content.add(subtitle("Elegi donde instalar los mods."));
+        content.add(plain("Elige donde instalar los mods."));
         content.add(Box.createVerticalStrut(14));
 
-        content.add(destinationPanel());
+        boolean hasLauncher = Platform.hasOfficialLauncher();
+
+        profileOption = new JRadioButton("Crear un perfil en el launcher oficial (recomendado)", hasLauncher);
+        profileOption.setEnabled(hasLauncher);
+        profileOption.addActionListener(event -> refreshEnabled());
+        content.add(profileOption);
+        content.add(hint(hasLauncher
+                ? "Usa una carpeta propia. No toca los mods que ya tengas instalados."
+                : "No se encontro el launcher oficial en esta computadora."));
+
+        JPanel nameRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        nameRow.setAlignmentX(Component.LEFT_ALIGNMENT);
+        nameRow.setBorder(BorderFactory.createEmptyBorder(0, 22, 6, 0));
+        nameRow.add(plain("Nombre del perfil:  "));
+        profileNameField = new JTextField(config.packName(), 18);
+        nameRow.add(profileNameField);
+        content.add(nameRow);
+
+        folderOption = new JRadioButton("Solo descargar los mods a una carpeta", !hasLauncher);
+        folderOption.addActionListener(event -> refreshEnabled());
+        content.add(folderOption);
+        content.add(hint("Para Prism, MultiMC u otra instalacion."));
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(profileOption);
+        group.add(folderOption);
+
+        JPanel folderRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        folderRow.setAlignmentX(Component.LEFT_ALIGNMENT);
+        folderRow.setBorder(BorderFactory.createEmptyBorder(4, 0, 0, 0));
+        JButton browse = new JButton("Cambiar carpeta...");
+        browse.addActionListener(event -> chooseFolder());
+        folderRow.add(browse);
+        folderRow.add(Box.createHorizontalStrut(8));
+        folderLabel = hint(gameFolder.toString());
+        folderLabel.setBorder(BorderFactory.createEmptyBorder());
+        folderRow.add(folderLabel);
+        content.add(folderRow);
+
         content.add(Box.createVerticalStrut(12));
         content.add(memoryPanel());
-        content.add(Box.createVerticalStrut(14));
+        content.add(Box.createVerticalStrut(12));
 
         progress = new JProgressBar();
         progress.setVisible(false);
         progress.setAlignmentX(Component.LEFT_ALIGNMENT);
         content.add(progress);
 
-        statusLabel = subtitle(" ");
+        statusLabel = plain(" ");
         content.add(statusLabel);
 
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
@@ -91,49 +134,20 @@ public final class InstallerUi {
         content.add(Box.createVerticalStrut(10));
         content.add(buttons);
 
+        refreshEnabled();
+
         frame.setContentPane(content);
         frame.pack();
-        frame.setMinimumSize(new Dimension(520, frame.getHeight()));
+        frame.setMinimumSize(new Dimension(560, frame.getHeight()));
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    private JPanel destinationPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        boolean hasLauncher = Platform.hasOfficialLauncher();
-
-        profileOption = new JRadioButton("Crear un perfil aparte en el launcher (recomendado)", hasLauncher);
-        profileOption.setEnabled(hasLauncher);
-        panel.add(profileOption);
-        panel.add(hint(hasLauncher
-                ? "Instala en una carpeta propia. No toca los mods que ya tengas."
-                : "No se encontro el launcher oficial en esta maquina."));
-
-        customOption = new JRadioButton("Elegir una carpeta yo mismo", !hasLauncher);
-        panel.add(customOption);
-        panel.add(hint("Para Prism, MultiMC u otra instalacion."));
-
-        ButtonGroup group = new ButtonGroup();
-        group.add(profileOption);
-        group.add(customOption);
-
-        JPanel chooser = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        chooser.setAlignmentX(Component.LEFT_ALIGNMENT);
-        JButton browse = new JButton("Elegir carpeta...");
-        browse.addActionListener(event -> chooseFolder());
-        customPathLabel = hint("(ninguna elegida)");
-        chooser.add(browse);
-        chooser.add(Box.createHorizontalStrut(8));
-        chooser.add(customPathLabel);
-        panel.add(chooser);
-
-        return panel;
+    private void refreshEnabled() {
+        profileNameField.setEnabled(profileOption.isSelected());
     }
 
-    /** Deja a la vista cuanta memoria se va a asignar, y avisa si la maquina esta justa. */
+    /** Deja a la vista cuanta memoria se asigna, y avisa si la computadora esta justa. */
     private JPanel memoryPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -141,12 +155,11 @@ public final class InstallerUi {
 
         int totalGb = Platform.totalMemoryGb();
         int heapGb = Platform.recommendedHeapGb();
-
-        panel.add(hint("Memoria detectada: " + (totalGb > 0 ? totalGb + " GB" : "desconocida")
-                + "  -  se le asignaran " + heapGb + " GB al juego."));
+        panel.add(plain("Memoria detectada: " + (totalGb > 0 ? totalGb + " GB" : "desconocida")
+                + "  -  se asignaran " + heapGb + " GB al juego."));
 
         if (Platform.isMemoryTight()) {
-            JLabel warning = hint("Aviso: este modpack es pesado y con menos de 10 GB puede ir a los tirones.");
+            JLabel warning = plain("Aviso: este modpack es pesado y con menos de 10 GB puede ir lento.");
             warning.setForeground(new Color(0xB8, 0x6A, 0x00));
             panel.add(warning);
         }
@@ -156,61 +169,58 @@ public final class InstallerUi {
     private void chooseFolder() {
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setDialogTitle("Elegi la carpeta del juego");
+        chooser.setDialogTitle("Elige la carpeta del juego");
+        chooser.setSelectedFile(gameFolder.toFile());
         if (chooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
-            customFolder = chooser.getSelectedFile().toPath();
-            customPathLabel.setText(customFolder.toString());
-            customOption.setSelected(true);
+            gameFolder = chooser.getSelectedFile().toPath();
+            folderLabel.setText(gameFolder.toString());
             frame.pack();
         }
     }
 
     private void install() {
-        Installer.Destination destination = profileOption.isSelected()
-                ? Installer.Destination.DEDICATED_PROFILE
-                : Installer.Destination.CUSTOM_FOLDER;
-
+        boolean withProfile = profileOption.isSelected();
         Path minecraftFolder = Platform.minecraftFolder();
-        Path gameDirectory;
 
-        if (destination == Installer.Destination.DEDICATED_PROFILE) {
+        if (withProfile) {
             if (!LauncherProfiles.exists(minecraftFolder)) {
                 error("No se encontro el launcher oficial.\n\n"
-                        + "Abrilo una vez y volve a intentar, o elegi una carpeta a mano.");
+                        + "Abrelo una vez y vuelve a intentar, o elige la otra opcion.");
+                return;
+            }
+            if (profileNameField.getText().isBlank()) {
+                error("El perfil necesita un nombre.");
                 return;
             }
             if (LauncherProfiles.looksLikeLauncherRunning()) {
                 int answer = JOptionPane.showConfirmDialog(
                         frame,
                         "Parece que el launcher esta abierto.\n\n"
-                                + "Al cerrarse vuelve a escribir su configuracion y podria borrar\n"
-                                + "el perfil que estamos por crear. Conviene cerrarlo primero.\n\n"
-                                + "Cerralo y despues segui. Continuar igual?",
-                        brand,
+                                + "Al cerrarse vuelve a escribir su configuracion y puede borrar\n"
+                                + "el perfil que se va a crear. Conviene cerrarlo antes.\n\n"
+                                + "Continuar de todos modos?",
+                        config.packName(),
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.WARNING_MESSAGE);
                 if (answer != JOptionPane.YES_OPTION) {
                     return;
                 }
             }
-            gameDirectory = minecraftFolder.resolve(folderName);
-        } else {
-            if (customFolder == null) {
-                error("Elegi una carpeta primero.");
-                return;
-            }
-            gameDirectory = customFolder;
         }
 
+        String profileName = profileNameField.getText().trim();
         Installer.Options options = new Installer.Options(
-                destination,
+                withProfile ? Installer.Destination.DEDICATED_PROFILE : Installer.Destination.CUSTOM_FOLDER,
                 minecraftFolder,
-                gameDirectory,
-                packUrl,
-                neoForgeVersion,
-                brand,
-                "packwarden-" + folderName,
-                bootstrapJar);
+                gameFolder,
+                config.packUrl(),
+                config.fallbackPackUrl(),
+                config.neoForgeVersion(),
+                profileName,
+                profileKey(profileName),
+                config.brandName(),
+                config.commandAlias(),
+                config.bootstrapJar());
 
         installButton.setEnabled(false);
         progress.setVisible(true);
@@ -236,7 +246,7 @@ public final class InstallerUi {
                 installButton.setEnabled(true);
                 try {
                     get();
-                    finished(destination, gameDirectory);
+                    finished(withProfile, profileName);
                 } catch (Exception e) {
                     Throwable cause = e.getCause() != null ? e.getCause() : e;
                     statusLabel.setText("No se pudo completar.");
@@ -246,18 +256,29 @@ public final class InstallerUi {
         }.execute();
     }
 
-    private void finished(Installer.Destination destination, Path gameDirectory) {
-        String message = destination == Installer.Destination.DEDICATED_PROFILE
-                ? "Listo.\n\nAbri el launcher y elegi el perfil \"" + brand + "\".\n"
-                        + "De ahora en mas el juego te avisa solo cuando haya cambios."
-                : "Listo.\n\nLos mods quedaron en:\n" + gameDirectory
+    /** Clave interna del perfil, estable para que reinstalar no duplique entradas. */
+    private String profileKey(String profileName) {
+        String slug = profileName.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]+", "-");
+        return "packwarden-" + (slug.isBlank() ? config.folderName() : slug);
+    }
+
+    private void finished(boolean withProfile, String profileName) {
+        String message = withProfile
+                ? "Listo.\n\nAbre el launcher y elige el perfil \"" + profileName + "\".\n\n"
+                        + "De ahora en mas el juego avisa solo cuando haya cambios."
+                : "Listo.\n\nLos mods quedaron en:\n" + gameFolder
                         + "\n\nApunta tu instancia a esa carpeta.";
-        statusLabel.setText("Instalacion completa.");
-        JOptionPane.showMessageDialog(frame, message, brand, JOptionPane.INFORMATION_MESSAGE);
+
+        JOptionPane.showMessageDialog(frame, message, config.packName(), JOptionPane.INFORMATION_MESSAGE);
+
+        // Se cierra del todo: el instalador se corre una sola vez y no tiene nada
+        // mas que ofrecer despues de terminar.
+        frame.dispose();
+        System.exit(0);
     }
 
     private void error(String message) {
-        JOptionPane.showMessageDialog(frame, message, brand, JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(frame, message, config.packName(), JOptionPane.ERROR_MESSAGE);
     }
 
     private static JLabel title(String text) {
@@ -267,7 +288,7 @@ public final class InstallerUi {
         return label;
     }
 
-    private static JLabel subtitle(String text) {
+    private static JLabel plain(String text) {
         JLabel label = new JLabel(text);
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
@@ -283,18 +304,19 @@ public final class InstallerUi {
     }
 
     /** Punto de entrada del modo instalador. */
-    public static void launch(
-            String brand, String packUrl, String neoForgeVersion, String folderName, String bootstrap) {
-        Path bootstrapJar = Paths.get(bootstrap);
-        if (!Files.isRegularFile(bootstrapJar)) {
+    public static void launch(Config config) {
+        if (!Files.isRegularFile(config.bootstrapJar())) {
             JOptionPane.showMessageDialog(
                     null,
-                    "Falta el instalador de packwiz:\n" + bootstrapJar,
-                    brand,
+                    "Falta el instalador de packwiz:\n" + config.bootstrapJar(),
+                    config.packName(),
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
-        SwingUtilities.invokeLater(
-                () -> new InstallerUi(brand, packUrl, neoForgeVersion, folderName, bootstrapJar).show());
+        SwingUtilities.invokeLater(() -> new InstallerUi(config).show());
+    }
+
+    static Path resolve(String value) {
+        return Paths.get(value);
     }
 }

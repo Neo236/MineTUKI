@@ -10,34 +10,34 @@
   "packwarden.button.now": "Actualizar ahora",
   "packwarden.button.on_exit": "Actualizar al salir",
   "packwarden.button.later": "Más tarde",
-  "packwarden.check.dont_ask": "No avisarme de nuevo por esta versión",
+  "packwarden.check.dont_ask": "No avisar de nuevo por esta versión",
 
   "packwarden.checking.title": "%s",
-  "packwarden.checking.message": "Consultando si hay actualizaciones...",
+  "packwarden.checking.message": "Buscando actualizaciones...",
 
-  "packwarden.status.up_to_date": "Tu modpack está al día. ¡A jugar!",
-  "packwarden.status.offline": "No se pudo consultar. Revisá tu conexión.",
-  "packwarden.status.disabled": "No hay ninguna URL de modpack configurada.",
-  "packwarden.status.not_managed": "Los mods de esta carpeta no los instaló el actualizador, así que no hay con qué comparar. Actualizá una vez para que quede sincronizada.",
+  "packwarden.status.up_to_date": "El modpack está al día.",
+  "packwarden.status.offline": "No se pudo consultar. Revisa tu conexión.",
+  "packwarden.status.disabled": "No hay ninguna dirección de modpack configurada.",
+  "packwarden.status.not_managed": "Los mods de esta carpeta no los instaló el actualizador, así que no hay con qué comparar. Actualiza una vez para sincronizarla.",
   "packwarden.status.available": "Hay una actualización disponible.",
 
   "packwarden.error.title": "Error de actualización",
   "packwarden.error.launch": "No se pudo iniciar la actualización.\n\n%s",
 
   "packwarden.command.checking": "Consultando el estado del modpack...",
-  "packwarden.command.no_permission": "No tenés permiso para eso.",
+  "packwarden.command.no_permission": "No tienes permiso para eso.",
 
   "packwarden.server.update_found": "%s: hay una actualización del modpack.",
-  "packwarden.server.restarting_now": "El servidor se reinicia ahora para actualizarse. Volvemos en un minuto.",
+  "packwarden.server.restarting_now": "El servidor se reinicia ahora para actualizarse. Vuelve en un minuto.",
   "packwarden.server.countdown": "El servidor se va a actualizar en %s.",
-  "packwarden.server.kick": "El servidor se está actualizando. Volvé a entrar en un minuto y actualizá tu modpack.",
-  "packwarden.server.vote_open": "¿Postergamos la actualización?",
-  "packwarden.server.vote_postpone": "[Postergar %s]",
+  "packwarden.server.kick": "El servidor se está actualizando. Vuelve a entrar en un minuto y actualiza tu modpack.",
+  "packwarden.server.vote_open": "¿Posponemos la actualización?",
+  "packwarden.server.vote_postpone": "[Posponer %s]",
   "packwarden.server.vote_now": "[Actualizar ya]",
   "packwarden.server.vote_counted": "Voto registrado.",
-  "packwarden.server.vote_postponed": "La actualización se posterga %s.",
+  "packwarden.server.vote_postponed": "La actualización se pospone %s.",
   "packwarden.server.vote_rejected": "Se mantiene el horario de actualización.",
-  "packwarden.server.vote_limit": "Ya no se puede postergar más.",
+  "packwarden.server.vote_limit": "Ya no se puede posponer más.",
 
-  "packwarden.client.outdated": "Tu modpack no coincide con el del servidor. Actualizalo con el botón del menú principal."
+  "packwarden.client.outdated": "Tu modpack no coincide con el del servidor. Actualízalo con el botón del menú principal."
 }

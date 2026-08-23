@@ -36,6 +36,9 @@ public final class CompanionMain {
     private static final String ARG_INSTALL = "--install";
     private static final String ARG_NEOFORGE = "--neoforge-version";
     private static final String ARG_FOLDER_NAME = "--folder-name";
+    private static final String ARG_PACK_NAME = "--pack-name";
+    private static final String ARG_ALIAS = "--command-alias";
+    private static final String ARG_FALLBACK_URL = "--fallback-url";
 
     /** Margen de seguridad: si el juego no cierra en este plazo, seguimos igual. */
     private static final Duration WAIT_LIMIT = Duration.ofMinutes(2);
@@ -56,12 +59,16 @@ public final class CompanionMain {
         // con el juego ya cerrado. Comparten la deteccion de Java, las rutas y la
         // llamada a packwiz, asi que separarlos en dos programas seria duplicar todo.
         if (contains(args, ARG_INSTALL)) {
-            InstallerUi.launch(
-                    title,
+            String packName = options.getOrDefault(ARG_PACK_NAME, "Modpack");
+            InstallerUi.launch(new InstallerUi.Config(
+                    packName,
+                    options.getOrDefault(ARG_TITLE, packName),
+                    options.getOrDefault(ARG_ALIAS, ""),
                     options.getOrDefault(ARG_PACK_URL, ""),
+                    options.getOrDefault(ARG_FALLBACK_URL, ""),
                     options.getOrDefault(ARG_NEOFORGE, ""),
                     options.getOrDefault(ARG_FOLDER_NAME, "modpack"),
-                    options.getOrDefault(ARG_BOOTSTRAP, "packwiz-installer-bootstrap.jar"));
+                    Paths.get(options.getOrDefault(ARG_BOOTSTRAP, "packwiz-installer-bootstrap.jar"))));
             return;
         }
 
@@ -70,7 +77,7 @@ public final class CompanionMain {
             int exitCode = runInstaller(options);
 
             if (exitCode == 0) {
-                info(title, "Listo. Ya podes abrir el juego.");
+                info(title, "Listo. Ya puedes abrir el juego.");
             } else {
                 error(title, "La actualizacion no se completo (codigo " + exitCode + ").\n"
                         + "El modpack quedo como estaba.");

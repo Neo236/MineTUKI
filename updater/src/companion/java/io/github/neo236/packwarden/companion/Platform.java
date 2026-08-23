@@ -122,7 +122,7 @@ public final class Platform {
     private static final int RESERVED_GB = 4;
 
     private static final int MIN_HEAP_GB = 4;
-    private static final int MAX_HEAP_GB = 8;
+    private static final int MAX_HEAP_GB = 10;
 
     /** Por debajo de esto, un pack pesado no va a andar bien y conviene avisarlo. */
     private static final int COMFORTABLE_TOTAL_GB = 10;

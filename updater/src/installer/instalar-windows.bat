@@ -38,14 +38,17 @@ if not defined JAVA_BIN (
     echo.
     echo No se encontro Java en esta computadora.
     echo.
-    echo Instalalo desde: https://adoptium.net/temurin/releases/?version=21
+    echo Descargalo desde: https://adoptium.net/temurin/releases/?version=21
     echo.
     pause
     exit /b 1
 )
 
 start "" "!JAVA_BIN!" -jar "%~dp0packwarden-companion.jar" --install ^
+    --pack-name "MineTUKI" ^
     --title "NeoTUKI Mod Updater" ^
+    --command-alias "tuki" ^
+    --fallback-url "https://raw.githubusercontent.com/Neo236/MineTUKI/main/pack.toml" ^
     --pack-url "https://minetuki-neo236s-projects.vercel.app/pack.toml" ^
     --neoforge-version "neoforge-21.1.248" ^
     --folder-name "minetuki" ^
