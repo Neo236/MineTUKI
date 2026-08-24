@@ -198,10 +198,25 @@ jobs:
             exit 1
           fi
 
-          7z x 7zextra.7z -o7zextra -y >/dev/null
-          sfx=$(find 7zextra -name '7zS.sfx' | head -1)
+          7z x 7zextra.7z -o7zextra -y
+
+          # El nombre del modulo cambio entre versiones de 7-Zip, asi que se
+          # buscan los conocidos por orden de preferencia en vez de fijar uno.
+          # Solo sirven los que soportan RunProgram, que es lo que hace que el
+          # ejecutable corra la aplicacion despues de descomprimirse.
+          sfx=""
+          for nombre in 7zSD.sfx 7zS.sfx 7zS2.sfx; do
+            hallado=$(find 7zextra -name "$nombre" | head -1)
+            if [ -n "$hallado" ]; then
+              sfx="$hallado"
+              echo "Modulo autoextraible: $nombre"
+              break
+            fi
+          done
+
           if [ -z "$sfx" ]; then
-            echo "::error::No se encontro el modulo 7zS.sfx."
+            echo "::error::No se encontro ningun modulo autoextraible. Contenido:"
+            find 7zextra -name '*.sfx' -o -name '*.exe' | head -20
             exit 1
           fi
 
