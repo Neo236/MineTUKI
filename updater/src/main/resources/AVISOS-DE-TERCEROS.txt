@@ -1,17 +1,33 @@
-PackWarden incluye codigo de terceros. Sus licencias exigen que estos avisos
-viajen con el programa.
+PackWarden se apoya en trabajo de otras personas. Estos avisos viajan con el
+programa porque sus licencias lo exigen, y porque corresponde.
+
 
 ---------------------------------------------------------------------------
-packwiz-installer-bootstrap  -  https://github.com/packwiz/packwiz-installer-bootstrap
-Licencia MIT.  Copyright (c) comp500
+packwiz  -  https://packwiz.infra.link/
+Creado por comp500.  Licencia MIT.
 
-Se incluye sin modificar, para descargar y actualizar los archivos del
-modpack.
+Es quien hace el trabajo de fondo: define el formato del modpack, descarga
+los mods y mantiene la carpeta sincronizada. PackWarden no lo reemplaza, lo
+usa: se encarga de detectar cuando hay cambios y de la experiencia alrededor
+--el perfil del launcher, la memoria, el idioma, los avisos dentro del
+juego-- y le deja a packwiz lo que packwiz ya hace bien.
+
+Se incluye sin modificar:
+
+  packwiz-installer-bootstrap
+  https://github.com/packwiz/packwiz-installer-bootstrap
+
+Y se descarga en tiempo de ejecucion, tambien sin modificar:
+
+  packwiz-installer
+  https://github.com/packwiz/packwiz-installer
+
 
 ---------------------------------------------------------------------------
 Gson  -  https://github.com/google/gson
-Licencia Apache 2.0.  Copyright (c) Google Inc.
+Copyright (c) Google Inc.  Licencia Apache 2.0.
 
 Se incluye dentro del instalador, para leer y reescribir la configuracion
 del launcher sin perder datos.
-El texto completo de la licencia: https://www.apache.org/licenses/LICENSE-2.0
+
+Texto completo de la licencia: https://www.apache.org/licenses/LICENSE-2.0

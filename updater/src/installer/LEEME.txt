@@ -79,5 +79,15 @@ Dentro de la carpeta del juego queda un archivo packwarden-install.log
 con el detalle de la instalacion.
 
 
+HECHO CON PACKWIZ
+-----------------
+La descarga y la sincronizacion de los mods las hace packwiz, creado por
+comp500. Este instalador se apoya en el, no lo reemplaza: se encarga del
+perfil del launcher, la memoria, el idioma y la configuracion, y le deja
+a packwiz lo que packwiz ya hace bien.
+
+  https://packwiz.infra.link/
+
+
 Codigo y lista de mods: https://github.com/Neo236/MineTUKI
 Licencia MIT. Ver AVISOS-DE-TERCEROS.txt.
