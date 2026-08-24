@@ -73,11 +73,6 @@ jobs:
               --generate-notes --latest
           fi
 
-|
-            updater/build/libs/*-companion.jar
-            updater/build/packwiz/packwiz-installer-bootstrap.jar
-          if-no-files-found: error
-
       - name: Apuntar el pack a la version nueva
         run: |
           jar="packwarden-${{ steps.meta.outputs.version }}.jar"
