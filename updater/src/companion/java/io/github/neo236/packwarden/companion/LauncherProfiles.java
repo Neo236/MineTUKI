@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
+import java.util.Base64;
 import java.util.Optional;
 
 /**
@@ -112,7 +113,7 @@ public final class LauncherProfiles {
         profile.addProperty("lastUsed", now);
         profile.addProperty("name", displayName);
         profile.addProperty("type", "custom");
-        profile.addProperty("icon", "Furnace");
+        profile.addProperty("icon", icon());
         profile.addProperty("lastVersionId", versionId);
         profile.addProperty("gameDir", gameDirectory.toAbsolutePath().toString());
         profile.addProperty("javaArgs", javaArgs);
@@ -128,6 +129,28 @@ public final class LauncherProfiles {
         Files.move(temporary, target, StandardCopyOption.REPLACE_EXISTING);
 
         return backup;
+    }
+
+    /**
+     * Icono del perfil en la lista del launcher.
+     *
+     * <p>El launcher acepta tanto uno de sus iconos predefinidos como una imagen
+     * propia codificada en base64. Se usa la propia para que el perfil se reconozca
+     * de un vistazo entre los demas, en vez de quedar con un horno generico.
+     *
+     * <p>Si la imagen no estuviera, se cae a un icono predefinido antes que dejar
+     * el perfil sin ninguno.
+     */
+    private static String icon() {
+        try (java.io.InputStream in =
+                LauncherProfiles.class.getResourceAsStream("/packwarden/icon-64.png")) {
+            if (in != null) {
+                return "data:image/png;base64," + Base64.getEncoder().encodeToString(in.readAllBytes());
+            }
+        } catch (Exception ignored) {
+            // Un icono ilegible no puede impedir que se cree el perfil.
+        }
+        return "Furnace";
     }
 
     /** Version de NeoForge instalada que coincida con la pedida, si esta. */

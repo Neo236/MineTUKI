@@ -111,6 +111,11 @@ class InstallerTest {
         assertEquals("MineTUKI", nuestro.get("name").getAsString());
         assertEquals("neoforge-21.1.248", nuestro.get("lastVersionId").getAsString());
         assertEquals("-Xmx8G", nuestro.get("javaArgs").getAsString());
+
+        // El perfil lleva icono propio, no el generico del launcher.
+        String icono = nuestro.get("icon").getAsString();
+        assertTrue(icono.startsWith("data:image/png;base64,"), "tiene que llevar el icono propio");
+        assertTrue(icono.length() > 200, "el icono no puede venir vacio");
     }
 
     @Test
