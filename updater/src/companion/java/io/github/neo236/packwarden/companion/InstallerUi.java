@@ -129,6 +129,8 @@ public final class InstallerUi {
         content.add(title(config.packName()));
         content.add(Box.createVerticalStrut(4));
         content.add(plain(Messages.get("intro")));
+        content.add(Box.createVerticalStrut(2));
+        content.add(aviso(Messages.get("warn.closeLauncher")));
         content.add(Box.createVerticalStrut(10));
         content.add(languageRow());
         content.add(Box.createVerticalStrut(10));
@@ -153,6 +155,7 @@ public final class InstallerUi {
         folderOption.addActionListener(event -> refreshEnabled());
         content.add(folderOption);
         content.add(hint(Messages.get("option.folder.hint")));
+        content.add(hint(Messages.get("option.folder.hint2")));
 
         ButtonGroup group = new ButtonGroup();
         group.add(profileOption);
@@ -327,14 +330,28 @@ public final class InstallerUi {
                 config.bootstrapJar());
 
         installButton.setEnabled(false);
+        languageBox.setEnabled(false);
         progress.setVisible(true);
         progress.setIndeterminate(true);
         frame.pack();
 
-        new SwingWorker<Void, String>() {
+        SwingWorker<Void, String> trabajo = new SwingWorker<Void, String>() {
             @Override
             protected Void doInBackground() throws Exception {
-                Installer.run(options, this::publish);
+                Installer.run(options, new Installer.Progress() {
+                    @Override
+                    public void step(String message) {
+                        publish(message);
+                    }
+
+                    @Override
+                    public void progress(int hechos, int total) {
+                        // La barra pasa a mostrar cuantos archivos van: medio giga de
+                        // descarga con una barra indeterminada parece un cuelgue.
+                        setProgress(total > 0 ? Math.min(100, hechos * 100 / total) : 0);
+                        publish(Messages.get("step.downloadingCount", hechos, total));
+                    }
+                });
                 return null;
             }
 
@@ -357,7 +374,16 @@ public final class InstallerUi {
                     error(Messages.get("error.failed", String.valueOf(cause.getMessage())));
                 }
             }
-        }.execute();
+        };
+
+        // La barra pasa de indeterminada a real en cuanto llega el primer avance.
+        trabajo.addPropertyChangeListener(evento -> {
+            if ("progress".equals(evento.getPropertyName())) {
+                progress.setIndeterminate(false);
+                progress.setValue((Integer) evento.getNewValue());
+            }
+        });
+        trabajo.execute();
     }
 
     /** Clave interna del perfil, estable para que reinstalar no duplique entradas. */
@@ -392,6 +418,15 @@ public final class InstallerUi {
 
     private static JLabel plain(String text) {
         JLabel label = new JLabel(text);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        return label;
+    }
+
+    /** Aviso destacado: lo unico que el jugador tiene que hacer antes de empezar. */
+    private static JLabel aviso(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(label.getFont().deriveFont(Font.BOLD));
+        label.setForeground(new Color(0xB8, 0x6A, 0x00));
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
     }

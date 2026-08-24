@@ -1,6 +1,5 @@
 package io.github.neo236.packwarden.core;
 
-import io.github.neo236.packwarden.PackWarden;
 import io.github.neo236.packwarden.config.WardenConfig;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -14,6 +13,8 @@ import java.util.Optional;
  * declara el pack publicado. No inventa nada: si no puede saberlo, lo dice.
  */
 public final class UpdateChecker {
+
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger("PackWarden");
 
     public enum State {
         /** No hay URL configurada. */
@@ -65,7 +66,7 @@ public final class UpdateChecker {
             // Sin manifiesto no hay forma honesta de saber que hay instalado. La
             // version anterior de este mod asumia "hay actualizacion", que es como
             // no chequear nada.
-            PackWarden.LOG.info(
+            LOG.info(
                     "No hay {} en {}: la instalacion no la gestiona packwiz.",
                     PackManifest.FILE_NAME, packFolder);
             return new Result(
@@ -84,7 +85,7 @@ public final class UpdateChecker {
         Map<String, String> publishedFiles = remote.fetchIndexFiles(snapshot);
         PackChangelog changelog = PackChangelog.between(installed.installedFiles(), publishedFiles);
 
-        PackWarden.LOG.info(
+        LOG.info(
                 "Actualizacion disponible: {} cambios (indice {} -> {})",
                 changelog.total(), shorten(installedHash), shorten(snapshot.indexHash()));
 

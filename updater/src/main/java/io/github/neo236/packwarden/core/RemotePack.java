@@ -1,6 +1,5 @@
 package io.github.neo236.packwarden.core;
 
-import io.github.neo236.packwarden.PackWarden;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -25,6 +24,8 @@ import java.util.regex.Pattern;
  * vez de arrastrar un parser completo.
  */
 public final class RemotePack {
+
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger("PackWarden");
 
     /** {@code version = "1.4.0"} en la raiz de pack.toml. */
     private static final Pattern VERSION = Pattern.compile("(?m)^\\s*version\\s*=\\s*\"([^\"]*)\"");
@@ -74,7 +75,7 @@ public final class RemotePack {
                     return snapshot;
                 }
             } catch (Exception e) {
-                PackWarden.LOG.warn("No se pudo consultar {}: {}", url, e.toString());
+                LOG.warn("No se pudo consultar {}: {}", url, e.toString());
             }
         }
         return Optional.empty();
@@ -103,19 +104,19 @@ public final class RemotePack {
         // una identidad exacta.
         HttpResponse<byte[]> response = http.send(request, HttpResponse.BodyHandlers.ofByteArray());
         if (response.statusCode() != 200) {
-            PackWarden.LOG.warn("{} respondio {}", url, response.statusCode());
+            LOG.warn("{} respondio {}", url, response.statusCode());
             return Optional.empty();
         }
 
         byte[] raw = response.body();
         String body = new String(raw, StandardCharsets.UTF_8);
-        String indexHash = firstGroup(INDEX_HASH, body);
+        String indexHash = parseIndexHash(body);
         if (indexHash == null) {
-            PackWarden.LOG.warn("{} no parece un pack.toml: no tiene hash de indice", url);
+            LOG.warn("{} no parece un pack.toml: no tiene hash de indice", url);
             return Optional.empty();
         }
 
-        return Optional.of(new Snapshot(url, body, sha256(raw), indexHash, firstGroup(VERSION, body)));
+        return Optional.of(new Snapshot(url, body, sha256(raw), indexHash, parseVersion(body)));
     }
 
     /**
@@ -137,14 +138,9 @@ public final class RemotePack {
                 return Map.of();
             }
 
-            Map<String, String> files = new LinkedHashMap<>();
-            Matcher matcher = INDEX_ENTRY.matcher(response.body());
-            while (matcher.find()) {
-                files.put(matcher.group(1), matcher.group(2));
-            }
-            return files;
+            return parseIndexEntries(response.body());
         } catch (Exception e) {
-            PackWarden.LOG.warn("No se pudo leer el indice remoto: {}", e.toString());
+            LOG.warn("No se pudo leer el indice remoto: {}", e.toString());
             return Map.of();
         }
     }
@@ -153,6 +149,26 @@ public final class RemotePack {
     private static String resolveSibling(String url, String name) {
         int slash = url.lastIndexOf('/');
         return slash < 0 ? name : url.substring(0, slash + 1) + name;
+    }
+
+    /** Hash del indice declarado en un pack.toml. Visible para poder probarlo. */
+    static String parseIndexHash(String toml) {
+        return firstGroup(INDEX_HASH, toml);
+    }
+
+    /** Version declarada en un pack.toml. */
+    static String parseVersion(String toml) {
+        return firstGroup(VERSION, toml);
+    }
+
+    /** Pares archivo-hash de un index.toml. */
+    static Map<String, String> parseIndexEntries(String toml) {
+        Map<String, String> files = new LinkedHashMap<>();
+        Matcher matcher = INDEX_ENTRY.matcher(toml);
+        while (matcher.find()) {
+            files.put(matcher.group(1), matcher.group(2));
+        }
+        return files;
     }
 
     private static String firstGroup(Pattern pattern, String text) {

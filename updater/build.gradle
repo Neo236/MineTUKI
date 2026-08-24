@@ -290,7 +290,8 @@ tasks.register('installerZip', Zip) {
             rename { 'packwarden-companion.jar' }
         }
         from(packwizBootstrapFile)
-        from('src/installer') {
+        from("src/installer") {
+            exclude "icono.ico"
             // Los scripts de shell tienen que quedar ejecutables al descomprimir.
             // En Gradle 9 la propiedad 'mode' ya no existe.
             filesMatching('*.command') { details ->
@@ -298,4 +299,56 @@ tasks.register('installerZip', Zip) {
             }
         }
     }
+}
+
+// ---------------------------------------------------------------------------
+// Tests. Cubren la logica pura: parseo, comparaciones y generacion de archivos.
+// Es justo donde aparecieron los errores que solo se vieron al ejecutar.
+// ---------------------------------------------------------------------------
+
+sourceSets {
+    companionTest {
+        java.srcDirs = ["src/companionTest/java"]
+        // Con "+=" en vez de "=" para no perder las dependencias declaradas
+        // despues, que es donde entran JUnit y Gson.
+        compileClasspath += sourceSets.companion.output
+        runtimeClasspath += sourceSets.companion.output
+    }
+}
+
+configurations {
+    companionTestImplementation.extendsFrom companionDeps
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.11.3')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // El classpath de compilacion las trae desde Minecraft, pero el de ejecucion
+    // de los tests no: sin esto las clases del nucleo no llegan a inicializarse.
+    testImplementation 'org.slf4j:slf4j-api:2.0.16'
+    testImplementation 'com.google.code.gson:gson:2.11.0'
+    testRuntimeOnly 'org.slf4j:slf4j-nop:2.0.16'
+
+    companionTestImplementation platform('org.junit:junit-bom:5.11.3')
+    companionTestImplementation 'org.junit.jupiter:junit-jupiter'
+    companionTestRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test', Test) {
+    useJUnitPlatform()
+    testLogging { events 'passed', 'failed', 'skipped' }
+}
+
+tasks.register('companionTest', Test) {
+    description = 'Tests del instalador, que no necesita Minecraft.'
+    testClassesDirs = sourceSets.companionTest.output.classesDirs
+    classpath = sourceSets.companionTest.runtimeClasspath
+    useJUnitPlatform()
+    testLogging { events 'passed', 'failed', 'skipped' }
+}
+
+tasks.named('check') {
+    dependsOn 'companionTest'
 }

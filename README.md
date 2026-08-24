@@ -15,18 +15,11 @@ Ambos apuntan a la misma URL de `pack.toml` — el archivo crudo de este repo en
 
 ## Para amigos: instalar el modpack
 
-Descargá el **[instalador](https://github.com/Neo236/MineTUKI/releases/latest)**, extraelo y abrilo:
+Descargá el **[instalador](https://github.com/Neo236/MineTUKI/releases/latest)** (`MineTUKI-instalador.zip`), descomprimilo y abrí el de tu sistema: `instalar-windows.bat` o `instalar-mac-linux.command`. **No hace falta instalar Java** — usa el que ya trae el launcher de Minecraft.
 
-| Sistema | Archivo |
-|---|---|
-| Windows | `MineTUKI-instalador.exe` — un solo archivo. Doble clic y listo: no instala nada en la máquina ni necesita Java |
-| Mac / Linux | `MineTUKI-instalador.zip` — descomprimir y doble clic al script |
+Crea un perfil aparte en el launcher oficial, con su **propia carpeta de mods**. No toca los mods que ya tengas: tus otros perfiles y modpacks quedan intactos. El nombre del perfil, la carpeta y el idioma se pueden cambiar antes de instalar, y también podés instalar solo a una carpeta suelta si usás Prism, MultiMC u otra instalación.
 
-Crea un perfil aparte en el launcher oficial, con su **propia carpeta de mods**. No toca los mods que ya tengas: tus otros perfiles y modpacks quedan intactos. El nombre del perfil y la carpeta se pueden cambiar antes de instalar, y también podés instalar solo a una carpeta suelta si usás Prism, MultiMC u otra instalación.
-
-**No hace falta instalar Java**: usa el que ya viene con el launcher de Minecraft.
-
-Cerrá el launcher antes de instalar — al cerrarse reescribe su configuración y podría borrar el perfil recién creado.
+**Cerrá el launcher antes de instalar** — al cerrarse reescribe su configuración y podría borrar el perfil recién creado.
 
 Esto se corre **una sola vez**. De ahí en más el mod [PackWarden](updater/) avisa solo dentro del juego cuando el modpack cambia, muestra qué mods entran y salen, y te deja actualizar en el momento, al salir del juego, o más tarde.
 

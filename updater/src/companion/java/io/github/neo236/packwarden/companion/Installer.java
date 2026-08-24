@@ -39,7 +39,19 @@ public final class Installer {
 
     public interface Progress {
         void step(String message);
+
+        /**
+         * Avance de la descarga.
+         *
+         * <p>Sin esto la barra queda indeterminada durante varios minutos y medio
+         * giga de descarga, que es indistinguible de un programa colgado.
+         */
+        void progress(int hechos, int total);
     }
+
+    /** Lineas de packwiz del estilo "(12/153) Downloaded Create". */
+    private static final java.util.regex.Pattern AVANCE =
+            java.util.regex.Pattern.compile("\\((\\d+)/(\\d+)\\)");
 
     private Installer() {}
 
@@ -51,7 +63,7 @@ public final class Installer {
         }
 
         progress.step(Messages.get("step.downloading"));
-        installPack(options);
+        installPack(options, progress);
 
         progress.step(Messages.get("step.configuring"));
         seedModConfig(options);
@@ -117,7 +129,7 @@ public final class Installer {
         }
     }
 
-    private static void installPack(Options options) throws Exception {
+    private static void installPack(Options options, Progress progress) throws Exception {
         List<String> command = new ArrayList<>();
         command.add(javaExecutable());
         command.add("-jar");
@@ -132,12 +144,30 @@ public final class Installer {
         command.add("--no-gui");
         command.add(options.packUrl());
 
+        Path log = options.gameDirectory().resolve("packwarden-install.log");
+
         Process process = new ProcessBuilder(command)
                 .directory(options.gameDirectory().toFile())
                 .redirectErrorStream(true)
-                .redirectOutput(ProcessBuilder.Redirect.appendTo(
-                        options.gameDirectory().resolve("packwarden-install.log").toFile()))
                 .start();
+
+        // Se lee la salida en vivo para saber por donde va, y se guarda igual en el
+        // log por si despues hay que revisar que fallo.
+        try (var salida = new java.io.BufferedReader(
+                        new java.io.InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
+                var archivo = Files.newBufferedWriter(log, StandardCharsets.UTF_8)) {
+            String linea;
+            while ((linea = salida.readLine()) != null) {
+                archivo.write(linea);
+                archivo.newLine();
+
+                var encontrado = AVANCE.matcher(linea);
+                if (encontrado.find()) {
+                    progress.progress(
+                            Integer.parseInt(encontrado.group(1)), Integer.parseInt(encontrado.group(2)));
+                }
+            }
+        }
 
         int exit = process.waitFor();
         if (exit != 0) {

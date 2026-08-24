@@ -3,7 +3,6 @@ package io.github.neo236.packwarden.core;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.github.neo236.packwarden.PackWarden;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -41,6 +40,8 @@ import java.util.Optional;
  */
 public record PackManifest(
         String packFileHash, String indexFileHash, String side, Map<String, Entry> installedFiles) {
+
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger("PackWarden");
 
     /**
      * Un archivo del pack tal como quedo registrado.
@@ -105,7 +106,7 @@ public record PackManifest(
                     root.has("cachedSide") ? root.get("cachedSide").getAsString() : null,
                     files));
         } catch (Exception e) {
-            PackWarden.LOG.warn("No se pudo leer {}: {}", file, e.toString());
+            LOG.warn("No se pudo leer {}: {}", file, e.toString());
             return Optional.empty();
         }
     }
