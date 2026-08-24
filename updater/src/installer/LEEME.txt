@@ -1,42 +1,83 @@
-MineTUKI - Instalador de mods
-=============================
+MineTUKI - Instalador
+=====================
 
-Que hace
---------
-Deja el juego listo para jugar. Crea un perfil aparte en el launcher
-oficial, con su propia carpeta de mods, y descarga todo lo necesario.
+Modpack de Minecraft 1.21.1 con NeoForge.
 
-No toca los mods que ya tengas: usa una carpeta propia, asi que tus
-otros perfiles y modpacks quedan intactos.
 
-Como se usa
------------
-- Windows: doble clic en instalar-windows.bat
-- Mac / Linux: doble clic en instalar-mac-linux.command
-  (en Mac, si no abre con doble clic: clic derecho > Abrir)
+ANTES DE EMPEZAR
+----------------
+Cierra el launcher de Minecraft.
 
-Cierra el launcher de Minecraft antes de instalar. Si esta abierto,
-al cerrarse reescribe su configuracion y puede borrar el perfil nuevo.
+Es importante: el launcher reescribe su configuracion al cerrarse, y
+puede borrar el perfil que este instalador va a crear.
 
-Cuando termine, abre el launcher y elige el perfil que creaste.
 
-Se puede cambiar el nombre del perfil y la carpeta de instalacion
-desde la misma ventana, antes de instalar.
+COMO SE INSTALA
+---------------
+1. Windows ........ doble clic en  instalar-windows.bat
+   Mac / Linux .... doble clic en  instalar-mac-linux.command
+                    (en Mac, si no abre: clic derecho > Abrir)
 
-Java
-----
-No hace falta instalar nada: el instalador usa el Java que ya trae el
-launcher de Minecraft. Si no encuentra ninguno lo va a avisar, con el
-enlace para descargarlo.
+2. Elige el idioma. Define tanto esta ventana como el idioma con el
+   que va a arrancar el juego.
 
-Despues de instalar
+3. Deja marcada la primera opcion y pulsa Instalar.
+
+4. Cuando termine, abre el launcher y elige el perfil "MineTUKI".
+
+La descarga es de unos 500 MB y la ventana muestra cuantos archivos
+van. Puede tardar varios minutos segun tu conexion.
+
+
+QUE HACE EXACTAMENTE
+--------------------
+Crea una carpeta propia dentro de .minecraft y deja ahi los mods, un
+perfil nuevo en el launcher que apunta a esa carpeta, y la memoria ya
+configurada segun la que tenga tu computadora.
+
+NO toca los mods que ya tengas. Tus otros perfiles y modpacks quedan
+intactos, porque nada se instala en la carpeta compartida.
+
+Antes de instalar podes cambiar el nombre del perfil y la carpeta de
+destino desde la misma ventana.
+
+
+NO HACE FALTA INSTALAR JAVA
+---------------------------
+El instalador usa el Java que ya viene con el launcher de Minecraft.
+Solo si no encuentra ninguno te lo va a decir, con el enlace para
+descargarlo.
+
+
+DESPUES DE INSTALAR
 -------------------
-Esto se ejecuta una sola vez. De ahi en mas el juego avisa solo cuando
-hay cambios en el modpack, con un boton en el menu principal, y se puede
-elegir actualizar en el momento, al salir del juego, o mas tarde.
+Esto se ejecuta UNA SOLA VEZ.
 
-Si prefieres otra cosa
-----------------------
-El instalador tambien permite descargar los mods a una carpeta suelta,
-sin crear ningun perfil, para quien use Prism, MultiMC u otra
-instalacion.
+De ahi en mas, el modpack se mantiene al dia desde adentro del juego.
+Cuando la lista de mods cambie, al abrir el juego vas a ver una
+pantalla con el detalle -- que mods entran, cuales salen y cuales se
+actualizan -- y tres opciones:
+
+  Actualizar ahora ...... cierra el juego y actualiza
+  Actualizar al salir ... segui jugando; se actualiza cuando cierres
+  Mas tarde ............. te lo vuelve a preguntar la proxima vez
+
+El boton con el zorro, en el menu principal, sirve para consultar
+cuando quieras.
+
+
+SI USAS PRISM, MULTIMC U OTRO LAUNCHER
+--------------------------------------
+La segunda opcion del instalador descarga los mods a la carpeta que
+elijas, sin crear ningun perfil. Despues apunta tu instancia a esa
+carpeta.
+
+
+SI ALGO SALE MAL
+----------------
+Dentro de la carpeta del juego queda un archivo packwarden-install.log
+con el detalle de la instalacion.
+
+
+Codigo y lista de mods: https://github.com/Neo236/MineTUKI
+Licencia MIT. Ver AVISOS-DE-TERCEROS.txt.

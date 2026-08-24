@@ -12,7 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
  * mundo: quien no vota, no bloquea. Si nadie vota, el horario original se
  * mantiene, que es el comportamiento menos sorpresivo.
  */
-public class VoteSession {
+public final class VoteSession {
 
     public enum Choice {
         POSTPONE,

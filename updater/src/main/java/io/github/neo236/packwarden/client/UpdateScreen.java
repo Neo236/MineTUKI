@@ -22,7 +22,7 @@ import net.minecraft.network.chat.Component;
  * "no" no significaba nada: volvia a aparecer igual, y no habia forma de decir
  * "si, pero cuando termine de jugar". Las tres opciones son intencionales.
  */
-public class UpdateScreen extends Screen {
+public final class UpdateScreen extends Screen {
 
     private static final int MAX_LISTED = 6;
 

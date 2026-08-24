@@ -16,7 +16,7 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
  * tambien hay servidor integrado; el ciclo de reinicio automatico, en cambio, solo
  * tiene sentido en un servidor dedicado.
  */
-public class PackWardenServer {
+public final class PackWardenServer {
 
     @SubscribeEvent
     public void onRegisterCommands(RegisterCommandsEvent event) {

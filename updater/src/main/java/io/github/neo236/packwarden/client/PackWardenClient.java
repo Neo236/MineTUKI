@@ -20,7 +20,7 @@ import net.neoforged.neoforge.common.NeoForge;
  * de interfaz grafica se cargue en un servidor dedicado.
  */
 @Mod(value = PackWarden.MOD_ID, dist = Dist.CLIENT)
-public class PackWardenClient {
+public final class PackWardenClient {
 
     private static final int BUTTON_SIZE = 20;
     private static final int BUTTON_GAP = 4;

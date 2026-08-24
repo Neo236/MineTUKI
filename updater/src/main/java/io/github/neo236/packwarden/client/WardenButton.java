@@ -14,7 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 /** El boton del menu principal: estado de un vistazo, y consulta manual al hacer clic. */
-public class WardenButton extends Button {
+public final class WardenButton extends Button {
 
     /** Lado de la textura del icono, en pixeles. Ver assets/packwarden/textures/gui. */
     private static final int ICON_SIZE = 64;
