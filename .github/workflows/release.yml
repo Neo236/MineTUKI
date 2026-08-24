@@ -180,14 +180,17 @@ jobs:
           cp entrada/packwiz-installer-bootstrap.jar "salida/MineTUKI/"
 
       - name: Empaquetar en un unico ejecutable
+        id: sfx
         shell: bash
         run: |
           # Un solo archivo que no hay que descomprimir y que no instala nada:
           # se descomprime solo en una carpeta temporal, corre, y desaparece.
           # El modulo que lo permite es codigo de terceros, asi que va fijado por
           # version y verificado por hash.
-          url="https://www.7-zip.org/a/7z2501-extra.7z"
-          esperado="cd3cf38085c2cc6839cf72716dafb3175ae425f4fd34faafc6c0b64d618d307f"
+          # Se usa la 23.01 y no la ultima: a partir de la 25.01 el paquete dejo
+          # de traer los modulos autoextraibles, comprobado en un run anterior.
+          url="https://www.7-zip.org/a/7z2301-extra.7z"
+          esperado="db3a1cbe57a26fac81b65c6a2d23feaecdeede3e4c1fe8fb93a7b91d72d1094c"
 
           curl -sL -o 7zextra.7z "$url"
           obtenido=$(sha256sum 7zextra.7z | cut -d' ' -f1)
@@ -215,10 +218,12 @@ jobs:
           done
 
           if [ -z "$sfx" ]; then
-            echo "::error::No se encontro ningun modulo autoextraible. Contenido:"
-            find 7zextra -name '*.sfx' -o -name '*.exe' | head -20
-            exit 1
+            echo "::warning::Sin modulo autoextraible; se arma el instalador clasico."
+            find 7zextra -name '*.sfx' -o -name '*.exe' | head -10
+            echo "logrado=no" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
+          echo "logrado=si" >> "$GITHUB_OUTPUT"
 
           cd salida && 7z a -t7z -mx=7 ../aplicacion.7z MineTUKI >/dev/null && cd ..
 
@@ -227,8 +232,35 @@ jobs:
           cat "$sfx" config.txt aplicacion.7z > MineTUKI-instalador.exe
           ls -la MineTUKI-instalador.exe
 
+      - name: Instalador clasico, si el autoextraible no fue posible
+        if: steps.sfx.outputs.logrado != 'si'
+        shell: bash
+        run: |
+          choco install wixtoolset --no-progress -y
+
+          # Deja una aplicacion registrada en la maquina, que para algo que se
+          # corre una sola vez no es lo ideal, pero sigue siendo un unico archivo
+          # que no hay que descomprimir.
+          jpackage \
+            --type exe \
+            --name "MineTUKI" \
+            --app-version "${{ steps.meta.outputs.version }}" \
+            --app-image salida/MineTUKI \
+            --dest instalador \
+            --icon updater/src/installer/icono.ico \
+            --win-per-user-install \
+            --win-shortcut \
+            --win-menu \
+            --win-menu-group "MineTUKI" \
+            --vendor "Neo236"
+
+          mv instalador/*.exe MineTUKI-instalador.exe
+
       - name: Subirlo al release
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload "${{ steps.meta.outputs.tag }}" MineTUKI-instalador.exe --clobber
+        run: |
+          echo "Autoextraible: ${{ steps.sfx.outputs.logrado }}"
+          ls -la MineTUKI-instalador.exe
+          gh release upload "${{ steps.meta.outputs.tag }}" MineTUKI-instalador.exe --clobber
