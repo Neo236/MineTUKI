@@ -1,7 +1,7 @@
 # Plan técnico — MineTUKI
 
 Estado: **decisiones cerradas**, ejecución en curso.
-Última actualización: 2026-08-23.
+Última actualización: 2026-08-24.
 
 ## 1. Objetivo
 
@@ -26,8 +26,7 @@ entra por configuración, nunca por código.
 | Distribución del mod | Un solo jar, con guardas de `Dist`. `side = "client"` hasta que exista la parte servidor; `both` a partir de la Fase 2 |
 | Destinos del instalador | **Perfil dedicado** (default) y **Ubicación personalizada** |
 | `.minecraft` como destino | **Descartado** como opción propia |
-| Fuente del pack (cliente) | Vercel |
-| Fuente del pack (servidor) | GitHub raw |
+| Fuente del pack | Vercel para los dos lados, con GitHub raw como respaldo del mod |
 | IP del servidor | **No se publica.** El instalador la pide como campo opcional |
 | i18n | Claves de idioma con placeholders desde el día uno |
 
@@ -58,21 +57,34 @@ eligiéndola a mano en vez de que se la ofrezcamos.
                   push → deploy        │ raw
                              │         │
                     ┌────────▼─────┐  ┌▼────────────────┐
-                    │  Vercel      │  │ raw.github...   │
-                    │  instantáneo │  │ hasta 5 min     │
-                    └────────┬─────┘  └┬────────────────┘
-                             │         │
-                    ┌────────▼───┐  ┌──▼──────────────┐
-                    │  Clientes  │  │ Servidor Docker │
-                    │  (mod)     │  │ (itzg packwiz)  │
-                    └────────────┘  └─────────────────┘
+                    │   Vercel     │  │  raw.github...  │
+                    │  instantáneo │  │  hasta 5 min    │
+                    └───────┬──────┘  └────────┬────────┘
+                            │                  │
+                   fuente principal    respaldo del mod
+                            │
+              ┌─────────────┴─────────────┐
+              ▼                           ▼
+      ┌──────────────┐          ┌─────────────────┐
+      │   Clientes   │          │ Servidor Docker │
+      │    (mod)     │          │ (itzg + packwiz)│
+      └──────────────┘          └─────────────────┘
 ```
 
-**Por qué el servidor no usa Vercel.** El servidor solo sincroniza al reiniciar, así que 5
-minutos de retraso le dan igual. Y como el arranque **falla duro** si la instalación de
-packwiz falla (ver §4), cada dependencia en ese camino es un modo de falla nuevo. El cliente
-sí va por Vercel, donde la inmediatez importa, y lleva la URL de GitHub como fallback
-configurable — algo que itzg no tiene.
+**Los dos lados usan Vercel.** Esta decisión se revirtió.
+
+La original era que el servidor leyera GitHub raw: como solo sincroniza al reiniciar, 5
+minutos de retraso daban igual, y el arranque **falla duro** si packwiz falla (ver §4), así
+que convenía tener una dependencia menos en ese camino.
+
+Al activar el reinicio automático el cálculo cambió. El servidor detectaba una
+actualización, se reiniciaba, itzg sincronizaba contra un nodo de CDN que todavía servía el
+índice viejo, y volvía con la misma versión — para volver a detectar lo mismo en el chequeo
+siguiente. Un reinicio de más **en cada publicación**, contra el riesgo hipotético de que
+Vercel esté caído justo en un arranque. Lo primero pasa siempre; lo segundo, casi nunca.
+
+El mod conserva GitHub raw como respaldo configurable. itzg no tiene respaldo, pero tampoco
+lo tenía antes.
 
 ### Componentes
 
@@ -118,6 +130,8 @@ Todo lo que sigue se midió o se leyó del código, no se asumió.
 | El filtrado por `side` funciona en producción | Log del servidor: `(83/153) Skipped MineTUKI Updater (wrong side)` |
 | itzg resincroniza en cada arranque y deja el índice al día | Reinicio real: `indexFileHash` pasó de `6e0ceafc` a `0d25b6cd` |
 | El loop de reinicio por fallo de packwiz **ocurre de verdad** | Log del servidor: 6 arranques fallidos seguidos antes de uno exitoso |
+| El ciclo automático del servidor funciona | Cuatro actualizaciones autónomas seguidas en producción, ~1 min de caída cada una |
+| Leer el pack desde GitHub raw provoca reinicios redundantes | El servidor reinició, itzg sincronizó un índice viejo, y volvió a detectar la misma actualización pendiente |
 
 ### Consecuencia operativa importante
 

@@ -71,12 +71,11 @@ Publicar un `pack.toml` cuyo hash no coincide con `index.toml` rompe la instalac
 
 ## De dónde sale el pack
 
-| | URL | por qué |
-|---|---|---|
-| Clientes | `minetuki-neo236s-projects.vercel.app/pack.toml` | se actualiza en el momento del push |
-| Servidor | `raw.githubusercontent.com/.../main/pack.toml` | una dependencia menos en el arranque |
+Clientes y servidor leen el pack desde **Vercel**, que se actualiza en el momento del push. El mod lleva `raw.githubusercontent.com` como respaldo configurable.
 
-GitHub raw tarda hasta ~5 minutos en propagar, y **por nodo de CDN**: durante esa ventana dos jugadores pueden recibir versiones distintas. Al servidor no le afecta porque solo sincroniza al reiniciar. El mod lleva la URL de GitHub como respaldo configurable.
+GitHub raw tarda hasta ~5 minutos en propagar, y **por nodo de CDN**: durante esa ventana dos lectores pueden recibir versiones distintas.
+
+Al principio el servidor apuntaba ahí, con el argumento de tener una dependencia menos en el arranque. Al activar el reinicio automático eso se volvió un problema concreto: el servidor se reiniciaba para actualizarse, itzg sincronizaba contra un nodo que todavía servía el índice viejo, y volvía con la misma versión — para detectar la misma actualización pendiente en el siguiente chequeo. Un reinicio de más por cada publicación.
 
 ## El código del mod
 

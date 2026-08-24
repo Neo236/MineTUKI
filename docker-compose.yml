@@ -20,10 +20,14 @@ services:
       VERSION: "1.21.1"
       NEOFORGE_VERSION: "21.1.248"
 
-      # Pulls pack.toml straight from this repo's main branch and installs
-      # only the mods marked side="server" or side="both" - the same
-      # mechanism friends use client-side, just filtered the other way.
-      PACKWIZ_URL: "https://raw.githubusercontent.com/Neo236/MineTUKI/main/pack.toml"
+      # Instala solo los mods marcados side="server" o side="both", el mismo
+      # mecanismo que usan los clientes pero filtrado al reves.
+      #
+      # Apunta a Vercel y no al repositorio crudo: GitHub tarda hasta cinco
+      # minutos en propagar, y por nodo de CDN. Con el reinicio automatico
+      # activado eso hacia que el servidor se reiniciara, sincronizara contenido
+      # viejo, y volviera a detectar la misma actualizacion pendiente.
+      PACKWIZ_URL: "https://minetuki-neo236s-projects.vercel.app/pack.toml"
 
       MEMORY: "${MC_MEMORY:-8G}"
       MOTD: "${MC_MOTD:-MineTUKI}"
