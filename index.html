@@ -3,108 +3,282 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MineTUKI — Instalar el modpack</title>
-<meta name="description" content="Instalador del modpack MineTUKI para Minecraft 1.21.1.">
+<title>MineTUKI — Descargar el modpack</title>
+<meta name="description" content="Instalador del modpack MineTUKI para Minecraft 1.21.1 con NeoForge.">
+<link rel="icon" href="/web/fox-2d.png">
+
+<meta property="og:title" content="MineTUKI">
+<meta property="og:description" content="Modpack de Minecraft 1.21.1. Instalá una vez y se mantiene al día solo.">
+<meta property="og:image" content="/web/fox.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+
 <style>
   :root {
-    color-scheme: light dark;
-    --bg: #f6f5f2;
-    --card: #ffffff;
-    --ink: #1c1b19;
-    --soft: #6b6862;
-    --line: #e2ded6;
-    --accent: #b4632a;
-    --accent-ink: #ffffff;
+    --oro:      #fee761;
+    --oro-baja: #f0b541;
+    --panel:    #3a4466;
+    --marco:    #5a6988;
+    --fondo:    #262b44;
+    --fondo-2:  #1b1f38;
+    --texto:    #ffffff;
+    --tenue:    #9ca1b2;
+
+    --pixel: 4px;
+    --titulos: "Silkscreen", "Courier New", monospace;
+    --cuerpo: "Pixelify Sans", "Silkscreen", "Courier New", monospace;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #16150f;
-      --card: #201e17;
-      --ink: #f0ece3;
-      --soft: #a29c8e;
-      --line: #322f25;
-      --accent: #d4813f;
-      --accent-ink: #1c1b19;
-    }
-  }
-  * { box-sizing: border-box; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
   body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
-    padding: 40px 20px 80px;
+    font-family: var(--cuerpo);
+    background-color: var(--fondo-2);
+    /* Rejilla de pixeles: da textura sin traer ninguna imagen de fondo. */
+    background-image:
+      linear-gradient(rgba(90, 105, 136, .07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(90, 105, 136, .07) 1px, transparent 1px),
+      radial-gradient(ellipse at 50% 0%, #303757 0%, var(--fondo-2) 70%);
+    background-size: 32px 32px, 32px 32px, 100% 100%;
+    color: var(--texto);
+    min-height: 100vh;
+    padding: 48px 20px 64px;
+    display: flex;
+    justify-content: center;
+    image-rendering: pixelated;
   }
-  main { max-width: 620px; margin: 0 auto; }
-  h1 { font-size: 2.2rem; margin: 0 0 6px; letter-spacing: -0.02em; }
-  .sub { color: var(--soft); margin: 0 0 32px; }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 22px 24px;
-    margin-bottom: 16px;
+
+  main { width: 100%; max-width: 880px; }
+
+  /* ---------- Encabezado ---------- */
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
   }
-  .card h2 { font-size: 1.05rem; margin: 0 0 4px; }
-  .card p { margin: 0 0 16px; color: var(--soft); font-size: 0.92rem; }
-  a.dl {
-    display: inline-block;
-    background: var(--accent);
-    color: var(--accent-ink);
+
+  .zorro {
+    width: 88px;
+    height: 88px;
+    image-rendering: pixelated;
+    filter: drop-shadow(4px 4px 0 rgba(0, 0, 0, .45));
+  }
+
+  h1 {
+    font-family: var(--titulos);
+    font-weight: 700;
+    font-size: clamp(2rem, 7vw, 3.4rem);
+    letter-spacing: .02em;
+    line-height: 1;
+    /* Contorno de pixel: cuatro sombras duras, sin desenfoque. */
+    text-shadow:
+      var(--pixel) var(--pixel) 0 var(--fondo),
+      calc(var(--pixel) * -1) var(--pixel) 0 var(--fondo),
+      var(--pixel) calc(var(--pixel) * -1) 0 var(--fondo),
+      calc(var(--pixel) * -1) calc(var(--pixel) * -1) 0 var(--fondo);
+  }
+  h1 .tuki { color: var(--oro); }
+
+  .subtitulo {
+    text-align: center;
+    color: var(--tenue);
+    font-size: 1.05rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin: -24px 0 40px;
+  }
+
+  /* ---------- Botón ---------- */
+
+  .descargar {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 12px;
+    padding: 20px 56px;
+    font-family: var(--titulos);
+    font-weight: 700;
+    font-size: clamp(1.3rem, 4vw, 2rem);
+    letter-spacing: .05em;
+    color: var(--oro);
     text-decoration: none;
-    font-weight: 600;
-    padding: 11px 22px;
-    border-radius: 9px;
+    background: var(--marco);
+    border: var(--pixel) solid var(--oro);
+    /* Bisel duro, sin degradados: la luz arriba, la sombra abajo. */
+    box-shadow:
+      inset 0 var(--pixel) 0 rgba(255, 255, 255, .18),
+      inset 0 calc(var(--pixel) * -1) 0 rgba(0, 0, 0, .3),
+      0 6px 0 var(--fondo);
+    transition: transform .06s steps(2), box-shadow .06s steps(2);
   }
-  a.dl:hover { filter: brightness(1.08); }
-  a.alt { color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.92rem; }
-  a.alt:hover { text-decoration: underline; }
-  ol { padding-left: 20px; margin: 0; }
-  ol li { margin-bottom: 10px; }
-  .note {
-    border-left: 3px solid var(--accent);
-    padding: 2px 0 2px 14px;
-    color: var(--soft);
-    font-size: 0.92rem;
-    margin: 24px 0 0;
+  .descargar:hover {
+    background: #66759a;
+    transform: translateY(2px);
+    box-shadow:
+      inset 0 var(--pixel) 0 rgba(255, 255, 255, .18),
+      inset 0 calc(var(--pixel) * -1) 0 rgba(0, 0, 0, .3),
+      0 4px 0 var(--fondo);
   }
-  footer { margin-top: 40px; color: var(--soft); font-size: 0.85rem; }
-  footer a { color: var(--soft); }
+  .descargar:active {
+    transform: translateY(6px);
+    box-shadow: inset 0 calc(var(--pixel) * -1) 0 rgba(0, 0, 0, .3);
+  }
+
+  .bajo-boton {
+    text-align: center;
+    color: var(--tenue);
+    font-size: .95rem;
+    margin-bottom: 44px;
+  }
+
+  /* ---------- Paneles ---------- */
+
+  .paneles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 28px;
+    margin-bottom: 40px;
+  }
+
+  .panel {
+    background: var(--marco);
+    border: var(--pixel) solid var(--fondo);
+    padding: var(--pixel);
+    box-shadow: 0 6px 0 rgba(0, 0, 0, .35);
+  }
+
+  .panel h2 {
+    font-family: var(--titulos);
+    font-weight: 700;
+    font-size: clamp(1.05rem, 3vw, 1.45rem);
+    text-align: center;
+    color: var(--oro);
+    padding: 14px 8px;
+    letter-spacing: .03em;
+    text-shadow: 3px 3px 0 var(--fondo);
+  }
+
+  .panel-cuerpo {
+    background: var(--panel);
+    border-top: var(--pixel) solid var(--fondo);
+    padding: 26px 24px;
+    box-shadow: inset 0 var(--pixel) 0 rgba(0, 0, 0, .25);
+  }
+
+  /* ---------- Pasos ---------- */
+
+  ol { list-style: none; counter-reset: paso; }
+
+  ol li {
+    counter-increment: paso;
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    gap: 16px;
+    align-items: start;
+    margin-bottom: 22px;
+    line-height: 1.55;
+  }
+  ol li:last-child { margin-bottom: 0; }
+
+  ol li::before {
+    content: counter(paso);
+    font-family: var(--titulos);
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--oro);
+    background: var(--fondo);
+    border: 2px solid var(--marco);
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+  }
+
+  .panel-cuerpo p { line-height: 1.65; margin-bottom: 16px; }
+  .panel-cuerpo p:last-child { margin-bottom: 0; }
+
+  strong { color: var(--oro); font-weight: 700; }
+
+  .aviso {
+    display: block;
+    background: var(--fondo);
+    border-left: var(--pixel) solid var(--oro-baja);
+    padding: 14px 16px;
+    margin-top: 22px;
+    color: var(--oro-baja);
+    line-height: 1.5;
+  }
+
+  /* ---------- Pie ---------- */
+
+  footer {
+    text-align: center;
+    color: var(--tenue);
+    font-size: .92rem;
+    line-height: 1.9;
+    border-top: 2px solid rgba(90, 105, 136, .35);
+    padding-top: 28px;
+  }
+  footer a { color: var(--marco); text-decoration: none; border-bottom: 2px solid transparent; }
+  footer a:hover { color: var(--oro); border-bottom-color: var(--oro); }
+
+  @media (max-width: 560px) {
+    body { padding: 32px 14px 48px; }
+    .zorro { width: 64px; height: 64px; }
+    .descargar { padding: 18px 32px; width: 100%; text-align: center; }
+  }
 </style>
 </head>
 <body>
 <main>
-  <h1>MineTUKI</h1>
-  <p class="sub">Modpack de Minecraft 1.21.1 · NeoForge</p>
 
-  <div class="card">
-    <h2>Descargar</h2>
-    <p>Funciona en Windows, Mac y Linux. No necesitas tener Java instalado.</p>
-    <a class="dl" href="https://github.com/Neo236/MineTUKI/releases/latest/download/MineTUKI-instalador.zip">Descargar</a>
-  </div>
+  <header>
+    <img class="zorro" src="/web/fox.png" alt="">
+    <h1>MINE<span class="tuki">TUKI</span></h1>
+  </header>
 
-  <div class="card">
-    <h2>Cómo se usa</h2>
-    <ol>
-      <li><strong>Cierra el launcher de Minecraft.</strong> Si está abierto puede borrar el perfil que se va a crear.</li>
-      <li>Descomprime el archivo y abre el instalador de tu sistema:<br><code>instalar-windows.bat</code> o <code>instalar-mac-linux.command</code>.</li>
-      <li>Elige el idioma.</li>
-      <li>Deja marcada la primera opción y pulsa <strong>Instalar</strong>.</li>
-      <li>Abre el launcher y elige el perfil <strong>MineTUKI</strong>.</li>
-    </ol>
-    <p class="note">
-      Crea una carpeta de mods propia: no toca los mods que ya tengas en otros perfiles.
-      Se ejecuta una sola vez — después el juego avisa solo cuando el modpack cambia.
-    </p>
+  <p class="subtitulo">Minecraft 1.21.1 · NeoForge</p>
+
+  <a class="descargar" href="https://github.com/Neo236/MineTUKI/releases/latest/download/MineTUKI-instalador.zip">
+    DESCARGAR
+  </a>
+  <p class="bajo-boton">Windows, Mac y Linux · No necesitás tener Java</p>
+
+  <div class="paneles">
+
+    <section class="panel">
+      <h2>INSTRUCCIONES</h2>
+      <div class="panel-cuerpo">
+        <ol>
+          <li>Descargá y descomprimí el instalador.</li>
+          <li>Ejecutalo y elegí las opciones que quieras.</li>
+          <li>Al terminar vas a tener un perfil nuevo listo para jugar.</li>
+        </ol>
+        <span class="aviso">Cerrá el launcher de Minecraft antes de instalar, o puede borrar el perfil nuevo.</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>INFORMACIÓN</h2>
+      <div class="panel-cuerpo">
+        <p>Instala <strong>NeoForge</strong> por vos si no lo tenés. Una vez instalado, <strong>no hace falta volver a actualizar los mods a mano</strong>: el juego te avisa solo cuando el pack cambia.</p>
+        <p>Podés elegir dónde instalarlo y cómo se llama el perfil. Usa una carpeta propia, así que <strong>no toca los mods que ya tengas</strong>.</p>
+        <p>Si usás Prism o MultiMC, también podés bajar solo los mods a una carpeta suelta.</p>
+      </div>
+    </section>
+
   </div>
 
   <footer>
-    <p>
-      La descarga y sincronización de mods las hace
-      <a href="https://packwiz.infra.link/">packwiz</a>, creado por comp500.
-    </p>
+    <p>La descarga y sincronización de los mods las hace <a href="https://packwiz.infra.link/">packwiz</a>, creado por comp500.</p>
     <p><a href="https://github.com/Neo236/MineTUKI">Código y lista de mods en GitHub</a></p>
   </footer>
+
 </main>
 </body>
 </html>
