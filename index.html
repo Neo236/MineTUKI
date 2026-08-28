@@ -289,13 +289,16 @@ footer a:hover { color: var(--oro); border-bottom-color: var(--oro); }
 }
 @media (max-width: 620px) {
   body { padding: 34px 14px 48px; font-size: 19px; }
-  .cabecera { flex-direction: column; align-items: flex-start; gap: 0; }
-  .marca { width: 338px; }
-  .zorro { width: 168px; height: 168px; margin-left: -14px; }
+  .cabecera { flex-direction: column; align-items: flex-start; }
+  .zorro { margin: 0 0 0 -14px; }
   .descargar { display: block; text-align: center; padding: 20px 16px 18px; }
   .descargar .tipo { font-size: 21px; }
   .panel h2 .tipo { font-size: 15px; }
   ol li { grid-template-columns: 30px 1fr; gap: 10px; }
+}
+@media (max-width: 550px) {
+  .marca { width: 338px; }
+  .zorro { width: 168px; height: 168px; }
 }
 @media (max-width: 380px) {
   .marca { width: 169px; }
