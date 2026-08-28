@@ -4,270 +4,353 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MineTUKI — Descargar el modpack</title>
-<meta name="description" content="Instalador del modpack MineTUKI para Minecraft 1.21.1 con NeoForge.">
-<link rel="icon" href="/web/fox-2d.png">
+<meta name="description" content="Modpack de Minecraft 1.21.1 con NeoForge. Instalalo una vez y se mantiene al dia solo.">
+<meta name="theme-color" content="#262b44">
+<link rel="icon" href="web/fox-2d.png">
+<link rel="apple-touch-icon" href="web/icono.png">
 
+<meta property="og:type" content="website">
 <meta property="og:title" content="MineTUKI">
-<meta property="og:description" content="Modpack de Minecraft 1.21.1. Instalá una vez y se mantiene al día solo.">
-<meta property="og:image" content="/web/fox.png">
+<meta property="og:description" content="Modpack de Minecraft 1.21.1. Instalalo una vez y se mantiene al dia solo.">
+<meta property="og:image" content="web/social.png">
+<meta name="twitter:card" content="summary_large_image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jersey+15&family=Press+Start+2P&display=swap" rel="stylesheet">
 
 <style>
-  :root {
-    --oro:      #fee761;
-    --oro-baja: #f0b541;
-    --panel:    #3a4466;
-    --marco:    #5a6988;
-    --fondo:    #262b44;
-    --fondo-2:  #1b1f38;
-    --texto:    #ffffff;
-    --tenue:    #9ca1b2;
+/* ------------------------------------------------------------------ *
+ * Paleta medida sobre el archivo de Figma, no aproximada a ojo.
+ * ------------------------------------------------------------------ */
+:root {
+  --oro:        #fee761;
+  --oro-medio:  #f0b541;
+  --oro-bajo:   #e08a2e;
+  --oro-alto:   #fffcea;
+  --marco:      #5a6988;   /* relleno del marco del panel */
+  --panel:      #3a4466;   /* area hundida del panel      */
+  --noche:      #262b44;   /* contorno oscuro / fondo     */
+  --abismo:     #1b1f38;
+  --tinta:      #3f2832;   /* contorno del texto dorado   */
+  --texto:      #ffffff;
+  --tenue:      #9ca1b2;
 
-    --pixel: 4px;
-    --titulos: "Silkscreen", "Courier New", monospace;
-    --cuerpo: "Pixelify Sans", "Silkscreen", "Courier New", monospace;
-  }
+  --display: "Press Start 2P", "Courier New", monospace;
+  --cuerpo:  "Jersey 15", "Trebuchet MS", sans-serif;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    font-family: var(--cuerpo);
-    background-color: var(--fondo-2);
-    /* Rejilla de pixeles: da textura sin traer ninguna imagen de fondo. */
-    background-image:
-      linear-gradient(rgba(90, 105, 136, .07) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(90, 105, 136, .07) 1px, transparent 1px),
-      radial-gradient(ellipse at 50% 0%, #303757 0%, var(--fondo-2) 70%);
-    background-size: 32px 32px, 32px 32px, 100% 100%;
-    color: var(--texto);
-    min-height: 100vh;
-    padding: 48px 20px 64px;
-    display: flex;
-    justify-content: center;
-    image-rendering: pixelated;
-  }
+body {
+  font-family: var(--cuerpo);
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--texto);
+  background-color: var(--abismo);
+  /* Rejilla de pixeles + luz detras del logo. Ninguna imagen de fondo. */
+  background-image:
+    linear-gradient(rgba(90,105,136,.08) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(90,105,136,.08) 2px, transparent 2px),
+    radial-gradient(1000px 520px at 28% -8%, #38406b 0%, var(--abismo) 72%);
+  background-size: 40px 40px, 40px 40px, 100% 100%;
+  background-attachment: fixed;
+  min-height: 100vh;
+  padding: 56px 24px 72px;
+  -webkit-font-smoothing: none;
+}
 
-  main { width: 100%; max-width: 880px; }
+main { max-width: 960px; margin: 0 auto; }
 
-  /* ---------- Encabezado ---------- */
+/* ------------------------------------------------------------------ *
+ * Esquinas redondeadas pixeladas.
+ *
+ * En vez de border-radius (que da una curva suave y rompe el estilo),
+ * la esquina es una escalera de dos escalones de --u. El recorte lo hace
+ * clip-path, asi que tambien afecta al contenido; la sombra dura va con
+ * filter: drop-shadow, que sigue el recorte en vez de la caja.
+ * ------------------------------------------------------------------ */
+.pix {
+  --u: 5px;
+  clip-path: polygon(
+    0 calc(var(--u) * 2), var(--u) calc(var(--u) * 2), var(--u) var(--u),
+    calc(var(--u) * 2) var(--u), calc(var(--u) * 2) 0,
+    calc(100% - var(--u) * 2) 0, calc(100% - var(--u) * 2) var(--u),
+    calc(100% - var(--u)) var(--u), calc(100% - var(--u)) calc(var(--u) * 2), 100% calc(var(--u) * 2),
+    100% calc(100% - var(--u) * 2), calc(100% - var(--u)) calc(100% - var(--u) * 2),
+    calc(100% - var(--u)) calc(100% - var(--u)), calc(100% - var(--u) * 2) calc(100% - var(--u)),
+    calc(100% - var(--u) * 2) 100%,
+    calc(var(--u) * 2) 100%, calc(var(--u) * 2) calc(100% - var(--u)),
+    var(--u) calc(100% - var(--u)), var(--u) calc(100% - var(--u) * 2), 0 calc(100% - var(--u) * 2)
+  );
+}
+.pix-chico { --u: 3px; }
 
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 40px;
-    flex-wrap: wrap;
-  }
+/* ------------------------------------------------------------------ *
+ * Titulos dorados: contorno duro + degradado vertical.
+ *
+ * Dos capas sobre el mismo texto. La de abajo es el texto en color
+ * tinta, engordado un pixel en las ocho direcciones con text-shadow sin
+ * desenfoque: eso da el contorno. La de arriba (::after) repite el texto
+ * y lo rellena con el degradado recortado a la letra. Se usan sombras y
+ * no -webkit-text-stroke porque el stroke redondea las esquinas y aca
+ * todo tiene que quedar en angulo recto.
+ * ------------------------------------------------------------------ */
+.tipo {
+  display: inline-block;
+  position: relative;
+  font-family: var(--display);
+  font-weight: 400;
+  letter-spacing: -.055em;
+  color: var(--tinta);
+  text-shadow:
+     3px 0 0 var(--tinta), -3px 0 0 var(--tinta),  0 3px 0 var(--tinta),  0 -3px 0 var(--tinta),
+     3px 3px 0 var(--tinta), -3px 3px 0 var(--tinta), 3px -3px 0 var(--tinta), -3px -3px 0 var(--tinta);
+}
+.tipo::after {
+  content: attr(data-t);
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    var(--oro-alto) 0%, var(--oro) 38%, var(--oro-medio) 76%, var(--oro-bajo) 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  text-shadow: none;
+}
+/* El boton se contornea en azul noche, como en el diseno. */
+.tipo-azul { color: var(--noche); text-shadow:
+   3px 0 0 var(--noche), -3px 0 0 var(--noche),  0 3px 0 var(--noche),  0 -3px 0 var(--noche),
+   3px 3px 0 var(--noche), -3px 3px 0 var(--noche), 3px -3px 0 var(--noche), -3px -3px 0 var(--noche); }
 
-  .zorro {
-    width: 88px;
-    height: 88px;
-    image-rendering: pixelated;
-    filter: drop-shadow(4px 4px 0 rgba(0, 0, 0, .45));
-  }
+/* ------------------------------------------------------------------ *
+ * Cabecera
+ * ------------------------------------------------------------------ */
+.cabecera {
+  display: flex;
+  align-items: center;
+  margin-bottom: 26px;
+}
 
-  h1 {
-    font-family: var(--titulos);
-    font-weight: 700;
-    font-size: clamp(2rem, 7vw, 3.4rem);
-    letter-spacing: .02em;
-    line-height: 1;
-    /* Contorno de pixel: cuatro sombras duras, sin desenfoque. */
-    text-shadow:
-      var(--pixel) var(--pixel) 0 var(--fondo),
-      calc(var(--pixel) * -1) var(--pixel) 0 var(--fondo),
-      var(--pixel) calc(var(--pixel) * -1) 0 var(--fondo),
-      calc(var(--pixel) * -1) calc(var(--pixel) * -1) 0 var(--fondo);
-  }
-  h1 .tuki { color: var(--oro); }
+/* El zorro es una animacion de 160 fotogramas. Va en webm con canal alfa
+   (293 KB); fox.webp es el respaldo y solo se descarga si hace falta. */
+.zorro {
+  width: 300px;
+  height: 300px;
+  /* El render trae aire a los costados: los margenes negativos alinean el
+     zorro con el borde del texto y lo montan un poco sobre la M. */
+  margin: 0 -24px 0 -14px;
+  flex: none;
+  display: block;
+  object-fit: contain;
+  background: none;
+}
 
-  .subtitulo {
-    text-align: center;
-    color: var(--tenue);
-    font-size: 1.05rem;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    margin: -24px 0 40px;
-  }
+h1 { margin: 0; line-height: 0; }
+.marca {
+  display: block;
+  width: 676px;               /* 169 px de origen x 4: escala entera = pixel limpio */
+  height: auto;
+  image-rendering: pixelated;
+}
 
-  /* ---------- Botón ---------- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+.chip {
+  font-family: var(--display);
+  font-size: 10px;
+  letter-spacing: -.02em;
+  color: var(--tenue);
+  background: rgba(90,105,136,.28);
+  border: 2px solid rgba(90,105,136,.55);
+  padding: 9px 12px 8px;
+}
+.chip b { color: var(--oro); font-weight: 400; }
 
-  .descargar {
-    display: block;
-    width: fit-content;
-    margin: 0 auto 12px;
-    padding: 20px 56px;
-    font-family: var(--titulos);
-    font-weight: 700;
-    font-size: clamp(1.3rem, 4vw, 2rem);
-    letter-spacing: .05em;
-    color: var(--oro);
-    text-decoration: none;
-    background: var(--marco);
-    border: var(--pixel) solid var(--oro);
-    /* Bisel duro, sin degradados: la luz arriba, la sombra abajo. */
-    box-shadow:
-      inset 0 var(--pixel) 0 rgba(255, 255, 255, .18),
-      inset 0 calc(var(--pixel) * -1) 0 rgba(0, 0, 0, .3),
-      0 6px 0 var(--fondo);
-    transition: transform .06s steps(2), box-shadow .06s steps(2);
-  }
-  .descargar:hover {
-    background: #66759a;
-    transform: translateY(2px);
-    box-shadow:
-      inset 0 var(--pixel) 0 rgba(255, 255, 255, .18),
-      inset 0 calc(var(--pixel) * -1) 0 rgba(0, 0, 0, .3),
-      0 4px 0 var(--fondo);
-  }
-  .descargar:active {
-    transform: translateY(6px);
-    box-shadow: inset 0 calc(var(--pixel) * -1) 0 rgba(0, 0, 0, .3);
-  }
+/* ------------------------------------------------------------------ *
+ * Boton
+ * ------------------------------------------------------------------ */
+.descargar {
+  display: inline-block;
+  padding: 22px 40px 20px;
+  background: var(--marco);
+  border: 4px solid var(--oro-medio);
+  box-shadow: inset 0 0 0 3px var(--noche);
+  text-decoration: none;
+  filter: drop-shadow(0 7px 0 rgba(0,0,0,.4));
+  transition: transform .07s steps(2), filter .07s steps(2), background-color .07s steps(2);
+}
+.descargar .tipo { font-size: 27px; }
+.descargar:hover { background: #66759a; border-color: var(--oro); }
+.descargar:active {
+  transform: translateY(7px);
+  filter: drop-shadow(0 0 0 rgba(0,0,0,.4));
+}
+.descargar:focus-visible { outline: 4px solid var(--oro); outline-offset: 6px; }
 
-  .bajo-boton {
-    text-align: center;
-    color: var(--tenue);
-    font-size: .95rem;
-    margin-bottom: 44px;
-  }
+.pie-boton {
+  color: var(--tenue);
+  margin: 16px 0 46px;
+  font-size: 19px;
+}
+.pie-boton b { color: var(--texto); font-weight: 400; }
 
-  /* ---------- Paneles ---------- */
+/* ------------------------------------------------------------------ *
+ * Paneles
+ * ------------------------------------------------------------------ */
+.paneles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 26px;
+  margin-bottom: 46px;
+}
 
-  .paneles {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 28px;
-    margin-bottom: 40px;
-  }
+.panel {
+  background: var(--marco);
+  padding: 0 10px 10px;
+  filter: drop-shadow(0 7px 0 rgba(0,0,0,.32));
+}
+.panel h2 {
+  text-align: center;
+  padding: 17px 6px 15px;
+  margin: 0;
+}
+.panel h2 .tipo { font-size: 19px; }
 
-  .panel {
-    background: var(--marco);
-    border: var(--pixel) solid var(--fondo);
-    padding: var(--pixel);
-    box-shadow: 0 6px 0 rgba(0, 0, 0, .35);
-  }
+.cuerpo {
+  background: var(--panel);
+  border-top: 3px solid var(--noche);
+  box-shadow: inset 0 -3px 0 rgba(255,255,255,.16);
+  padding: 26px 24px 28px;
+}
 
-  .panel h2 {
-    font-family: var(--titulos);
-    font-weight: 700;
-    font-size: clamp(1.05rem, 3vw, 1.45rem);
-    text-align: center;
-    color: var(--oro);
-    padding: 14px 8px;
-    letter-spacing: .03em;
-    text-shadow: 3px 3px 0 var(--fondo);
-  }
+/* Pasos numerados: el numero a la izquierda, el texto centrado al lado,
+   igual que en el diseno. */
+ol { list-style: none; }
+ol li {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 14px;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+}
+ol li:last-child { margin-bottom: 0; }
+.num { font-size: 17px; justify-self: start; }
 
-  .panel-cuerpo {
-    background: var(--panel);
-    border-top: var(--pixel) solid var(--fondo);
-    padding: 26px 24px;
-    box-shadow: inset 0 var(--pixel) 0 rgba(0, 0, 0, .25);
-  }
+.cuerpo p { margin-bottom: 15px; }
+.cuerpo p:last-child { margin-bottom: 0; }
+.cuerpo strong { color: var(--oro); font-weight: 400; }
 
-  /* ---------- Pasos ---------- */
+.centrado { text-align: center; }
 
-  ol { list-style: none; counter-reset: paso; }
+/* ------------------------------------------------------------------ *
+ * Aviso
+ * ------------------------------------------------------------------ */
+.aviso {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  background: var(--noche);
+  border-left: 5px solid var(--oro-medio);
+  padding: 14px 16px;
+  margin-top: 22px;
+  color: var(--oro);
+  text-align: left;
+}
+.aviso .tipo { font-size: 22px; flex: none; align-self: flex-start; margin-top: 4px; }
 
-  ol li {
-    counter-increment: paso;
-    display: grid;
-    grid-template-columns: 42px 1fr;
-    gap: 16px;
-    align-items: start;
-    margin-bottom: 22px;
-    line-height: 1.55;
-  }
-  ol li:last-child { margin-bottom: 0; }
+/* ------------------------------------------------------------------ *
+ * Pie
+ * ------------------------------------------------------------------ */
+footer {
+  color: var(--tenue);
+  font-size: 18px;
+  line-height: 1.9;
+  border-top: 3px solid rgba(90,105,136,.3);
+  padding-top: 26px;
+}
+footer a { color: var(--oro-medio); text-decoration: none; border-bottom: 2px solid transparent; }
+footer a:hover { color: var(--oro); border-bottom-color: var(--oro); }
 
-  ol li::before {
-    content: counter(paso);
-    font-family: var(--titulos);
-    font-weight: 700;
-    font-size: 1.15rem;
-    color: var(--oro);
-    background: var(--fondo);
-    border: 2px solid var(--marco);
-    width: 42px;
-    height: 42px;
-    display: grid;
-    place-items: center;
-  }
+/* ------------------------------------------------------------------ *
+ * Adaptable. El ancho de la marca solo toma multiplos enteros de 169 px
+ * para que el escalado pixelado no deje columnas de distinto grosor.
+ * ------------------------------------------------------------------ */
+@media (max-width: 900px) {
+  .marca { width: 507px; }
+  .zorro { width: 220px; height: 220px; }
+}
+@media (max-width: 620px) {
+  body { padding: 34px 14px 48px; font-size: 19px; }
+  .cabecera { flex-direction: column; align-items: flex-start; gap: 0; }
+  .marca { width: 338px; }
+  .zorro { width: 168px; height: 168px; margin-left: -14px; }
+  .descargar { display: block; text-align: center; padding: 20px 16px 18px; }
+  .descargar .tipo { font-size: 21px; }
+  .panel h2 .tipo { font-size: 15px; }
+  ol li { grid-template-columns: 30px 1fr; gap: 10px; }
+}
+@media (max-width: 380px) {
+  .marca { width: 169px; }
+}
 
-  .panel-cuerpo p { line-height: 1.65; margin-bottom: 16px; }
-  .panel-cuerpo p:last-child { margin-bottom: 0; }
-
-  strong { color: var(--oro); font-weight: 700; }
-
-  .aviso {
-    display: block;
-    background: var(--fondo);
-    border-left: var(--pixel) solid var(--oro-baja);
-    padding: 14px 16px;
-    margin-top: 22px;
-    color: var(--oro-baja);
-    line-height: 1.5;
-  }
-
-  /* ---------- Pie ---------- */
-
-  footer {
-    text-align: center;
-    color: var(--tenue);
-    font-size: .92rem;
-    line-height: 1.9;
-    border-top: 2px solid rgba(90, 105, 136, .35);
-    padding-top: 28px;
-  }
-  footer a { color: var(--marco); text-decoration: none; border-bottom: 2px solid transparent; }
-  footer a:hover { color: var(--oro); border-bottom-color: var(--oro); }
-
-  @media (max-width: 560px) {
-    body { padding: 32px 14px 48px; }
-    .zorro { width: 64px; height: 64px; }
-    .descargar { padding: 18px 32px; width: 100%; text-align: center; }
-  }
+/* Si el sistema pide menos movimiento, el zorro queda quieto. */
+@media (prefers-reduced-motion: reduce) {
+  .descargar { transition: none; }
+}
 </style>
 </head>
+
 <body>
 <main>
 
-  <header>
-    <img class="zorro" src="/web/fox.png" alt="">
-    <h1>MINE<span class="tuki">TUKI</span></h1>
+  <header class="cabecera">
+    <video class="zorro" id="zorro" width="600" height="600"
+           autoplay loop muted playsinline preload="auto"
+           poster="web/fox-quieto.webp" aria-hidden="true" tabindex="-1">
+      <source src="web/fox.webm" type="video/webm">
+    </video>
+    <h1><img class="marca" src="web/minetuki.png" width="169" height="41" alt="MineTUKI"></h1>
   </header>
 
-  <p class="subtitulo">Minecraft 1.21.1 · NeoForge</p>
+  <div class="chips">
+    <div class="chip">MINECRAFT <b>1.21.1</b></div>
+    <div class="chip">NEOFORGE <b>21.1.248</b></div>
+    <div class="chip">WINDOWS · MAC · LINUX</div>
+    <div class="chip">SIN INSTALAR <b>JAVA</b></div>
+  </div>
 
   <a class="descargar" href="https://github.com/Neo236/MineTUKI/releases/latest/download/MineTUKI-instalador.zip">
-    DESCARGAR
+    <span class="tipo tipo-azul" data-t="DESCARGAR">DESCARGAR</span>
   </a>
-  <p class="bajo-boton">Windows, Mac y Linux · No necesitás tener Java</p>
+  <p class="pie-boton">Se baja un <b>.zip</b> de medio mega. Los mods (unos 500 MB) los descarga el instalador.</p>
 
   <div class="paneles">
 
-    <section class="panel">
-      <h2>INSTRUCCIONES</h2>
-      <div class="panel-cuerpo">
+    <section class="panel pix">
+      <h2><span class="tipo" data-t="INSTRUCCIONES">INSTRUCCIONES</span></h2>
+      <div class="cuerpo pix-chico">
         <ol>
-          <li>Descargá y descomprimí el instalador.</li>
-          <li>Ejecutalo y elegí las opciones que quieras.</li>
-          <li>Al terminar vas a tener un perfil nuevo listo para jugar.</li>
+          <li><span class="tipo num" data-t="1">1</span><span>Descargá y descomprimí el instalador</span></li>
+          <li><span class="tipo num" data-t="2">2</span><span>Ejecutalo y elegí las opciones que quieras</span></li>
+          <li><span class="tipo num" data-t="3">3</span><span>Al terminar vas a tener un perfil nuevo listo para jugar</span></li>
         </ol>
-        <span class="aviso">Cerrá el launcher de Minecraft antes de instalar, o puede borrar el perfil nuevo.</span>
+        <p class="aviso"><span class="tipo" data-t="!" aria-hidden="true">!</span><span>Cerrá el launcher de Minecraft antes de instalar, o al cerrarse puede borrar el perfil nuevo.</span></p>
       </div>
     </section>
 
-    <section class="panel">
-      <h2>INFORMACIÓN</h2>
-      <div class="panel-cuerpo">
-        <p>Instala <strong>NeoForge</strong> por vos si no lo tenés. Una vez instalado, <strong>no hace falta volver a actualizar los mods a mano</strong>: el juego te avisa solo cuando el pack cambia.</p>
-        <p>Podés elegir dónde instalarlo y cómo se llama el perfil. Usa una carpeta propia, así que <strong>no toca los mods que ya tengas</strong>.</p>
+    <section class="panel pix">
+      <h2><span class="tipo" data-t="INFORMACION">INFORMACION</span></h2>
+      <div class="cuerpo pix-chico centrado">
+        <p>Instala <strong>NeoForge</strong> por vos si no lo tenés. Una vez instalado <strong>no hace falta volver a actualizar los mods a mano</strong>: el juego avisa solo cuando el pack cambia.</p>
+        <p>Podés elegir dónde se instala y cómo se llama el perfil. Usa una carpeta propia, así que <strong>no toca los mods que ya tengas</strong>.</p>
         <p>Si usás Prism o MultiMC, también podés bajar solo los mods a una carpeta suelta.</p>
       </div>
     </section>
@@ -275,10 +358,52 @@
   </div>
 
   <footer>
-    <p>La descarga y sincronización de los mods las hace <a href="https://packwiz.infra.link/">packwiz</a>, creado por comp500.</p>
+    <p>La descarga y la sincronización de los mods las hace <a href="https://packwiz.infra.link/">packwiz</a>, creado por comp500.</p>
     <p><a href="https://github.com/Neo236/MineTUKI">Código y lista de mods en GitHub</a></p>
   </footer>
 
 </main>
+
+<script>
+/* El webm lleva el canal alfa en VP9. Chrome, Firefox y Edge lo pintan
+   bien; algunos navegadores reproducen el video pero ignoran el alfa y
+   dejan un recuadro negro. No alcanza con canPlayType, porque esos
+   dicen que si. Se dibuja un fotograma en un canvas y se mira la esquina
+   superior izquierda, que en los 160 fotogramas es transparente: si
+   volvio opaca, el navegador perdio el alfa y se pasa al webp animado. */
+(function () {
+  var v = document.getElementById('zorro');
+  if (!v) return;
+
+  function alWebp() {
+    if (!v.parentNode) return;
+    var img = document.createElement('img');
+    img.className = 'zorro';
+    img.src = 'web/fox.webp';
+    img.width = 400; img.height = 400;
+    img.alt = '';
+    v.parentNode.replaceChild(img, v);
+  }
+
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    v.removeAttribute('autoplay');
+    v.pause();
+    return;
+  }
+
+  v.addEventListener('error', alWebp);
+  v.addEventListener('loadeddata', function () {
+    try {
+      var c = document.createElement('canvas');
+      c.width = c.height = 8;
+      var ctx = c.getContext('2d');
+      ctx.drawImage(v, 0, 0, 8, 8);
+      if (ctx.getImageData(0, 0, 1, 1).data[3] > 8) alWebp();
+    } catch (e) {
+      /* Si el canvas no deja leer, se deja el video como esta. */
+    }
+  });
+})();
+</script>
 </body>
 </html>
