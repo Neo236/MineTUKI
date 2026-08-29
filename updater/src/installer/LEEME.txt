@@ -14,6 +14,11 @@ puede borrar el perfil que este instalador va a crear.
 
 COMO SE INSTALA
 ---------------
+0. Descomprimi esta carpeta ENTERA antes de ejecutar nada.
+
+   Si haces doble clic en el .bat desde adentro del zip, Windows
+   extrae solo ese archivo y el instalador no encuentra el resto.
+
 1. Windows ........ doble clic en  instalar-windows.bat
    Mac / Linux .... doble clic en  instalar-mac-linux.command
                     (en Mac, si no abre: clic derecho > Abrir)
@@ -45,8 +50,12 @@ destino desde la misma ventana.
 NO HACE FALTA INSTALAR JAVA
 ---------------------------
 El instalador usa el Java que ya viene con el launcher de Minecraft.
-Solo si no encuentra ninguno te lo va a decir, con el enlace para
-descargarlo.
+Necesita Java 17 o mas nuevo: el launcher guarda varios a la vez y
+algunos son viejos, asi que los mide y se queda con el mas nuevo.
+
+Si no encuentra ninguno que sirva te lo dice. La forma mas facil de
+resolverlo es abrir una vez cualquier version 1.18 o superior desde
+el launcher: al hacerlo descarga Java solo.
 
 
 DESPUES DE INSTALAR
@@ -75,8 +84,15 @@ carpeta.
 
 SI ALGO SALE MAL
 ----------------
-Dentro de la carpeta del juego queda un archivo packwarden-install.log
-con el detalle de la instalacion.
+La ventana no se cierra sola: muestra el error y espera. Ese mismo
+texto queda en instalacion.log, al lado de este archivo. Mandalo y
+con eso alcanza para saber que paso.
+
+Ahi adentro esta, ademas, la lista de los Java que encontro en la
+computadora con su version, que es lo que suele explicar el problema.
+
+Una vez empezada la descarga de los mods, el detalle sigue en
+packwarden-install.log, dentro de la carpeta del juego.
 
 
 HECHO CON PACKWIZ

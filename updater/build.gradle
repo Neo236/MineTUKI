@@ -107,6 +107,16 @@ sourceSets {
     }
 }
 
+// El companion se compila para Java 17 y no para 21 como el mod.
+//
+// El instalador corre ANTES de que el jugador haya abierto nunca un perfil
+// 1.21, asi que el launcher todavia puede no haber descargado su runtime de
+// Java 21: lo normal es que solo tenga java-runtime-gamma, que es 17.
+// Compilado a 21, en esas maquinas moria con UnsupportedClassVersionError.
+tasks.named('compileCompanionJava') {
+    options.release = 17
+}
+
 // Fijado a una version concreta y verificado por hash: es codigo de terceros que
 // se va a ejecutar en las maquinas de los jugadores.
 def packwizBootstrapUrl =
@@ -234,6 +244,9 @@ tasks.register('companionTest', Test) {
     description = 'Tests del instalador, que no necesita Minecraft.'
     testClassesDirs = sourceSets.companionTest.output.classesDirs
     classpath = sourceSets.companionTest.runtimeClasspath
+    // Los lanzadores son archivos de texto que no compila nadie, asi que hay
+    // pruebas que los leen tal cual se entregan.
+    systemProperty 'installer.scripts', file('src/installer').absolutePath
     useJUnitPlatform()
     testLogging { events 'passed', 'failed', 'skipped' }
 }

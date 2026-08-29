@@ -450,7 +450,18 @@ public final class InstallerUi {
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
-        SwingUtilities.invokeLater(() -> new InstallerUi(config).show());
+        // El hilo de eventos de Swing atrapa por su cuenta todo lo que explota
+        // dentro suyo y lo imprime, sin pasar por el handler de excepciones no
+        // atrapadas. Sin consola eso no llegaba a ningun lado y la ventana
+        // simplemente no aparecia.
+        SwingUtilities.invokeLater(() -> {
+            try {
+                new InstallerUi(config).show();
+            } catch (Throwable e) {
+                Diagnostics.crash(config.packName(), e);
+                System.exit(1);
+            }
+        });
     }
 
     static Path resolve(String value) {

@@ -51,6 +51,12 @@ public final class CompanionMain {
         Messages.setLanguage(options.getOrDefault(ARG_LANGUAGE, ""));
         String title = options.getOrDefault(ARG_TITLE, "PackWarden");
 
+        // Antes de tocar nada: dejar constancia de con que Java se esta corriendo
+        // y atrapar lo que se escape de cualquier hilo. Sin esto, un fallo antes
+        // de que exista la ventana se perdia entero.
+        Diagnostics.start(args);
+        Thread.setDefaultUncaughtExceptionHandler(Diagnostics.handler(title));
+
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ignored) {
@@ -62,15 +68,22 @@ public final class CompanionMain {
         // llamada a packwiz, asi que separarlos en dos programas seria duplicar todo.
         if (contains(args, ARG_INSTALL)) {
             String packName = options.getOrDefault(ARG_PACK_NAME, "Modpack");
-            InstallerUi.launch(new InstallerUi.Config(
-                    packName,
-                    options.getOrDefault(ARG_TITLE, packName),
-                    options.getOrDefault(ARG_ALIAS, ""),
-                    options.getOrDefault(ARG_PACK_URL, ""),
-                    options.getOrDefault(ARG_FALLBACK_URL, ""),
-                    options.getOrDefault(ARG_NEOFORGE, ""),
-                    options.getOrDefault(ARG_FOLDER_NAME, "modpack"),
-                    Paths.get(options.getOrDefault(ARG_BOOTSTRAP, "packwiz-installer-bootstrap.jar"))));
+            try {
+                InstallerUi.launch(new InstallerUi.Config(
+                        packName,
+                        options.getOrDefault(ARG_TITLE, packName),
+                        options.getOrDefault(ARG_ALIAS, ""),
+                        options.getOrDefault(ARG_PACK_URL, ""),
+                        options.getOrDefault(ARG_FALLBACK_URL, ""),
+                        options.getOrDefault(ARG_NEOFORGE, ""),
+                        options.getOrDefault(ARG_FOLDER_NAME, "modpack"),
+                        Paths.get(options.getOrDefault(ARG_BOOTSTRAP, "packwiz-installer-bootstrap.jar"))));
+            } catch (Throwable e) {
+                // Salir con codigo distinto de cero es lo que hace que el .bat
+                // muestre el registro en vez de cerrar la ventana.
+                Diagnostics.crash(title, e);
+                System.exit(1);
+            }
             return;
         }
 
@@ -84,7 +97,9 @@ public final class CompanionMain {
                 error(title, Messages.get("update.failed", exitCode));
             }
             System.exit(exitCode);
-        } catch (Exception e) {
+        } catch (Throwable e) {
+            // Este camino ya tiene su propio cartel, asi que solo se registra.
+            Diagnostics.record(e);
             error(title, Messages.get("update.error", String.valueOf(e.getMessage())));
             System.exit(1);
         }

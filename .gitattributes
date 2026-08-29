@@ -6,3 +6,8 @@
 # "/bin/sh\r" y fallan con "required file not found" (exit 127).
 updater/gradlew text eol=lf
 .githooks/* text eol=lf
+
+# Los .bat se entregan con finales de linea de Windows. cmd.exe recorre el
+# archivo por posicion de byte: con LF solos, un "goto" o un "call :etiqueta"
+# puede caer en medio de una linea y el script se rompe de formas raras.
+updater/src/installer/*.bat text eol=crlf
