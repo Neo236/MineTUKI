@@ -35,6 +35,18 @@ services:
       MAX_PLAYERS: "${MC_MAX_PLAYERS:-10}"
       ALLOW_FLIGHT: "TRUE"
 
+      # El vigilante que mata el servidor cuando un tick tarda demasiado, aca
+      # desactivado. Con este stack de generacion de terreno --Terralith,
+      # Tectonic, Regions Unexplored y una decena de mods de estructuras-- un
+      # chunk pesado puede pasarse de los 60 segundos que trae vanilla por
+      # defecto, y entonces el vigilante tira abajo un servidor que en realidad
+      # iba a terminar. Ya paso una vez.
+      #
+      # Lo que se pierde: si alguna vez hay un cuelgue de verdad, el servidor se
+      # queda colgado en vez de reiniciarse solo. A cambio, un chunk lento deja
+      # de costar una caida.
+      MAX_TICK_TIME: "${MC_MAX_TICK_TIME:--1}"
+
       # Whitelist is on (white-list=true set directly in server.properties -
       # deliberately NOT managed via the WHITELIST/ENFORCE_WHITELIST env vars
       # here: itzg's image treats an empty env value as "clear this
