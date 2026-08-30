@@ -691,6 +691,11 @@ hash = "258a77de0a6db4c9ab045cbb240bcf4eac0dbbca3f6bc981fb461e55c247f23f"
 metafile = true
 
 [[files]]
+file = "mods/spark.pw.toml"
+hash = "5995decc8738d7ddccec218dfa1ed95db9eca5bb64c98fd2cede8bf9bbc837c2"
+metafile = true
+
+[[files]]
 file = "mods/spelunkers-charm-ii.pw.toml"
 hash = "64724b165f10321c0a85bd819ea470b694c651ef477cabefffeb776b42bb5a49"
 metafile = true
