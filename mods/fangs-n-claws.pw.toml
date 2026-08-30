@@ -1,0 +1,13 @@
+name = "Fangs 'n Claws"
+filename = "fangs_n_claws-1.2.4.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/gJRzG1va/versions/dxaiBsRX/fangs_n_claws-1.2.4.jar"
+hash-format = "sha512"
+hash = "0c52d41f5acbb18e2c411912e15b9d00f5a84e383abbfd39876d1d345c2aebc270a4804bb1077d63f22e74b0b3e32a1735445ae8afe1e1f053f1d486dc645595"
+
+[update]
+[update.modrinth]
+mod-id = "gJRzG1va"
+version = "dxaiBsRX"

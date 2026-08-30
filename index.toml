@@ -176,6 +176,11 @@ hash = "ab919e8dbd9fa214ee8498a8e0f6714e9f401afbad4f259a4bdeaf1f07263c6b"
 metafile = true
 
 [[files]]
+file = "mods/deeperdarker.pw.toml"
+hash = "a9ecc4476d26e707189e9f988c19f22961c33dfd5e5b4db1dfd6f87c6a81c545"
+metafile = true
+
+[[files]]
 file = "mods/diagonal-fences.pw.toml"
 hash = "632743d54d410c8b78fb92c94d8f3bb6a7a3faed45171f91e554877f94f82163"
 metafile = true
@@ -243,6 +248,11 @@ metafile = true
 [[files]]
 file = "mods/falling-leaves.pw.toml"
 hash = "2639b92c44a573ac982a9b7bbf719b08ec85a42c5cf800128a058656e78c8d0e"
+metafile = true
+
+[[files]]
+file = "mods/fangs-n-claws.pw.toml"
+hash = "92f7e37a405f6471bbe5aa79d7e8fa0ea692ec37fcf0d40c6e90a7080ba205a6"
 metafile = true
 
 [[files]]
@@ -386,6 +396,11 @@ hash = "a71ccad600f4a98aa81753880d96eb51b801289adfac9a32ab438ce2f4bcbeee"
 metafile = true
 
 [[files]]
+file = "mods/lendercataclysm.pw.toml"
+hash = "b21e4c7a4bbf9d8acadfe5d0e2dc8d250a17740b2516a28a906c30edec0149b0"
+metafile = true
+
+[[files]]
 file = "mods/lets-do-farm-charm.pw.toml"
 hash = "ab76f91b59f2ef174907ea9d080a4ccc03fcacd013565eed2b1cba8ed06d99ea"
 metafile = true
@@ -403,6 +418,11 @@ metafile = true
 [[files]]
 file = "mods/library-ferret.pw.toml"
 hash = "599c8c37e60b9f1fbfb29d10eb9ede3d174b72287b9fbe407e90b6417a27a441"
+metafile = true
+
+[[files]]
+file = "mods/lionfish-api.pw.toml"
+hash = "c27c2b642deba3609c6e5741ee6360cb8d760e5bf5b2595fd4fa01c01dc5f074"
 metafile = true
 
 [[files]]
@@ -473,6 +493,11 @@ metafile = true
 [[files]]
 file = "mods/my-nethers-delight.pw.toml"
 hash = "9d17108df8460b193938992825266e5f22205ee066249a3f706be640069f193a"
+metafile = true
+
+[[files]]
+file = "mods/myths-and-legends.pw.toml"
+hash = "c5bdb73a49f80ac77c7e9a8942421315ea2d67164c4f57a7f83f1c6889866b13"
 metafile = true
 
 [[files]]
