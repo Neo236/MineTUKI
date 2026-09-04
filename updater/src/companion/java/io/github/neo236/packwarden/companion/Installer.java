@@ -2,10 +2,12 @@ package io.github.neo236.packwarden.companion;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -41,13 +43,19 @@ public final class Installer {
         void step(String message);
 
         /**
-         * Avance de la descarga.
+         * Avance de una tarea larga: el texto para la etiqueta y la fraccion para
+         * la barra.
          *
-         * <p>Sin esto la barra queda indeterminada durante varios minutos y medio
-         * giga de descarga, que es indistinguible de un programa colgado.
+         * <p>Sin esto la barra queda indeterminada durante varios minutos, que es
+         * indistinguible de un programa colgado. El texto viaja junto con los
+         * numeros porque no todas las tareas largas son la descarga de mods: la de
+         * NeoForge tiene que poder decir lo suyo.
          */
-        void progress(int hechos, int total);
+        void progress(String message, int hechos, int total);
     }
+
+    /** Plazo de espera para hablar con maven.neoforged.net, en milisegundos. */
+    private static final int TIMEOUT_MS = 30_000;
 
     /** Lineas de packwiz del estilo "(12/153) Downloaded Create". */
     private static final java.util.regex.Pattern AVANCE =
@@ -57,6 +65,10 @@ public final class Installer {
 
     public static void run(Options options, Progress progress) throws Exception {
         Files.createDirectories(options.gameDirectory());
+
+        // El registro arranca limpio en cada corrida y despues todos los pasos le
+        // van agregando: NeoForge primero y packwiz despues.
+        Files.writeString(installLog(options), "");
 
         if (options.destination() == Destination.DEDICATED_PROFILE) {
             ensureNeoForge(options, progress);
@@ -110,10 +122,69 @@ public final class Installer {
                 + version + "/neoforge-" + version + "-installer.jar";
 
         Path installer = Files.createTempFile("neoforge-installer", ".jar");
-        try (InputStream in = java.net.URI.create(url).toURL().openStream()) {
-            Files.copy(in, installer, StandardCopyOption.REPLACE_EXISTING);
+        try {
+            download(url, installer, progress);
+            runNeoForgeInstaller(options, installer, progress);
+        } finally {
+            Files.deleteIfExists(installer);
         }
+    }
 
+    /**
+     * Baja un archivo mostrando cuanto va.
+     *
+     * <p>Se abre la conexion a mano en vez de usar openStream() por los plazos de
+     * espera: openStream() no trae ninguno, asi que una conexion que se corta a
+     * mitad de la descarga deja el instalador esperando para siempre, con la
+     * ventana quieta en "Instalando NeoForge" y sin forma de saber que paso.
+     */
+    private static void download(String url, Path target, Progress progress) throws IOException {
+        URLConnection connection = java.net.URI.create(url).toURL().openConnection();
+        connection.setConnectTimeout(TIMEOUT_MS);
+        connection.setReadTimeout(TIMEOUT_MS);
+
+        long total = connection.getContentLengthLong();
+        long done = 0;
+        byte[] buffer = new byte[64 * 1024];
+
+        try (InputStream in = connection.getInputStream();
+                OutputStream out = Files.newOutputStream(target, StandardOpenOption.CREATE,
+                        StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+                done += read;
+                if (total > 0) {
+                    progress.progress(
+                            Messages.get("step.neoforgeDownloading", megabytes(done), megabytes(total)),
+                            (int) (done / 1024),
+                            (int) (total / 1024));
+                }
+            }
+        } catch (IOException e) {
+            throw new IOException(Messages.get("error.neoforgeDownload", String.valueOf(e.getMessage())), e);
+        }
+    }
+
+    private static String megabytes(long bytes) {
+        return String.valueOf(Math.round(bytes / 1048576.0));
+    }
+
+    /** El unico registro de la instalacion, al que escriben todos los pasos. */
+    private static Path installLog(Options options) {
+        return options.gameDirectory().resolve("packwarden-install.log");
+    }
+
+    /**
+     * Corre el instalador oficial de NeoForge.
+     *
+     * <p>Hay que vaciar su salida si o si. El instalador escribe una linea por
+     * cada libreria que baja, y si nadie lee esa tuberia el sistema operativo la
+     * llena y el proceso queda bloqueado escribiendo, sin terminar nunca. Antes
+     * se llamaba a waitFor() sin leer nada, y ese era justamente el cuelgue.
+     */
+    private static void runNeoForgeInstaller(Options options, Path installer, Progress progress)
+            throws Exception {
         List<String> command = new ArrayList<>();
         command.add(javaExecutable());
         command.add("-jar");
@@ -121,12 +192,35 @@ public final class Installer {
         command.add("--install-client");
         command.add(options.minecraftFolder().toAbsolutePath().toString());
 
-        int exit = new ProcessBuilder(command).redirectErrorStream(true).start().waitFor();
-        Files.deleteIfExists(installer);
+        Process process = new ProcessBuilder(command).redirectErrorStream(true).start();
 
+        try (var salida = new java.io.BufferedReader(
+                        new java.io.InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
+                var archivo = Files.newBufferedWriter(installLog(options), StandardCharsets.UTF_8,
+                        StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
+            String linea;
+            while ((linea = salida.readLine()) != null) {
+                archivo.write(linea);
+                archivo.newLine();
+
+                // La ultima linea del instalador va a la etiqueta: el paso dura
+                // minutos y sin esto no se distingue de un cuelgue.
+                String corta = linea.trim();
+                if (!corta.isEmpty()) {
+                    progress.step(Messages.get("step.neoforgeWorking", resumir(corta)));
+                }
+            }
+        }
+
+        int exit = process.waitFor();
         if (exit != 0) {
             throw new IOException(Messages.get("error.neoforge", exit));
         }
+    }
+
+    /** Recorta una linea del instalador para que entre en la etiqueta. */
+    private static String resumir(String linea) {
+        return linea.length() <= 58 ? linea : linea.substring(0, 55) + "...";
     }
 
     private static void installPack(Options options, Progress progress) throws Exception {
@@ -144,8 +238,6 @@ public final class Installer {
         command.add("--no-gui");
         command.add(options.packUrl());
 
-        Path log = options.gameDirectory().resolve("packwarden-install.log");
-
         Process process = new ProcessBuilder(command)
                 .directory(options.gameDirectory().toFile())
                 .redirectErrorStream(true)
@@ -155,7 +247,8 @@ public final class Installer {
         // log por si despues hay que revisar que fallo.
         try (var salida = new java.io.BufferedReader(
                         new java.io.InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
-                var archivo = Files.newBufferedWriter(log, StandardCharsets.UTF_8)) {
+                var archivo = Files.newBufferedWriter(installLog(options), StandardCharsets.UTF_8,
+                        StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
             String linea;
             while ((linea = salida.readLine()) != null) {
                 archivo.write(linea);
@@ -163,8 +256,9 @@ public final class Installer {
 
                 var encontrado = AVANCE.matcher(linea);
                 if (encontrado.find()) {
-                    progress.progress(
-                            Integer.parseInt(encontrado.group(1)), Integer.parseInt(encontrado.group(2)));
+                    int hechos = Integer.parseInt(encontrado.group(1));
+                    int total = Integer.parseInt(encontrado.group(2));
+                    progress.progress(Messages.get("step.downloadingCount", hechos, total), hechos, total);
                 }
             }
         }

@@ -245,8 +245,10 @@ tasks.register('companionTest', Test) {
     testClassesDirs = sourceSets.companionTest.output.classesDirs
     classpath = sourceSets.companionTest.runtimeClasspath
     // Los lanzadores son archivos de texto que no compila nadie, asi que hay
-    // pruebas que los leen tal cual se entregan.
+    // pruebas que los leen tal cual se entregan. Lo mismo con las fuentes, para
+    // cotejar cada texto que pide el codigo contra los dos idiomas.
     systemProperty 'installer.scripts', file('src/installer').absolutePath
+    systemProperty 'companion.sources', file('src/companion/java').absolutePath
     useJUnitPlatform()
     testLogging { events 'passed', 'failed', 'skipped' }
 }

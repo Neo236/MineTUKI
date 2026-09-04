@@ -15,7 +15,7 @@ Ambos apuntan a la misma URL de `pack.toml` — el archivo crudo de este repo en
 
 ## Para amigos: instalar el modpack
 
-Descargá el **[instalador](https://github.com/Neo236/MineTUKI/releases/latest)** (`MineTUKI-instalador.zip`), descomprimilo y abrí el de tu sistema: `instalar-windows.bat` o `instalar-mac-linux.command`. **No hace falta instalar Java** — usa el que ya trae el launcher de Minecraft.
+Descargá el **[instalador](https://github.com/Neo236/MineTUKI/releases/latest)** (`MineTUKI-instalador.zip`), descomprimilo y abrí el de tu sistema: `instalar-mods-windows.bat` o `instalar-mods-mac-linux.command`. **No hace falta instalar Java** — usa el que ya trae el launcher de Minecraft.
 
 Crea un perfil aparte en el launcher oficial, con su **propia carpeta de mods**. No toca los mods que ya tengas: tus otros perfiles y modpacks quedan intactos. El nombre del perfil, la carpeta y el idioma se pueden cambiar antes de instalar, y también podés instalar solo a una carpeta suelta si usás Prism, MultiMC u otra instalación.
 

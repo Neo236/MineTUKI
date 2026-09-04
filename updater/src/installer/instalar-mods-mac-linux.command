@@ -27,8 +27,8 @@ registrar "fecha: $(date)"
 registrar "carpeta: $(pwd)"
 
 echo
-echo "  MineTUKI - Instalador"
-echo "  ====================="
+echo "  MineTUKI - Instalador de mods"
+echo "  ============================"
 echo
 
 # --- Los archivos tienen que estar descomprimidos --------------------------

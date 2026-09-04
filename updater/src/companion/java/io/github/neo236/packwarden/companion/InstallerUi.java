@@ -345,11 +345,11 @@ public final class InstallerUi {
                     }
 
                     @Override
-                    public void progress(int hechos, int total) {
-                        // La barra pasa a mostrar cuantos archivos van: medio giga de
+                    public void progress(String message, int hechos, int total) {
+                        // La barra pasa a mostrar cuanto va: varios minutos de
                         // descarga con una barra indeterminada parece un cuelgue.
-                        setProgress(total > 0 ? Math.min(100, hechos * 100 / total) : 0);
-                        publish(Messages.get("step.downloadingCount", hechos, total));
+                        setProgress(total > 0 ? Math.min(100, (int) (hechos * 100L / total)) : 0);
+                        publish(message);
                     }
                 });
                 return null;

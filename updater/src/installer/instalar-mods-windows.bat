@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 cd /d "%~dp0"
-title MineTUKI - Instalador
+title MineTUKI - Instalador de mods
 
 rem ---------------------------------------------------------------------------
 rem Este script se ejecuta con java.exe y NO con javaw.exe, y sin "start".
@@ -24,8 +24,8 @@ call :registrar "fecha: %DATE% %TIME%"
 call :registrar "carpeta: %~dp0"
 
 echo.
-echo   MineTUKI - Instalador
-echo   =====================
+echo   MineTUKI - Instalador de mods
+echo   ============================
 echo.
 
 rem --- Los archivos tienen que estar descomprimidos --------------------------

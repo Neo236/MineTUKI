@@ -19,8 +19,8 @@ COMO SE INSTALA
    Si haces doble clic en el .bat desde adentro del zip, Windows
    extrae solo ese archivo y el instalador no encuentra el resto.
 
-1. Windows ........ doble clic en  instalar-windows.bat
-   Mac / Linux .... doble clic en  instalar-mac-linux.command
+1. Windows ........ doble clic en  instalar-mods-windows.bat
+   Mac / Linux .... doble clic en  instalar-mods-mac-linux.command
                     (en Mac, si no abre: clic derecho > Abrir)
 
 2. Elige el idioma. Define tanto esta ventana como el idioma con el

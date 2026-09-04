@@ -31,8 +31,8 @@ class InstallerScriptsTest {
     @BeforeAll
     static void leer() throws IOException {
         Path folder = Paths.get(System.getProperty("installer.scripts", "src/installer"));
-        Path batFile = folder.resolve("instalar-windows.bat");
-        Path commandFile = folder.resolve("instalar-mac-linux.command");
+        Path batFile = folder.resolve("instalar-mods-windows.bat");
+        Path commandFile = folder.resolve("instalar-mods-mac-linux.command");
 
         assertTrue(Files.isRegularFile(batFile), "no se encontro " + batFile.toAbsolutePath());
         assertTrue(Files.isRegularFile(commandFile), "no se encontro " + commandFile.toAbsolutePath());
