@@ -34,8 +34,15 @@ jobs:
         with:
           go-version: stable
 
+      # Se compila desde el repositorio en vez de "go install ...@latest": el
+      # go.mod de packwiz trae directivas replace, y go install las rechaza
+      # cuando el modulo no es el principal. Adentro del clon si valen, que es
+      # como lo construye su propio proyecto.
       - name: Instalar packwiz
-        run: go install github.com/packwiz/packwiz@latest
+        run: |
+          git clone --depth 1 https://github.com/packwiz/packwiz.git "$RUNNER_TEMP/packwiz"
+          go -C "$RUNNER_TEMP/packwiz" build -o "$(go env GOPATH)/bin/packwiz" .
+          packwiz --help > /dev/null
 
       - name: Resolver etiqueta y version
         id: meta
