@@ -339,4 +339,4 @@ puede quedar en loop de reinicio. Así que:
   que cambiarla — nadie adopta un mod que legalmente no puede redistribuir.
 - **Fabric.** Es donde está la mayoría de la gente, pero significa Architectury o dos builds.
   Se deja para cuando exista la necesidad; mientras tanto, no hardcodear nada que lo impida.
-- **Dominio propio** en Vercel, en lugar de `minetuki-neo236s-projects.vercel.app`.
+- ~~**Dominio propio** en Vercel~~ ✅ 2026-10-05: `https://minetuki.neo236.fun` (CNAME en Cloudflare a Vercel). Las direcciones `*.vercel.app` siguen andando: nadie tiene que cambiar la del pack.
