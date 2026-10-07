@@ -106,6 +106,16 @@ hash = "a2c8cf1a4fc5faed55ca1f8d04f7abaa1c8282b9bcd70e1b3e607181923f48d9"
 metafile = true
 
 [[files]]
+file = "mods/bossesrise.pw.toml"
+hash = "d20e603af6e9156021a1b8db31edd187a089b2b21cd7f70fa7eb7507bf81dbf9"
+metafile = true
+
+[[files]]
+file = "mods/brazil-legends.pw.toml"
+hash = "0ecb3fbb4f2d9fde6fa7f817c6be4466a905d7d03fdbf5a5d66754aeed590c44"
+metafile = true
+
+[[files]]
 file = "mods/bridging-mod.pw.toml"
 hash = "c50696cd98b02ba03425574c7850443f5cba8e097af4b6ae1c8b42bd5316a8eb"
 metafile = true
@@ -163,6 +173,11 @@ metafile = true
 [[files]]
 file = "mods/create-enchantment-industry.pw.toml"
 hash = "0ae5b9a5883e79282ad756ea205f3fa1af11ced75bb4ba5b74e3d32e1ea684c9"
+metafile = true
+
+[[files]]
+file = "mods/create-ultimate-factory.pw.toml"
+hash = "34d808989e71221b8e01a44bc8031f20af1c94981acb0cba4669e0e58be69629"
 metafile = true
 
 [[files]]
@@ -293,6 +308,11 @@ metafile = true
 [[files]]
 file = "mods/fastconfigapi.pw.toml"
 hash = "fa2640282935a560f924f518cd8168683d2d885bc0ca111c068fb480be5edf8b"
+metafile = true
+
+[[files]]
+file = "mods/fdlib.pw.toml"
+hash = "66ebc57b6ea5e09a154e21ee6edd384fbbe3002872026bf8224eede15e458456"
 metafile = true
 
 [[files]]
@@ -536,6 +556,11 @@ hash = "6d3ff3b7bbcc97fa06bdddcf2b3b7646168497ba6d7104bdea376f1bc65f9a93"
 metafile = true
 
 [[files]]
+file = "mods/monsterplus.pw.toml"
+hash = "0430c3d1c8c4a227fc617f7f4fa84a17d96ae1bc157bc32c617c15e7a67d5d4c"
+metafile = true
+
+[[files]]
 file = "mods/moogs-structure-lib.pw.toml"
 hash = "ba94dfeb21c6ae878a568062cd03154163e9b8bb31018bd16441129c75b16e8b"
 metafile = true
@@ -648,6 +673,11 @@ metafile = true
 [[files]]
 file = "mods/puzzles-lib.pw.toml"
 hash = "6be463e57622036302e6555834d4b915e9d0407ce646a20edc770901111eca0d"
+metafile = true
+
+[[files]]
+file = "mods/qliphoth-awakening.pw.toml"
+hash = "ef38357777e08fda1d85069e7f3d0627e6c47255d9686b67a687c2d06b2f0c11"
 metafile = true
 
 [[files]]

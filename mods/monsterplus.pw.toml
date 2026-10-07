@@ -1,0 +1,13 @@
+name = "MonsterPlus"
+filename = "MonsterPlus-Neoforge1.21.1-v1.2.0.0.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/Qekm44BX/versions/D93e0pzQ/MonsterPlus-Neoforge1.21.1-v1.2.0.0.jar"
+hash-format = "sha512"
+hash = "28d5e796c0fd694998fa89bb4a54831427c9dbe9871aa6ec8be6f3f9684bfb5f7ecaf62772b71c14d06b82891fae07904906c90d7b7ce7423562bb8cfbddbf7b"
+
+[update]
+[update.modrinth]
+mod-id = "Qekm44BX"
+version = "D93e0pzQ"
