@@ -281,6 +281,16 @@ hash = "73360e397134d238ee8fd21d33fd7f9275e9441f74f8f1b6ed92278877c0b9f1"
 metafile = true
 
 [[files]]
+file = "mods/formations-nether.pw.toml"
+hash = "610aaa5c8f0d6478aa7d7e0e518424968e02fc9f1f80b076134497411fdf4a47"
+metafile = true
+
+[[files]]
+file = "mods/formations.pw.toml"
+hash = "41ea41c71242b710df4768bdd0f3f2433c64600d2d1405472c01993bd7f5da25"
+metafile = true
+
+[[files]]
 file = "mods/framework.pw.toml"
 hash = "dd0153bc05a3ffc8592dfaf35b4e8014127e6e1b352d7c18462d49a1ed7a5035"
 metafile = true
@@ -321,6 +331,11 @@ hash = "89787085b795067d933d636211006b9a99e69a00f660eaa5a5debf93cfc9b612"
 metafile = true
 
 [[files]]
+file = "mods/hearths.pw.toml"
+hash = "40b201d2061f1a0df66401984c5242a8786f24f775f9f15991a280c2a80dc715"
+metafile = true
+
+[[files]]
 file = "mods/hexerei.pw.toml"
 hash = "bd496127dfae8939188c1eb6d6e77930a2f89514308169abed5d27a7b3199ac2"
 metafile = true
@@ -328,6 +343,11 @@ metafile = true
 [[files]]
 file = "mods/hollow-knight-silksong-gear.pw.toml"
 hash = "331f1bd610fad25633b2bfd4a46da2c884178436a01f8a9a8e3f21b86ee3c6d4"
+metafile = true
+
+[[files]]
+file = "mods/hopo-better-ruined-portals.pw.toml"
+hash = "577844e18732b36f36995820c6593e5fa8fb49d522d05f41ae0bce1f478a3637"
 metafile = true
 
 [[files]]
@@ -518,6 +538,11 @@ metafile = true
 [[files]]
 file = "mods/natures-compass.pw.toml"
 hash = "35acdf433fe8f8599f59975e848efdb717663c2c471d3a5dc18743799795a736"
+metafile = true
+
+[[files]]
+file = "mods/nether-dungeons.pw.toml"
+hash = "878eb7a753773da99c531932b70827001075acea7a0aa34158a222255b26921c"
 metafile = true
 
 [[files]]
@@ -808,6 +833,11 @@ metafile = true
 [[files]]
 file = "mods/yungs-api.pw.toml"
 hash = "d9c0c9209bac0b693af2a7c1e47ffb28d366bad19c91df31dc6d345fa75250a1"
+metafile = true
+
+[[files]]
+file = "mods/yungs-better-nether-fortresses.pw.toml"
+hash = "c0e40691651465b4eb1037749148c2078123604195e19b582dbef3cd5914e3b1"
 metafile = true
 
 [[files]]
