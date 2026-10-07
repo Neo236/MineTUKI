@@ -1,0 +1,13 @@
+name = "EnchantWithMob"
+filename = "enchantwithmob-1.21.1-21.4.0.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/SwDIbBHh/versions/TvCNduMm/enchantwithmob-1.21.1-21.4.0.jar"
+hash-format = "sha512"
+hash = "7e468d05855f7944f85e4d9cd18632a2c26146c877380094bf8cb9d16909cc7eb690cc11c7a03549cc0b18a3f9547d566c19d851bc87cbc1888e27640df78fb3"
+
+[update]
+[update.modrinth]
+mod-id = "SwDIbBHh"
+version = "TvCNduMm"

@@ -61,6 +61,11 @@ hash = "393176040f2fbc3aa9b91e5dad0627e138d02ee29711768b3e88f2be0bf7e7b0"
 metafile = true
 
 [[files]]
+file = "mods/bagus-lib.pw.toml"
+hash = "74db917d8986ed96afda79aa13c8e35a5ee77b521d72fd19d89905dc58cf9f1f"
+metafile = true
+
+[[files]]
 file = "mods/balm.pw.toml"
 hash = "7dba9a4a9894a6bbab3a8c7edcc718499297412247fc0e8ccebf75b760c85140"
 metafile = true
@@ -208,6 +213,11 @@ metafile = true
 [[files]]
 file = "mods/ecologics.pw.toml"
 hash = "9fe802c6e911ccd7117578a9fd92b0d1e1eb569c56535fadfbeedf8fe8045137"
+metafile = true
+
+[[files]]
+file = "mods/enchantwithmob.pw.toml"
+hash = "28a6e7b3fad2849358f149337d104f53df37f335fb5ef6d7c503934aecd6fcdf"
 metafile = true
 
 [[files]]
@@ -563,6 +573,11 @@ metafile = true
 [[files]]
 file = "mods/quark.pw.toml"
 hash = "726970c838cd6d724366956c2469b5a36dbe574abbd087317513359dfd1dd89e"
+metafile = true
+
+[[files]]
+file = "mods/raided.pw.toml"
+hash = "2ecb8bc24e1d68a35565f4ae80dc47e7cf4e9a903d7b30c54a00fb37391e24d8"
 metafile = true
 
 [[files]]
