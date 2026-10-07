@@ -1,0 +1,13 @@
+name = "Macabre - Call of False Prophets"
+filename = "macabre-0.9.2-neoforge-1.21.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "9d31ad23a690c047e29ad45b700508967c22b232"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 8362847
+project-id = 933001
