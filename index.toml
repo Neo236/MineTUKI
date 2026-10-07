@@ -91,6 +91,11 @@ hash = "b866140903f1f92f5b604aebe20762491a4096d4883b8bdedd1f388f10461091"
 metafile = true
 
 [[files]]
+file = "mods/blueprint.pw.toml"
+hash = "932b1f0df544525e277b4f75fc47dc9c01d0481d773f026082f1cae5c4afdb69"
+metafile = true
+
+[[files]]
 file = "mods/borninchaos.pw.toml"
 hash = "a2c8cf1a4fc5faed55ca1f8d04f7abaa1c8282b9bcd70e1b3e607181923f48d9"
 metafile = true
@@ -213,6 +218,11 @@ metafile = true
 [[files]]
 file = "mods/ecologics.pw.toml"
 hash = "9fe802c6e911ccd7117578a9fd92b0d1e1eb569c56535fadfbeedf8fe8045137"
+metafile = true
+
+[[files]]
+file = "mods/elysium-api.pw.toml"
+hash = "320e38a0bb24767b93473c7d6c969c8ed4e3bf014d7db36a74ad646504ed16ce"
 metafile = true
 
 [[files]]
@@ -381,6 +391,11 @@ hash = "4de3e4a1a49e332c1ad313283e0403c4273b628d634c17a9ff0c9da3d6b67f9a"
 metafile = true
 
 [[files]]
+file = "mods/jadens-nether-expansion.pw.toml"
+hash = "158d6b6f19d486d49b989eca3797078e24c093fc75004c13a4c71e3dbdf9d7f2"
+metafile = true
+
+[[files]]
 file = "mods/jamlib.pw.toml"
 hash = "750f4b552490779af147a9c70a558ab2aa1cbfd8331d5ad69efefa099854dfae"
 metafile = true
@@ -403,6 +418,11 @@ metafile = true
 [[files]]
 file = "mods/just-enough-resources-jer.pw.toml"
 hash = "7905c08f37d8ebde50a5330a7dd10029de6259b0cb8adbde1170d93ea20218a7"
+metafile = true
+
+[[files]]
+file = "mods/just-in-nether.pw.toml"
+hash = "47576179a6bf356e9d74f2b52fd8fbb9e7e9d39c34139d81c1fa158dc4f428ac"
 metafile = true
 
 [[files]]
@@ -466,8 +486,18 @@ hash = "0e1046e1bb16b42706ba58700f294787dc8fe643518bc5fb26eeaea8e96fd320"
 metafile = true
 
 [[files]]
+file = "mods/lodestonelib.pw.toml"
+hash = "f5d0701055478e980b50849f199f266e6ab1940277a17ad2e5060df0d978be83"
+metafile = true
+
+[[files]]
 file = "mods/luckyowls-wardrobe.pw.toml"
 hash = "29df77bca784d60746347ada9cfb891a61fbdbf77c58867e3277057cbe5c218b"
+metafile = true
+
+[[files]]
+file = "mods/luminous-nether.pw.toml"
+hash = "59cb6b503686ee9c5fc74a65cb73ec72353742552a5bc97c57a00090f40a8571"
 metafile = true
 
 [[files]]
@@ -546,6 +576,11 @@ hash = "878eb7a753773da99c531932b70827001075acea7a0aa34158a222255b26921c"
 metafile = true
 
 [[files]]
+file = "mods/nethers-exoticism.pw.toml"
+hash = "8f065de8a14d77fd909cb7bbc01a7e98419c61d9f7bb542844432442b4170f6a"
+metafile = true
+
+[[files]]
 file = "mods/noisium.pw.toml"
 hash = "d424a9260ef51bc102e56f0423d91dfabb739ccca8a86eb1c450ea631b739280"
 metafile = true
@@ -573,6 +608,11 @@ metafile = true
 [[files]]
 file = "mods/pf-neoforge.pw.toml"
 hash = "1ef7ce6d5fe6e584914680f5463508996f0dd1c2bdbc051b8b3b050c85e134ff"
+metafile = true
+
+[[files]]
+file = "mods/piglin-proliferation.pw.toml"
+hash = "b2dc1b63858d06278c69523287fc5cdc4cf3fb6d1aefa7e9294d5feaae4bcdab"
 metafile = true
 
 [[files]]

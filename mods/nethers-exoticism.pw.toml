@@ -1,0 +1,13 @@
+name = "Nether's Exoticism"
+filename = "nether-s-exoticism-1.21.1-1.2.9.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/3e4LaIlU/versions/iKlUgadq/nether-s-exoticism-1.21.1-1.2.9.jar"
+hash-format = "sha512"
+hash = "6dbb5cb5e989331136516b6aa29e85ad9ddd74117ec5c26e94805306aa5c3304a1912ddecb9681c37bbdbf70e6909afd4b971666510464258b1297af1594931a"
+
+[update]
+[update.modrinth]
+mod-id = "3e4LaIlU"
+version = "iKlUgadq"
